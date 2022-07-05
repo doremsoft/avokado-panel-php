@@ -1,0 +1,95 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+ <div class="row">
+     
+       <div class="col-md-12" style="margin-bottom: 15px;">
+         <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+       </div>
+
+
+
+     <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Markalar</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+
+                        <form id="logout-form" action="{{url}}/marka/logo-list-update" method="post" >
+                            {{csrf | raw}}
+
+                            <button type="submit" class="btn btn-danger fuse-ripple-ready">Logoları Güncelle</button>
+
+                            <div class="table-responsive">
+
+                            <table class="table table-striped">
+
+                                 <thead>
+                                                <tr>
+                                                    <th>Marka Adı</th>
+                                                    <th>Resim</th>
+
+                                                       <th>İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                <tbody>
+                                    {% for marka in markalar  %}
+                                        
+                                        
+                                        <tr>
+                                            
+                                            
+                                          <td>
+
+{{ marka.marka_adi }}
+                                           
+                                            </td>
+
+
+                                            <td>
+
+                                                <img src="{{ public_media(marka.logo) }}" style="max-width: 200px;" class="image"  id="img-fieldID-{{ marka.id }}">
+
+                                                <input type="text" onkeyup="imageKontrol('fieldID-{{ marka.id }}')" class="form-control" name="marka[{{ marka.id }}]" id="fieldID-{{ marka.id }}" value="{{marka.logo}}">
+
+
+                                            </td>
+
+
+                                            <td width="150px">
+
+
+                                                    <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=public&callback=publi_image_callback&type=1&popup=1&field_id=fieldID-{{ marka.id }}&relative_url=1')" class="btn" type="button">Logo Seç</a>
+
+
+                                           
+                                            </td>
+                                        </tr>
+                                        
+                                        {% endfor %}
+                                
+                                </tbody>
+                                
+                                
+                               
+                            </table>
+                        </div>
+
+                            <button type="submit" class="btn btn-danger fuse-ripple-ready">Logoları Güncelle</button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+{% endblock %}

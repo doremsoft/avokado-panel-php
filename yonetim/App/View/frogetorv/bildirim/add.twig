@@ -1,0 +1,121 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}{% endblock %}
+{% block bread %}
+
+
+
+{% endblock %}
+    {% block content %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Toplu Bildirim Gönder</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form action="#" method="post">
+                                    {{csrf | raw}}
+
+                                    <div class="form-group">
+                                        <label>Başlık:</label>
+                                        <input type="text" name="baslik"  id="b_baslik" class="form-control" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>İkon:</label>
+                                        <input type="text" name="ikon" id="b_icon" class="form-control" required value="notification_important">
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label>İçerik:</label>
+                                        <textarea type="text" name="icerik" id="b_icerik" class="form-control" required></textarea>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label>Bildirim Tarih:</label>
+                                        <input type="date" class="form-control" name="tarih" id="httarih" value="{{ bugun }}" required>
+                                    </div>
+                                                                    <div class="form-group">
+                                        <label>Bildirim Saati:</label>
+                                        <input type="time" class="form-control" name="saat" id="htsaat" value="{{ saat }}" required>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Sunucu:</label>
+                                        <select id="server" class="form-control">
+
+                                            <option name="avokadoyazilim.com">avokadoyazilim.com</option>
+
+
+                                        </select>
+                                    </div>
+
+
+                                    <div id="toplu_gonderim_msj"></div>
+
+                                    <button type="button" onclick="topluBildirimGonder()" id="toplu-bildirim-btn" class="btn btn-primary">Gönder</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {% endblock %}
+
+        {% block footer %}
+
+            
+            <script>
+                function topluBildirimGonder() {
+
+                    $("#toplu_gonderim_msj").html("Bildirimler Gönderiliyor....");
+                    $("#toplu-bildirim-btn").hide();
+
+
+                    var baslik = $("#b_baslik").val();
+                    var ikon = $("#b_icon").val();
+                    var mesaj = $("#b_icerik").val();
+                    var tarih = $("#httarih").val();
+                    var saat = $("#htsaat").val();
+                    var server = $("#server").val();
+
+                    var varb = {
+                        baslik :baslik ,
+                        ikon : ikon,
+                        mesaj : mesaj,
+                        tarih : tarih,
+                        saat : saat,
+                        server : server
+                    };
+
+
+
+                    $.post( "{{ url }}/bildirim/send", varb)
+                        .done(function( data ) {
+
+
+                            console.log(data);
+
+
+                            alert( "Bldirimler Gönderildi");
+
+                            $("#toplu_gonderim_msj").html("");
+                            $("#toplu-bildirim-btn").show();
+                        });
+                    
+                }
+            </script>
+
+
+        {% endblock %}

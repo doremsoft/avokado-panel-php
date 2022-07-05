@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+    <title>Avokado Yazılım</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Avokado Yazılım Profesyonel Satış Sistemleri" name="description" />
+    <meta name="robots" content="nofollow">
+    <meta name="googlebot" content="noindex">
+    <meta name="csrf-token" content="{{csrf_token}}">
+    <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon">
+        <link href="{{asset('plugins/sweet-alert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
+        <!-- App css -->
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('css/icons.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('css/metismenu.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('plugins/notification/css/notification.min.css')}}" rel="stylesheet" type="text/css" />  
+
+        {% if user.h_nav == 1 %}
+            <link href="{{asset('css/styleh.css')}}" rel="stylesheet" type="text/css" />
+        {% else %}
+            <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css" />
+        {% endif %}
+        {% block head %}{%endblock%}
+    </head>
+    <body>
+
+  
+
+
+      
+       
+
+
+            <div class="container-fluid"> 
+                {% if session['session_message'] is defined %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <!-- [ aler ] start -->
+                            {% if  session['session_message']['type'] == "primary" %}
+
+                                <div class="alert alert-info border-0" role="alert">
+                                    {{session['session_message']['message'] | raw}}
+                                </div>
+
+
+                            {% elseif  session['session_message']['type'] == "success" %}  
+
+                                <div class="alert alert-success border-0" role="alert">
+                                    {{session['session_message']['message'] | raw}}
+                                </div>  
+
+
+
+                            {% elseif  session['session_message']['type'] == "danger" %}  
+
+                                <div class="alert alert-danger border-0" role="alert">
+                                    {{session['session_message']['message'] | raw}}
+                                </div>
+                            {% elseif  session['session_message']['type'] == "fail" %}  
+
+                                <div class="alert alert-danger border-0" role="alert">
+                                    {{session['session_message']['message'] | raw}}
+                                </div>   
+
+                            {% elseif  session['session_message']['type'] == "warning" %}  
+
+                                <div class="alert alert-warning border-0" role="alert">
+                                    {{session['session_message']['message'] | raw}}
+                                </div>
+
+                            {% endif %}  
+
+                            <!-- [ aler ] end -->
+                        </div>    </div>
+                    {% endif %}        
+
+
+
+
+
+                {% block content %}{%endblock%}
+            </div><!-- container -->
+
+
+       
+        
+ 
+    <!-- end page content -->
+
+    <!--end page-wrapper-inner -->
+
+<!-- end page-wrapper -->
+
+<!-- jQuery  -->
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/metisMenu.min.js')}}"></script>
+<script src="{{asset('js/waves.min.js')}}"></script>
+<script src="{{asset('js/jquery.slimscroll.min.js')}}"></script>
+<script src="{{asset('plugins/notification/js/bootstrap-growl.min.js')}}"></script>
+
+{% if user.h_nav == 1 %}
+    <script src="{{asset('js/apph.js')}}"></script>
+{% else %}
+    <script src="{{asset('js/app.js')}}"></script>
+{% endif %}
+
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
+<script src="{{asset('js/dipa.js')}}"></script>
+{% block footer %}{%endblock%}
+</body>
+</html>

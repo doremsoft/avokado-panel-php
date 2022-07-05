@@ -1,0 +1,408 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+    <style>
+        .cariIsımleArama{
+            list-style: none;
+            position:absolute;
+            z-index:3;
+            right:0px;
+            left:0px;
+            background-color:white;
+            margin-right: 10px;
+            margin-left: 10px;
+            border: 1px solid black;
+            padding: 10px;
+
+        }
+
+        .cariIsımleArama li{
+            color: #040f12;
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .cariIsımleArama li:hover{
+            color: #040f12;
+            background-color: #e6f2ff;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="icon-account-box s-6"></i>
+                                        </span>
+                        <span class="logo-text h4">Hesaplar</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+            <!-- SEARCH -->
+            <div class="col search-wrapper">
+
+                <div class="input-group">
+
+                                    <span class="input-group-btn">
+
+                                        <button type="button" class="btn btn-icon">
+                                            <i class="icon icon-magnify"></i>
+                                        </button>
+
+                                    </span>
+
+                    <input onkeyup="cariarama(this.value)" id="contacts-search-input" type="text" class="form-control" placeholder="Hesap Adı..." aria-label="Hesap Adı..." />
+                    <div id="aramasonuc" ></div>
+                </div>
+            </div>
+            <!-- / SEARCH -->
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Hesap İşlemleri</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top:16px;">
+                                <a class="nav-link ripple active  sid-nav-link {% if tur == null %}accent{% endif %} " href="{{ url }}/cari/list">
+                                    <span>Bütün Hesaplar</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 1 %}accent{% endif %} " href="{{ url }}/cari/list/1">
+                                    <span>Müşteriler</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 2 %}accent{% endif %} " href="{{ url }}/cari/list/2">
+                                    <span>Tedarikçiler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 3 %}accent{% endif %} " href="{{ url }}/cari/list/3">
+                                    <span>Personeller</span>
+                                </a>
+                            </li>
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/finansal/alacaklarim">
+                                    <span>Alacaklarım</span>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/finansal/borclarim">
+                                    <span>Borçlarım</span>
+                                </a>
+                            </li>
+
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/cari/add/1">
+                                    <span>Yeni Müşteri</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  " href="{{ url }}/cari/add/2">
+                                    <span>Yeni Tedrikçi</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  " href="{{ url }}/cari/add/3">
+                                    <span>Yeni Personel</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="contacts-list card" style="padding-bottom: 20px;">
+
+                    <!-- CONTACT LIST HEADER -->
+                    <dvi class="contacts-list-header p-4">
+
+                        <div class="row no-gutters align-items-center justify-content-between">
+
+                            <div class="list-title text-muted">
+                                {% if tur == null %}
+        Bütün Hesaplar Listeleniyor
+                                {% elseif tur == 1 %}
+                                    Müşteriler Listeleniyor
+                                {% elseif tur == 2 %}
+                                    Tedarikçiler Listeleniyor
+                                {% elseif tur == 3 %}
+    Personeller Listeleniyor
+                                {% endif %}
+
+
+                            </div>
+
+                            <button type="button" class="btn btn-icon">
+                                <i class="icon icon-sort-alphabetical"></i>
+                            </button>
+                        </div>
+
+                    </dvi>
+                    <!-- / CONTACT LIST HEADER -->
+
+
+
+                    {% for cari in cariler.result  %}
+
+                        <!-- CONTACT ITEM -->
+                        <div onclick="window.location.href='{{url}}/cari/show/{{cari.id}}'" class="contact-item ripple row no-gutters align-items-center py-2 px-3 py-sm-4 px-sm-6">
+
+
+                            <div class="col text-truncate font-weight-bold"><a style="text-decoration: none;" href="{{url}}/cari/show/{{cari.id}}" >{{cari.cari_adi}}</a></div>
+
+                            <div class="col email text-truncate px-1 d-none d-xl-flex">
+                                {{cari.cari_mail}}
+                            </div>
+
+                            <div class="col phone text-truncate px-1 d-none d-xl-flex">
+                                {{cari.cari_telefon}}
+                            </div>
+
+                            <div class="col job-title text-truncate px-1 d-none d-sm-flex">
+                                {{cari.cari_gsm}}
+                            </div>
+
+                            <div class="col company text-truncate px-1 d-none d-sm-flex">
+                                {% if cari.cari_turu == 1%}
+                                    Müşteri
+                                {% elseif cari.cari_turu == 2 %}
+                                    Tedarikçi
+                                {% elseif cari.cari_turu == 3 %}
+                                    Personel
+
+                                {% endif %}
+
+
+                            </div>
+
+                            <div class="col-auto actions">
+
+                                <div class="row no-gutters">
+
+
+
+                                    <a  href="{{url}}/cari/show/{{cari.id}}" class="btn btn-icon">
+
+                                        <i class="icon icon-dots-vertical"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CONTACT ITEM -->
+
+
+
+
+                    {% endfor %}
+
+
+                </div>
+                <!-- / CONTACT LIST -->
+                <div class="col-md-12" style="padding-top: 25px;">
+                    <div class="row">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-end">
+                            {{paginate(cariler.paginate,uri) | raw }}
+                        </ul>
+                    </nav>
+
+                    </div>
+                </div>
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                           
+
+                            //document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                            if (data == "non") {
+
+                                document.getElementById("aramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                            } else {
+
+
+                                var cari_data = JSON.parse(data);
+
+                                var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                                if (cari_data.durum == "ok") {
+
+
+
+                                    $.each(cari_data.cari, function (key, val) {
+
+
+                                        lihtml += liurunbas(val);
+
+                                    });
+
+
+
+                                } else {
+
+                                    console.log("Cari Bulunamadı");
+
+
+
+                                    lihtml += cariyok();
+
+
+                                }
+
+                                document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+
+
+
+
+
+        }
+
+        function cariyok() {
+
+            var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+
+
+
+        function liurunbas(data) {
+
+            var html = "<li data-id=\"" + data.id + "\"  data-json='" + JSON.stringify(data) + "' onclick=\"window.location.href='{{url}}/cari/show/" + data.id + "'\" >" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function divYaz(label,input){
+            
+            
+var html = "<div class=\"form-group row\"> <label for=\"example-text-input\" class=\"col-sm-2 col-form-label text-right\">"+label+"</label><div class=\"col-sm-10\">";
+                                                    
+       html += input+"</div> </div>";   
+   return html;
+    }
+
+   
+
+
+
+    </script>
+
+
+{% endblock %}

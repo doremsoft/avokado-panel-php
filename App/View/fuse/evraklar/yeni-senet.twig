@@ -1,0 +1,348 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+    <style>
+        .cariIsımleArama{
+            list-style: none;
+
+
+            right:0px;
+            left:0px;
+            background-color:white;
+            margin-right: 15px;
+
+
+            padding: 10px;
+
+        }
+
+        .cariIsımleArama li{
+
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .cariIsımleArama li:hover{
+
+            background-color: #e6f2ff;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">subtitles</i>
+
+                                        </span>
+                        <span class="logo-text h4">Senet İşlemleri</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+
+        </div>
+             <div class="col-md-12">
+
+        <div class="row">
+
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"   href="{{ url }}/senet" >Senet Listesi</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  active fuse-ripple-ready"  href="{{ url }}/senet/ekle"  >Yeni Senet</a>
+                </li>
+
+
+            </ul>
+        </div>
+
+
+    <div class="col-md-12 m-t-15" >
+        <div class="card">
+            <div class="card-header">
+                <h5>Senet Kaydı Yapılacak Cari Hesap Seçimi</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Cari Hesabı Seçiniz:</label>
+                            <input type="text" class="form-control" id="cariname" onkeyup="cariarama(this.value)">
+                                <div id="aramasonuc"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-header">
+                <h5>Senet İşlem</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12" >
+                        <form id="senet-ekleme-form"  class="col-md-12" action="{{url}}/senet/kaydet" method="post">
+                            {{csrf | raw}} 
+                            <div id="seneteklemealan" class="col-lg-12">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+
+
+        </div>
+   </div>
+    {% endblock %}
+
+    {% block footer %}
+        <script>
+
+
+            let kasa_json = '{{kasalar | raw}}';
+
+
+
+            function cariarama(str) {
+                if (str.length <= 1) {
+                    document.getElementById("aramasonuc").innerHTML = "";
+                    document.getElementById("aramasonuc").style.border = "0px";
+                    return;
+                } else if (str.length > 1) {
+
+                    console.log(str);
+
+                    var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                            .done(function (data) {
+
+                                data = data.trim();
+
+                                console.log(data);
+
+
+                                document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                                if (data == "non") {
+
+                                    document.getElementById("aramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                                } else {
+
+
+                                    var cari_data = JSON.parse(data);
+
+                                    var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                                    if (cari_data.durum == "ok") {
+
+
+
+                                        $.each(cari_data.cari, function (key, val) {
+
+
+                                            lihtml += liurunbas(val);
+
+                                        });
+
+
+
+                                    } else {
+
+                                        console.log("Cari Bulunamadı");
+
+
+
+                                        lihtml += cariyok();
+
+
+                                    }
+
+                                    document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                                }
+
+                            })
+                            .fail(function () {
+                                alert("error");
+                            });
+                }
+
+
+
+
+
+
+
+            }
+
+            function cariyok() {
+
+                var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+                return html;
+
+            }
+
+
+
+
+            function liurunbas(data) {
+
+                var html = "<li data-id=\"" + data.id + "\"  data-json='" + JSON.stringify(data) + "' onclick=\"alanGetir(" + data.id + ")\">" + data.cari_adi + "</li>";
+
+
+                return html;
+
+            }
+
+
+
+            function divYaz(label, input) {
+
+
+                var html = "<div class=\"form-group row\"> <label for=\"example-text-input\" class=\"col-sm-2 col-form-label text-right\">" + label + "</label><div class=\"col-sm-10\">";
+
+                html += input + "</div> </div>";
+                return html;
+            }
+
+            function alanGetir(id) {
+                var data = JSON.parse($("[data-id=" + id + "]").attr("data-json"));
+
+                //seneteklemealan
+
+                console.log(data);
+                
+                var senet_tur_html="<select name=\"senet_tur\" class=\"form-control\"><option value=\"1\">Senet Alın</option><option value=\"2\">Senet Verin</option>  </select>";
+
+
+                var html = "";
+
+                html += divYaz("Cari Hesap:", "<input type=\"hidden\" name=\"cari_id\" value=\"" + data.id + "\" /><h4>" + data.cari_adi + "</h4>");
+
+
+                html += divYaz("Evrak Türü:", senet_tur_html);
+
+                html += divYaz("Son Ödeme Tarih:", "<input type=\"date\" name=\"odemetarih\" class=\"form-control\" value=\"\" required />");
+
+                html += divYaz("Düzenleme Tarih:", "<input type=\"date\" name=\"duzenlemetarih\" class=\"form-control\" value=\"{{bugun}}\" required/>");
+
+                html += divYaz("Evrak No:", "<input type=\"text\" name=\"evrak_no\" class=\"form-control\" required/>");
+
+                html += divYaz("Tutar:", "<input type=\"text\" name=\"tutar\" id=\"tutar\" class=\"form-control\" value=\"0.00\" required/>");
+
+                html += divYaz("Açıklama:", "<input type=\"text\" name=\"not\" class=\"form-control\" />");
+
+                html += divYaz("", "<input type=\"button\"  onClick=\"kasa_haraket_ekle()\" value=\"Kaydet\" class=\"btn btn-danger waves-effect waves-light\" />");
+
+                
+                $("#seneteklemealan").html(html);
+
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+
+                $("#cariname").val("");
+
+
+            }
+
+
+            function kasa_haraket_ekle() {
+
+
+
+                event.preventDefault();
+
+                var form = $("#senet-ekleme-form");
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data)
+                    {
+                        data = data.trim();
+
+                        console.log(data);
+
+                        if (data == "ok") {
+
+                            swalert( "success","","Senet Sisteme Kayıt Edildi");
+
+
+                            $("#tutar").val("");
+
+
+                        } else
+                        {
+
+                            swalert("error","Kayıt Gerçekleştirilemedi! ","Bütün Alanları Doldurun !" );
+                        }
+                    }
+                });
+
+
+
+
+
+            }
+
+
+            function kasalar() {
+
+
+                var html = "";
+
+
+                $.each(kasa_json, function (key, val) {
+
+                    html += "<option value=\"" + val.id + "\">" + val.kasa_adi + " </option>";
+
+                });
+
+                return html;
+
+
+            }
+
+
+
+
+        </script>
+
+
+    {% endblock %}

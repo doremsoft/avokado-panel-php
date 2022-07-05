@@ -1,0 +1,341 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Senet İşlem{% endblock %}
+{% block bread %}  
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Kıymetli Evraklar</a></li>
+    <li class="breadcrumb-item "><a href="javascript:void(0);">Senetler</a></li>
+  <li class="breadcrumb-item active"><a href="javascript:void(0);">Senet İşlem</a></li>{% endblock %}
+        {% block head %}
+
+
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">subtitles</i>
+
+                                        </span>
+                        <span class="logo-text h4">  <a href="{{ url }}/senet" class="text-white " style="text-decoration: none;" >Senetlere Dön....</a></span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+
+        </div>
+
+            <div class="col-md-12"> <div class="row">
+
+
+                    <div class="col-md-4">
+                        <div class="row">
+
+
+                            <div class="col-md-12 m-t-15">
+                                <div class="card">
+
+                                    <div class="card-body">
+
+
+                                        {% if senet.evrak_tip == 1 %}
+                                            <h3 class="text-success">Senet Tahsil Edeceksiniz</h3>
+                                        {% else %}
+                                            <h3 class="text-danger">Senet Ödemesi Yapacaksınız !</h3>
+                                        {% endif %}
+
+
+                                        <p>Hesap : <a target="_blank" href="{{ url }}/cari/show/{{ senet.cari_id }}">{{ senet.cari_adi }}</a></p>
+
+                                        <p> Son Ödeme Tarihi : {{ tarih(senet.evrak_son_odeme_tarihi , 'd.m.Y')}}</p>
+
+                                        <p>Tutar : {{ Fiyat(senet.evrak_bedeli,'TL','ok') | raw }}</p>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            {%  if senet.odeme_durum == 0 %}
+
+                        <div class="col-md-12 m-t-15">
+                <div class="card">
+                 
+                    <div class="card-body">
+                        <div class="row text-center">
+
+                            <a href="{{ url }}/senet/iptal/{{ senet_id }}" class="btn btn-danger" style="margin: auto;">Senet Kayıtlardan Sil</a>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+                        <div class="col-md-12 m-t-15">
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <div class="row text-center">
+
+
+                                        <a href="{{ url }}/senet/odenmedi/{{ senet_id }}" class="btn btn-danger" style="margin: auto;">Senet Ödenemedi Yap</a>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-md-8">
+
+
+
+
+
+
+                        <div class="col-md-12 m-t-15">
+                            <div class="card">
+
+                                <div class="card-body">
+
+
+                                    {%  if senet.odeme_durum == 0 %}
+
+                                        <!-- Nav tabs -->
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Nakit</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Eft - Havale - K.Kartı</a>
+                                            </li>
+
+                                        </ul>
+
+                                        <!-- Tab panes -->
+                                        <div class="tab-content">
+                                            <div class="tab-pane active p-3" id="home" role="tabpanel">
+
+                                                <form id="kasa-haraket-form"  class="col-md-12" action="{{url}}/kasa/kasa-haraket-ekle" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="hareket_kanal" value="evrakislem">
+                                                    <input type="hidden" name="evrak_id" value="{{ senet_id }}" />
+                                                    <input type="hidden" name="evrak_tur" value="senet" />
+                                                    {% if senet.evrak_tip == 1 %}
+                                                        <input type="hidden" name="kasa_haraket_tip" value="1" />
+                                                    {% else %}
+                                                        <input type="hidden" name="kasa_haraket_tip" value="2" />
+                                                    {% endif %}
+
+
+
+                                                    <input type="hidden" name="kasa_haraket_cari_id" value="{{senet.evrak_cari_id }}" />
+                                                    <div class="form-group">
+                                                        <label>İşlem Tarihi:</label>
+                                                        <input type="date" name="kasa_haraket_tarih" class="form-control" value="{{ bugun }}" required/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Kasa:</label>
+                                                        <select name="kasa_id" class="form-control">
+                                                            {% for kasa in kasalar %}
+                                                                <option value="{{ kasa.id }}">{{ kasa.kasa_adi }}</option>
+                                                            {%  endfor %}
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Tutar:</label>
+                                                        <input type="text" id="kasa-tutar" name="kasa_haraket_tutar" class="form-control" value="{{  Fiyat(senet.evrak_bedeli,"USD") }}"  readonly/>
+                                                    </div>
+
+
+                                                        <input type="hidden" name="kasa_haraket_not" class="form-control"  />
+
+                                                    <div class="form-group">
+                                                        <input type="button"  onClick="kasa_haraket_ekle()" value="Senet Kapat" class="btn btn-danger waves-effect waves-light" />
+                                                    </div>  </form>
+
+                                            </div>
+                                            <div class="tab-pane p-3" id="profile" role="tabpanel">
+
+
+                                                <form id="banka-haraket-form"  class="col-md-12" action="{{url}}/banka/hesap/hareket-kaydet-ajax" method="post">
+                                                    {{csrf | raw}}
+
+                                                    <input type="hidden" name="hareket_kanal" value="evrakislem">
+                                                    <input type="hidden" name="evrak_id" value="{{ senet_id }}" />
+                                                    <input type="hidden" name="evrak_tur" value="senet" />
+                                                    {% if senet.evrak_tip == 1 %}
+                                                        <input type="hidden" name="tip" value="1" />
+                                                    {% else %}
+                                                        <input type="hidden" name="tip" value="2" />
+                                                    {% endif %}
+
+                                                    <input type="hidden" name="banka_haraket_cari_id" value="{{ senet.evrak_cari_id }}" />
+                                                    <div class="form-group">
+                                                        <label>İşlem Tarihi:</label>
+                                                        <input type="date" name="tarih" class="form-control" value="{{ bugun }}" required/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label>Hesap:</label>
+
+                                                        <select name="hesap_id" class="form-control">
+                                                            {% for hesap in hesaplar  %}
+                                                                <option value="{{hesap.id}}">{{hesap.hesap_adi}}</option>
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </div>
+
+
+                                                        <input type="hidden" name="baslik" id="banka_hareket_baslik" class="form-control"  required/>
+
+                                                    <div class="form-group">
+                                                        <label>Tutar:</label>
+                                                        <input type="text" id="banka_hareket_tutar" name="banka_haraket_tutar" class="form-control" value="{{  Fiyat(senet.evrak_bedeli,"USD") }}"  readonly/>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <input type="button"  onClick="banka_haraket_ekle()" value="Senet Kapat" class="btn btn-danger waves-effect waves-light" />
+                                                    </div>  </form>
+
+
+
+                                            </div>
+
+                                        </div>
+
+
+                                    {%  else  %}
+
+                                        <h4>Senet Ödemesi Tamamlanmış</h4>
+
+                                    {% endif %}
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div></div>
+
+
+            
+
+    {% endblock %}
+
+    {% block footer %}
+
+        <script>
+
+            function kasa_haraket_ekle() {
+
+
+
+                event.preventDefault();
+
+                var form = $("#kasa-haraket-form");
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data)
+                    {
+                        data = data.trim();
+
+                        console.log(data);
+
+                        if (data == "ok") {
+
+                        window.location.reload();
+
+                        } else
+                        {
+
+
+                            swal("İşlem Başarısız!", "Kayıt Gerçekleştirilemedi!", "error");
+                        }
+                    }
+                });
+
+
+
+
+
+            }
+
+
+            function banka_haraket_ekle() {
+
+
+
+                event.preventDefault();
+
+                var form = $("#banka-haraket-form");
+                var url = form.attr('action');
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data)
+                    {
+                        data = data.trim();
+
+                        console.log(data);
+
+                        if (data == "ok") {
+
+
+                            window.location.reload();
+
+
+
+                        } else
+                        {
+
+
+                            swal("İşlem Başarısız!", "Kayıt Gerçekleştirilemedi!", "error");
+                        }
+                    }
+                });
+
+
+
+
+
+            }
+
+        </script>
+
+    {% endblock %}

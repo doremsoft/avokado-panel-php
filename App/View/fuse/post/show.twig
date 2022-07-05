@@ -1,0 +1,326 @@
+{% extends "layout-light.twig" %}
+
+        {% block head %}
+
+
+            <style>
+                .card {
+                    border-radius: 0px;
+                }
+
+                .wall-card {
+
+                    padding: 0px;
+                }
+            </style>
+
+        {% endblock %}
+    {% block content %}
+
+        {%  if paylasim_durum == 1 %}
+
+
+
+
+
+        <div data-comment-news-id="0" data-post-id-area="{{ post.id }}" data-post-id="{{ post.id }}"
+             data-post-last-comment-id='0'></div>
+
+        {% if post.original_image != null and post.original_image != "noimage.jpg" %}
+            <div class="col-md-12 m-t-15">
+                <div class="row">
+                    <div class="col-md-8">
+
+                        <div style="position: sticky; top: 15px;">
+
+                            <div class="card">
+                                <div class="card-body" style="padding: 0px;">
+
+                                    <div class="post-media">
+                                        <img class="media-img" style="width:100%;max-width: 100%;"
+                                             src="{{ url }}/storage-noi/images/{{ post.original_image }}"/>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4 m-m-t-15 mt-m-t-15">
+
+
+            {% if sahibi == 1 %}
+                        <div class="col-md-12 clearfix">
+
+
+
+                            <a class="nav-link  " style="float: left;"  href="{{ url }}/post/remove/{{ post.id }}">
+                                <i class="mat-icon  material-icons mat-icon-no-color "
+                                >delete_outline</i>
+                            </a>
+
+
+                            <a class="nav-link  " style="float: left;"   href="{{ url }}/post/comment-status/{{ post.id }}">
+                                <i class="mat-icon  material-icons mat-icon-no-color "
+                                >comment</i>
+                            </a>
+
+
+                        </div>
+                {% endif %}
+
+
+                        <div class="card">
+
+                            <div class="card-body">
+
+
+                                {{ post.mesaj | raw }}
+
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class=" card m-t-15 ">
+                            <div class="card-body" style="padding: 0px;">
+                                {% if post.yorum_durum == 1 %}
+
+                                    <footer class="bg-light p-4">
+
+                                        <div class="comment-count" style="padding-bottom: 10px;">
+                                            <button type='button' style='background: none;cursor:pointer;'
+                                                    onclick='yorumGetir("{{ post.id }}","first")' class=''><span
+                                                        id='post-comment-count-{{ post.id }}'>0</span> Yorum
+                                            </button>
+                                        </div>
+
+                                        <div class="reply row no-gutters">
+                                            <form class="col">
+                                                <textarea class="p-2 mb-2 w-100" id='yorumtextarea-{{ post.id }}'
+                                                          placeholder="Yorum yazın..."></textarea>
+                                                <button type="button"
+                                                        class="post-comment-button btn btn-sm btn-secondary"
+                                                        onclick="yorumEkle('{{ post.id }}')" aria-label="Post Comment">
+                                                    Yorum Kaydet
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div id='post-comments-{{ post.id }}' class='commentresults m-t-15'>
+                                        </div>
+
+
+                                        <div class="comments-loadmore px-2 py-2 more-unvisible"
+                                             data-comment-more="{{ post.id }}">
+                                            <button type='button' style='background: none;cursor:pointer;'
+                                                    onclick='yorumGetir("{{ post.id }}","more")' class=''><span
+                                                        id='post-comment-count-{{ post.id }}'>Daha Fazla Yükle...
+                                            </button>
+                                        </div>
+
+                                    </footer>
+
+                                {% elseif post.yorum_durum == 0 %}
+
+                                    <center><label style="font-size: 18px;padding: 10px;">Bu Paylaşım Yoruma Kapalı</label></center>
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+
+
+            <div class="col-md-12 m-t-15">
+                <div class="row">
+                    <div class="col-md-12">
+
+
+                        <div class="card">
+                            <div class="card-body">
+
+                                <div class="message">
+                                    {{ post.mesaj | raw }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    {% if sahibi == 1 %}
+
+                    <div class="col-md-12 clearfix">
+
+                        <a class="nav-link  " style="float: left;"  href="{{ url }}/post/remove/{{ post.id }}">
+                            <i class="mat-icon  material-icons mat-icon-no-color "
+                            >delete_outline</i>
+                        </a>
+
+
+                        <a class="nav-link  " style="float: left;"   href="{{ url }}/post/comment-status/{{ post.id }}">
+                            <i class="mat-icon  material-icons mat-icon-no-color "
+                            >comment</i>
+                        </a>
+
+
+                    </div>
+
+                        {% endif %}
+
+
+
+                    <div class="col-md-12 m-t-15">
+
+                        <div class="card">
+                            <div class="card-body" style="padding: 0px;">
+
+                                {% if post.yorum_durum == 1 %}
+                                    <footer class="bg-light p-4">
+
+                                        <div class="comment-count" style="padding-bottom: 10px;">
+                                            <button type='button' style='background: none;cursor:pointer;'
+                                                    onclick='yorumGetir("{{ post.id }}","first")' class=''><span
+                                                        id='post-comment-count-{{ post.id }}'>0</span> Yorum
+                                            </button>
+                                        </div>
+
+                                        <div class="reply row no-gutters">
+                                            <form class="col">
+                                                <textarea class="p-2 mb-2 w-100" id='yorumtextarea-{{ post.id }}'
+                                                          placeholder="Yorum yazın..."></textarea>
+                                                <button type="button"
+                                                        class="post-comment-button btn btn-sm btn-secondary"
+                                                        onclick="yorumEkle('{{ post.id }}')" aria-label="Post Comment">
+                                                    Yorum Kaydet
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div id='post-comments-{{ post.id }}' class='commentresults m-t-15'>
+                                        </div>
+
+
+                                        <div class="comments-loadmore px-2 py-2 more-unvisible"
+                                             data-comment-more="{{ post.id }}">
+                                            <button type='button' style='background: none;cursor:pointer;'
+                                                    onclick='yorumGetir("{{ post.id }}","more")' class=''><span
+                                                        id='post-comment-count-{{ post.id }}'>Daha Fazla Yükle...
+                                            </button>
+                                        </div>
+
+                                    </footer>
+
+                                {% elseif post.yorum_durum == 0 %}
+                                    <center><label style="font-size: 18px;padding: 10px;">Bu Paylaşım Yoruma Kapalı</label></center>
+
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+        {% endif %}
+
+{% else %}
+
+    <div class="col-md-12 m-t-15">
+
+
+        <div class="card">
+            <div class="card-body">
+
+                <div class="message" style="text-align: center;">
+                    <h4>PAYLAŞIM BULUNAMADI!</h4>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+        {% endif %}
+
+    {% endblock %}
+
+    {% block footer %}
+
+        <script>
+
+            yorumGetir('{{ post.id }}', 'first');
+
+            setInterval(function () {
+
+                // yorumGetir('{{ post.id }}',"news");
+
+            }, 5000);
+
+
+            var tineri = 4;
+
+            var myVar = setInterval(myTimer, 500);
+
+            function myTimer() {
+                tineri = tineri + 1;
+            }
+
+
+            $("div.content").scroll(function () {
+
+                var $this = $(this);
+                var $results = $(".commentresults");
+
+                var scrooltop = $this.scrollTop();
+
+                var thish = $this.height();
+                var resultheight = $results.height();
+                var thisheihgt = scrooltop + thish;
+
+
+                if (tineri > 1) {
+
+                    if (thisheihgt >= resultheight) {
+
+
+                        yorumGetir('{{ post.id }}', "first");
+
+                        tineri = 0;
+                    }
+
+
+                }
+
+
+            });
+
+
+        </script>
+
+
+
+    {% endblock %}

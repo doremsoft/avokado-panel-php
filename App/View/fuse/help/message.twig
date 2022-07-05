@@ -1,0 +1,157 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+    <div class="col-sm-12">
+                                    <div class="card msg-card mb-0">
+                                        <div class="card-body msg-block">
+                                            <div class="row">
+                                          
+                                                <div class="col-lg-12 col-md-12">
+                                                    <div class="ch-block">
+                                                        <div class="h-list-body">
+                                                            <div class="msg-user-chat scroll-div ps ps--active-y">
+                                                                <div class="main-friend-chat">
+                                                                    <div class="media chat-messages">
+                                                                 
+                                                                        <div class="media-body chat-menu-content">
+                                                                            <div class="">
+                                                                                <p class="chat-cont">Merhabalar</p>
+                                                                                <p class="chat-cont">Nasıl yardımcı olabilirim?</p>
+                                                                            </div>
+                                                                            <p class="chat-time">8:20</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="media chat-messages">
+                                                                        <div class="media-body chat-menu-reply">
+                                                                            <div class="">
+                                                                                <p class="chat-cont">Stok Ekleyemiyorum</p>
+                                                                            </div>
+                                                                            <p class="chat-time">8:22</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="media chat-messages">
+                                                                     
+                                                                        <div class="media-body chat-menu-content">
+                                                                            <div class="">
+                                                                                <p class="chat-cont">Şuanda bir bakım çalışması yürütülmekte en kısa sürede aktif olacaktır</p>
+                                                                            </div>
+                                                                            <p class="chat-time">8:20</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            <div class="ps__rail-x" style="left: 0px; bottom: -8px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 8px; height: 425px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 8px; height: 416px;"></div></div></div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="msg-form">
+                                                            <div class="input-group mb-0">
+                                                                <input type="text" class="form-control msg-send-chat" placeholder="Mesajınız . . .">
+                                                             
+                                                                <div class="input-group-append">
+                                                                    <button class="btn btn-theme btn-icon btn-msg-send" type="button"><i class="feather icon-play"></i></button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+    {% endblock %}
+    
+    {% block footer %}
+            <script type="text/javascript">
+        $(document).ready(function() {
+            $("#msg-friends").on("keyup", function() {
+                var g = $(this).val().toLowerCase();
+                $(".msg-user-list .userlist-box .media-body .chat-header").each(function() {
+                    var s = $(this).text().toLowerCase();
+                    $(this).closest('.userlist-box')[s.indexOf(g) !== -1 ? 'show' : 'hide']();
+                });
+            });
+        
+            $('.msg-send-chat').on('keyup', function(e) {
+                msg_cfc(e);
+            });
+            $('.btn-msg-send').on('click', function(e) {
+                msg_fc(e);
+            });
+
+            function msg_cfc(e) {
+                if (e.which == 13) {
+                    msg_fc(e);
+                }
+            };
+
+            function msg_fc(e) {
+                $('.msg-block .main-friend-chat').append('' +
+                    '<div class="media chat-messages">' +
+                    '<div class="media-body chat-menu-reply">' +
+                    '<div class="">' +
+                    '<p class="chat-cont">' + $('.msg-send-chat').val() + '</p>' +
+                    '</div>' +
+                    '<p class="chat-time">now</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '');
+                msg_frc($('.msg-send-chat').val());
+                msg_fsc();
+                $('.msg-send-chat').val(null);
+            };
+
+            function msg_frc(wrmsg) {
+                setTimeout(function() {
+                    $('.msg-block .main-friend-chat').append('' +
+                        '<div class="media chat-messages typing">' +
+                        '<a class="media-left photo-table" href="javascript:"><img class="media-object img-radius img-radius m-t-5" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image"></a>' +
+                        '<div class="media-body chat-menu-content">' +
+                        '<div class="rem-msg">' +
+                        '<p class="chat-cont">Typing . . .</p>' +
+                        '</div>' +
+                        '<p class="chat-time">now</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '');
+                    msg_fsc();
+                }, 1500);
+                setTimeout(function() {
+                    document.getElementsByClassName("rem-msg")[0].innerHTML = "<p class='chat-cont'>hello superior personality you write '" + wrmsg + " '</p>";
+                    $('.rem-msg').removeClass("rem-msg");
+                    $('.typing').removeClass("typing");
+                    msg_fsc();
+                }, 3000);
+            };
+
+            function msg_fsc() {
+                var tmph = $('.header-chat .main-friend-chat');
+                $('.msg-user-chat.scroll-div').scrollTop(tmph.outerHeight());
+            }
+            var ps = new PerfectScrollbar('.msg-user-list.scroll-div', {
+                wheelSpeed: .5,
+                swipeEasing: 0,
+                suppressScrollX: !0,
+                wheelPropagation: 1,
+                minScrollbarLength: 40,
+            });
+            var ps = new PerfectScrollbar('.msg-user-chat.scroll-div', {
+                wheelSpeed: .5,
+                swipeEasing: 0,
+                suppressScrollX: !0,
+                wheelPropagation: 1,
+                minScrollbarLength: 40,
+            });
+            $(".task-right-header-status").on('click', function() {
+                $(".taskboard-right-progress").slideToggle();
+            });
+
+            $(".message-mobile .media").on('click', function() {
+                var vw = $(window)[0].innerWidth;
+                if (vw < 992) {
+                    $(".taskboard-right-progress").slideUp();
+                    $(".msg-block").addClass('dis-chat');
+                }
+            });
+        });
+    </script>
+
+        {% endblock %}

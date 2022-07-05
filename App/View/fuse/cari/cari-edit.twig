@@ -1,0 +1,113 @@
+{% extends "layout-light.twig" %}
+
+
+    
+{% block content %}
+
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-6">
+
+        <div class="row no-gutters align-items-center">
+
+            <a href="{{ url }}/cari/show/{{ cari.id}}" class="btn btn-icon mr-4">
+                <i class="icon icon-arrow-left"></i>
+            </a>
+
+
+            <div><a href="{{ url }}/cari/show/{{ cari.id}}" style="text-decoration: none;" class="text-white">Hesaba Dön....</a></div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/cari/update" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="id" value="{{cari.id}}"/>
+
+                            <div class="form-group">
+                                <label>Cari Kod</label>
+                                <input type="text" class="form-control" name="cari_kod" value="{{cari.cari_kod}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Adı</label>
+                                <input type="text" class="form-control" name="cari_adi" required="" value="{{cari.cari_adi}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="text" class="form-control tr_telephone" data-mask="(999) 999-99-99" name="cari_telefon" value="{{cari.cari_telefon}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Gsm</label>
+                                <input type="text" class="form-control tr_telephone" name="cari_gsm" data-mask="(999) 999-99-99" value="{{cari.cari_gsm}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" name="cari_mail" value="{{cari.cari_mail}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Adres</label>
+                                <textarea name="cari_adres" class="form-control">{{cari.cari_adres}}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Detay</label>
+                                <textarea name="cari_detay" class="form-control">{{cari.cari_detay}}</textarea>
+                            </div>
+                            
+                            
+                                <div class="form-group">
+                                <label>Tanımlı Kredi Limit (TL)</label>
+                                <input type="text" class="form-control" name="cari_kredi_limit" required="" value="{{cari.cari_kredi_limit}}">
+                            </div>
+                            
+                            
+                                <div class="form-group">
+                                <label>Tanımlı Vade Günü</label>
+                                <input type="text" class="form-control" name="cari_vade_gun" required="" value="{{cari.cari_vade_gun}}">
+                            </div>
+                            
+                     
+                            <div class="form-group">
+                                <label>Vergi No / Tc Kimlik No</label>
+                                <input type="text" class="form-control" name="cari_vergi_no" required="" value="{{cari.cari_vergi_no}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Vergi Dairesi</label>
+                                <input type="text" class="form-control" name="cari_vergi_daire" value="{{cari.cari_vergi_daire}}">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Hesap Resmi</label>
+
+                                <img src="{{ media(cari.cari_image) }}" style="max-width: 200px;" class="image"  id="img-fieldID-1">
+
+                                <br>
+                                <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=private&callback=image_callback&type=1&popup=1&field_id=fieldID-1&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                                <input type="text" onkeyup="imageKontrol('fieldID-1')" class="form-control" name="cari_image" id="fieldID-1" value="{{cari.cari_image}}">
+                            </div>
+                          
+
+                            <button type="submit" class="btn btn-success">Güncelle</button> 
+    
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

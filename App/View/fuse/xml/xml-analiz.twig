@@ -1,0 +1,1037 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+
+        .form-group > label {
+
+            margin-top: 15px;
+        }
+
+        hr {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+        }
+
+        .md-has-value {
+            margin-top: 0px !important;
+        }
+
+
+       #eslesme_ozellikleri_listesi ul {
+                     list-style-type: none;
+                     margin: 0;
+                     padding: 0;
+                     margin-bottom: 10px;
+                 }
+
+        #eslesme_ozellikleri_listesi li {
+            margin-bottom: 10px;
+            padding: 5px;
+            list-style-type: none;
+        }
+
+        #esleme_secenekleri {
+            padding: 0px;
+        }
+        #esleme_secenekleri  ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 10px;
+
+        }
+
+        #esleme_secenekleri li {
+            margin-bottom: 10px;
+            padding: 5px;
+            list-style-type: none;
+        }
+
+        .stok_ozellikleri {
+
+            z-index: 2;
+            cursor: pointer;
+            list-style: none;
+            margin-bottom: 10px;
+            padding: 5px;
+            height: auto !important;
+
+        }
+
+        .selectedxmldata {
+            cursor: pointer;
+            list-style-type: none;
+            float: left;
+            margin: 5px;
+            padding: 5px;
+            z-index: 2;
+        }
+
+        .remove-item{
+            cursor: pointer;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+<div class="col-md-12">
+    <div class="row">
+
+
+        <div class="col-md-12 m-t-15">
+
+        <button type="button" onclick="window.location.href='{{ url }}/xml-import'"
+                class="btn btn-danger waves-effect waves-light m-t-15">İPTAL
+        </button>
+
+
+        {% if yukle == 1 %}
+
+            {% if xml.favori == 1 %}
+
+                <a class="btn btn-danger m-t-15" style="float: right;"  href="{{ url }}/xml-import/favori-cikart/{{ xml.id }}">XML
+                    Favoriden Çıkart</a>
+
+
+
+            {% else %}
+
+                <a  class="btn btn-secondary m-t-15" style="float: right;" href="{{ url }}/xml-import/favori-al/{{ xml.id }}">XML
+                    Favoriye Ekle</a>
+
+            {% endif %}
+
+        {% endif %}
+
+        </div>
+        <div class="col-md-12 m-t-15">
+
+            <div class="card">
+                <div class="card-header">
+                    <h5>Xml Analiz</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class=" col-md-4">
+                            <label>XML Dosyasi</label>
+
+
+                            <select name="xmldosyaadi" class="form-control" id="xmldosyaadi">
+
+                                <option value="0">XML Dosyası Seçin</option>
+
+
+                                {% for dosya in xmldosyalar %}
+                                   <option value="{{ dosya.xml_dosya_adi }}" {% if secilidosya ==  dosya.xml_dosya_adi %}selected{% endif %}>{{ dosya.ad }}</option>
+                                {% endfor %}
+
+                            </select>
+
+
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <label>XML Firma Adı</label>
+                            <input type="text" name="xmlfirma" id="xmlfirma" class="form-control" value=""/>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>XML Adı</label>
+                            <input type="text" name="xmlhatirlatma"  id="xmlhatirlatma" class="form-control" value=""/>
+                        </div>
+
+
+                        <input type="hidden" name="xmlmod" id="xmlmod" value="uygula">
+
+                    </div>
+
+                    <div id="islemmesaj" class="m-t-15"></div>
+
+                    <div id="analizbtn" class="m-t-15">
+                        <button type="button" onclick="xmlAnaliz()" class="btn btn-warning waves-effect waves-light"><i
+                                    class="mdi mdi-alert-outline mr-2"></i>Analiz Yap
+                        </button>
+                    </div>
+
+
+
+
+                    <div id="xmluygula" class="m-t-15" style="display: none;">
+
+
+                        <button type="button" onclick="xmlUygula('uygula')" class="btn btn-danger waves-effect waves-light">XML
+                            Aktarımı Başlat
+                        </button>
+
+
+                        <button type="button" onclick="xmlUygula('test')" class="btn btn-danger waves-effect waves-light">
+                            XML DOSYASINI  AYIKLA
+                        </button>
+
+
+
+                    </div>
+
+
+
+
+
+                    <h5>Dikkat!!</h5>
+
+
+                    Bu İşlemi Yedek Almadan Kesinlikle Yapmayın! <a target="_blank" href="{{ url }}/backup/list">Yedekleme Sistemi</a>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-12 m-t-15">
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <div class="card">
+
+                        <div class="card-header">Stok Varyant Grubu</div>
+
+                        <div class="card-body">
+
+                            <select class="form-control" id="esleme_varyant_secenekleri">
+
+
+                            </select>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="card  m-t-15">
+
+                        <div class="card-header">Fiaytlar Vergi Durum </div>
+
+                        <div class="card-body">
+
+                            <select class="form-control" id="stok_vergi_durum">
+                                <option value="0">Vergiler Hariç</option>
+                                <option value="1">Vergiler Dahil</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                    <div class="card  m-t-15">
+
+                        <div class="card-header">Stok XML Kullanılacak Eşleşmeler</div>
+
+                        <div class="card-body">
+
+                            <ul id="esleme_secenekleri">
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <div class="card " style="z-index: 1;">
+                        <div class="card-header">Stok Özellikleriniz</div>
+                        <div class="card-body">
+                            <ul style="padding-left: 0px;" id="eslesme_ozellikleri_listesi">
+
+                                {% for key , val  in stokozellikleri %}
+                                    <div data-type="{{ key }}" data-status="0" style="list-style: none; width: 100%;"
+                                        class="eslesme_liste stok_ozellikleri droppable ui-state-default ui-state-disabled">{{ val }}</div>
+                                {% endfor %}
+
+
+                            </ul>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-6">
+
+
+                    <div class="row">
+
+
+                        <div class="col-md-12">
+                            <div class="row">
+
+                                <div class="col-md-12 ">
+                                    <div class="card">
+
+                                        <div class="card-header" id="kontrolseceneklerihande">Kontrol Seçenekleri</div>
+
+                                        <div class="card-body sortable" style="padding-bottom: 100px;"
+                                             id="kontrol_secenekleri"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 m-t-15">
+                                    <div class="card">
+
+                                        <div class="card-header">Yoksa Eklenecek</div>
+
+                                        <div class="card-body sortable" style="min-height: 150px;"
+                                             id="yoksa_eklenecekler"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 m-t-15">
+                                    <div class="card">
+
+                                        <div class="card-header">Varsa Güncellenecek</div>
+
+                                        <div class="card-body sortable" style="min-height: 150px;"
+                                             id="varsa_guncellenecekler">
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="addselectedModal" role="dialog">
+        <div class="modal-dialog" style="max-width: 80%;">
+            <div class="modal-content">
+                <div class="modal-body" style="padding:0px;">
+
+
+                    <div class="col-md-12 m-t-15"  id="addselectedModalHtml"></div>
+
+
+                    <div class="col-md-12 m-t-15" >
+
+                        <button type="button" class="btn btn-secondary"  onclick="ekle('kontroller');">Kontrol Seçeneklerine Ekle</button>
+                        <button type="button" class="btn btn-secondary"  onclick="ekle('yoksaekle');">Yoksa Ekleneceklere Ekle</button>
+                        <button type="button" class="btn btn-secondary"  onclick="ekle('varsaguncelle');">Varsa Güncelleneceklere Ekle</button>
+
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <input type="hidden" id="kod" value="0">
+
+    {% endblock %}
+
+    {% block footer %}
+        <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+        <script>
+            {% if yukle == 1 %}
+            loading(true);
+
+            {% endif %}
+
+            function ekle(islem) {
+
+
+                if(islem == "kontroller"){
+
+                    $("#kontrol_secenekleri").append($("#addselectedModalHtml" ).html());
+
+                    $("#addselectedModalHtml" ).html("");
+
+                    $("#addselectedModal").modal("hide");
+
+
+                }else  if(islem == "yoksaekle"){
+
+
+                   $("#yoksa_eklenecekler").append($("#addselectedModalHtml" ).html());
+
+                    $("#addselectedModalHtml" ).html("");
+
+                    $("#addselectedModal").modal("hide");
+
+
+                }else  if(islem == "varsaguncelle"){
+
+
+                    $("#varsa_guncellenecekler").append($("#addselectedModalHtml" ).html());
+
+                    $("#addselectedModalHtml" ).html("");
+
+                    $("#addselectedModal").modal("hide");
+
+                }
+
+                removeitem();
+            }
+
+            function xmlUygula(islem_durumu) {
+
+
+
+                if( $("#xmlhatirlatma").val().trim() != ""){
+
+
+
+
+                var eslesme_listesi = {};
+                var eslesme_listesi_tersten = {};
+                var kontrol_secenekleri = {};
+                var kontrol_secenekleri_tersten = {};
+                var yoksa_eklenecekler = {};
+                var yoksa_eklenecekler_tersten = {};
+                var varsa_guncellenecekler = {};
+                var varsa_guncellenecekler_tersten = {};
+
+                $("#eslesme_ozellikleri_listesi > .eslesme_liste").each(function () {
+
+                    if ($(this).attr("data-status") == 1) {
+
+                        var eslesme_adi = $(this).attr("data-eslesme-adi");
+                        var data_type = $(this).attr("data-type");
+
+
+                        eslesme_listesi[eslesme_adi] = data_type;
+
+                        eslesme_listesi_tersten[data_type] =  eslesme_adi;
+
+
+                    }
+
+                });
+
+
+                $("#kontrol_secenekleri > .remove-item").each(function () {
+
+                    var eslesme_adi = $(this).attr("data-eslesme-adi");
+                    var data_type = $(this).attr("data-type");
+
+                    kontrol_secenekleri[eslesme_adi] = data_type;
+
+                    kontrol_secenekleri_tersten[data_type] = eslesme_adi;
+
+                });
+
+
+                $("#yoksa_eklenecekler > .remove-item").each(function () {
+
+                    var eslesme_adi = $(this).attr("data-eslesme-adi");
+                    var data_type = $(this).attr("data-type");
+
+                    yoksa_eklenecekler[eslesme_adi] = data_type;
+                    yoksa_eklenecekler_tersten[data_type] = eslesme_adi;
+
+                });
+
+
+                $("#varsa_guncellenecekler > .remove-item").each(function () {
+
+                    var eslesme_adi = $(this).attr("data-eslesme-adi");
+                    var data_type = $(this).attr("data-type");
+
+                    varsa_guncellenecekler[eslesme_adi] = data_type;
+                    varsa_guncellenecekler_tersten[data_type] = eslesme_adi;
+
+                });
+
+
+
+                var post_data ={
+                    "varyant_alani" : $("#esleme_varyant_secenekleri").val(),
+                    "stok_vergi_durum" : $("#stok_vergi_durum").val(),
+                    "xmldosyaadi" : $("#xmldosyaadi").val(),
+                    "xml_firma":$("#xmlfirma").val(),
+                    "xml_not":$("#xmlhatirlatma").val(),
+                    "eslesme_listesi" : eslesme_listesi,
+                    "eslesme_listesi_tersten" : eslesme_listesi_tersten,
+                    "kontrol_secenekleri" : kontrol_secenekleri,
+                    "kontrol_secenekleri_tersten" : kontrol_secenekleri_tersten,
+                    "yoksa_eklenecekler" : yoksa_eklenecekler,
+                    "yoksa_eklenecekler_tersten" : yoksa_eklenecekler_tersten,
+                    "varsa_guncellenecekler" : varsa_guncellenecekler,
+                    "varsa_guncellenecekler_tersten":varsa_guncellenecekler_tersten,
+                    "mod": islem_durumu
+                };
+
+                loading(true);
+
+                $.post("{{ url }}/xml-import/xml-accept", {varb: JSON.stringify(post_data)})
+                    .done(function (data) {
+
+                        console.log(data);
+
+
+                        if(data == 1){
+
+                            swalert("success", "Aktarım Kuyruğuna Alında", "Aktarım Tamamlandığında Size Bildirim Göndereceğiz");
+                        }else{
+                            swalert("error", "Hata", data);
+
+
+                        }
+                        try{
+
+                            //data = JSON.parse(data);
+
+                            /*
+
+                            var toplam_stok = data.xml_toplam_stok + data.toplam_varyant;
+
+                            var message = "Toplam Temel Stok:"+data.xml_toplam_stok
+                                +"<br>Eşleşen Temel Stok: "+data.eslesen_stok
+                                +"<br>Yeni Temel Eklenen Stok:"+data.yeni_eklenen_stok
+                                +"<br>Güncellenen Temel Stok:"+data.guncellenen_stok
+                                +"<br><br><br>Toplam Varyant:"+data.toplam_varyant
+                                +"<br>Eşleşen Varyant:"+data.eslesen_varyant
+                                +"<br>Yeni Eklenen Varyant:"+data.yeni_eklenen_varyant
+                                +"<br>Güncellenen Varyant:"+data.guncellenen_varyant
+                                +"<br><br><br>Toplam Xml Gelen Stok:"+toplam_stok;
+
+
+
+                            if($("#xmlmod").val() == "test"){
+
+                                swalert("success", "Test Tamamlandı", message+" Sonucu Alınacak!");
+
+                            }else{
+
+                                swalert("success", "Aktarım Tamamlandı", message);
+                            }
+
+
+                             */
+
+
+
+
+                        }catch (e) {
+
+                            swalert("error", "Hata", data);
+
+
+                            loading(false);
+
+
+                        }
+
+                        loading(false);
+                    });
+
+                }else{
+
+                    swalert("error", "Hata", "Bütün Alanları Doldurmalısınız!");
+                }
+
+            }
+
+            function xmlAnaliz() {
+
+                $("#analizbtn").hide();
+                $("#islemmesaj").html("Analiz Yapılıyor Lütfen Bekleyin....");
+
+                loading(true);
+
+
+                var xmldosyaadi = $("#xmldosyaadi").val();
+
+
+                $.post("{{ url }}/xml-import/xml-analiz", {xmldosyaadi: xmldosyaadi})
+                    .done(function (data) {
+
+
+                        console.log(data);
+
+try{
+
+
+    var result = JSON.parse(data);
+
+    var html = "";
+
+    var varyant_html = "<option value=\"off\">Varyant Kullanma</option>";
+
+
+    $.each(result, function (key, val) {
+
+        if (val instanceof Array) {
+
+
+        } else if (val instanceof Object) {
+
+            var selected = "";
+
+            var keya = Object.keys(val);
+
+
+            if (keya == "variants") {
+
+                selected = " selected";
+
+            }
+
+            varyant_html += "<option value='" + Object.keys(val) + "' " + selected + ">" + Object.keys(val) + "</option>";
+
+
+        } else {
+
+            if (val == "variants") {
+
+                selected = " selected";
+
+            }
+
+            varyant_html += "<option value='" + val + "' " + selected + ">" + val + "</option>";
+
+
+            html += "<div class='selectedxmldata  ui-state-default  draggable' dataid='" + val + "'  data-stok-esleme='" + val + "'>" + val + "</div>";
+
+        }
+
+    });
+
+
+    $("#esleme_varyant_secenekleri").html(varyant_html);
+    $("#esleme_secenekleri").html(html);
+
+    suruklenebilirAlanlar();
+
+    $("#xmluygula").css("display", "block");
+    $("#islemmesaj").html("");
+    loading(false);
+
+}catch (e) {
+
+    swalert("error", "Hata", "URL Adresini Kontol Edin!");
+    $("#analizbtn").css("display", "block");
+    $("#islemmesaj").html("");
+    loading(false);
+}
+
+                    });
+
+            }
+
+
+
+
+
+            function xmlAnalizKontrol(xmldata) {
+
+                $("#analizbtn").hide();
+                $("#islemmesaj").html("Analiz Yapılıyor Lütfen Bekleyin....");
+
+                loading(true);
+
+
+                var xmldosyaadi = $("#xmldosyaadi").val();
+
+
+                $.post("{{ url }}/xml-import/xml-analiz", {xmldosyaadi: xmldosyaadi})
+                    .done(function (data) {
+
+
+                        try{
+
+                            var result = JSON.parse(data);
+
+
+
+                            var html = "";
+
+                            var varyant_html = "<option value=\"off\">Varyant Kullanma</option>";
+
+                            $.each(result, function (key, val) {
+
+                                if (val instanceof Array) {
+
+                                } else if (val instanceof Object) {
+
+                                    var selected = "";
+
+                                    var keya = Object.keys(val);
+
+
+                                    if (keya === "variants") {
+
+                                        selected = " selected";
+
+                                    }else if (val === "subproducts") {
+
+                                        selected = " selected";
+
+                                    }
+
+                                    varyant_html += "<option value='" + Object.keys(val) + "' " + selected + ">" + Object.keys(val) + "</option>";
+
+
+                                } else {
+
+                                    if (val === "variants") {
+
+                                        selected = " selected";
+
+                                    }else if (val === "subproducts") {
+
+                                        selected = " selected";
+
+                                    }
+
+                                    varyant_html += "<option value='" + val + "' " + selected + ">" + val + "</option>";
+
+
+                                    html += "<div class='selectedxmldata  ui-state-default  draggable' dataid='" + val + "'  data-stok-esleme='" + val + "'>" + val + "</div>";
+
+                                }
+
+                            });
+
+
+                            $("#esleme_varyant_secenekleri").html(varyant_html);
+                            $("#esleme_secenekleri").html(html);
+
+
+
+                            var eskieslesme = xmldata.eslesme_listesi;
+
+
+
+                            var error = 0;
+
+                            var uyusmayanalanlar = "";
+
+                            $.each(eskieslesme,function(key,val){
+
+
+                                var status = $("[data-type = '"+val+"']").attr("data-status");
+
+                                if(status == 0){
+
+
+                                    var dataidstatus = $("[dataid = '"+key+"']").attr("data-stok-esleme");
+
+
+                                    if(dataidstatus){
+
+
+                                        var alan = $("[data-type = '"+val+"']");
+
+                                        alan.attr("data-status",1);
+                                        alan.attr("data-eslesme-adi",key);
+                                        alan.addClass("ui-state-highlight");
+                                        alan.addClass("esli_drag");
+                                        alan.removeClass("ui-state-disabled");
+                                        alan.removeClass("draggable");
+                                        alan.removeClass("droppable");
+
+                                        var inner_text = alan.html();
+                                        inner_text = inner_text + " - " + key;
+                                        alan.html(inner_text);
+
+                                        $("[dataid = '" + key + "']").remove();
+
+                                        eslidrag();
+
+
+                                    }else{
+
+
+                                        uyusmayanalanlar+=" "+key+" ";
+
+
+                                        error = 1;
+
+
+
+                                    }
+
+
+
+
+
+
+
+                                }else{
+
+
+                                    uyusmayanalanlar+=" "+val+" ";
+
+
+                                    error = 1;
+
+
+                                }
+
+
+                            });
+
+
+                            if(error == 1){
+
+
+                                swalert("error", "Hata", "Uyuşmayan Alanlar Mevcut! = "+uyusmayanalanlar);
+
+                            }
+
+                            console.log(xmldata);
+
+                            var vergi_durum = xmldata.stok_vergi_durum;
+
+
+                            if(vergi_durum === undefined){
+
+                                $("#stok_vergi_durum").val(0);
+
+                            }else{
+                                $("#stok_vergi_durum").val(vergi_durum);
+
+                            }
+
+
+
+                            var kontrol_secenekleri = xmldata.kontrol_secenekleri_tersten;
+
+                            $.each(kontrol_secenekleri,function(key,val){
+
+                                $("#eslesme_ozellikleri_listesi > [data-type = '"+key+"' ]" ).clone().appendTo( "#kontrol_secenekleri" );
+
+                            });
+
+                            var yoksa_eklenecekler = xmldata.yoksa_eklenecekler_tersten;
+
+                            $.each(yoksa_eklenecekler,function(key,val){
+
+                                $("#eslesme_ozellikleri_listesi > [data-type = '"+key+"' ]" ).clone().appendTo( "#yoksa_eklenecekler" );
+
+                            });
+
+                            var varsa_guncellenecekler = xmldata.varsa_guncellenecekler_tersten;
+
+                            $.each(varsa_guncellenecekler,function(key,val){
+
+                                $("#eslesme_ozellikleri_listesi > [data-type = '"+key+"' ]" ).clone().appendTo( "#varsa_guncellenecekler" );
+
+                            });
+
+
+                            var varsa_guncellenecek_divler =  $("#varsa_guncellenecekler > .eslesme_liste ");
+                            varsa_guncellenecek_divler.removeClass("eslesme_liste");
+                            varsa_guncellenecek_divler.removeClass("stok_ozellikleri");
+                            varsa_guncellenecek_divler.removeClass("esli_drag");
+                            varsa_guncellenecek_divler.removeClass("ui-droppable");
+                            varsa_guncellenecek_divler.addClass("remove-item");
+
+
+                            var yoksa_eklenecekler_divler =  $("#yoksa_eklenecekler > .eslesme_liste ");
+                            yoksa_eklenecekler_divler.removeClass("eslesme_liste");
+                            yoksa_eklenecekler_divler.removeClass("stok_ozellikleri");
+                            yoksa_eklenecekler_divler.removeClass("esli_drag");
+                            yoksa_eklenecekler_divler.removeClass("ui-droppable");
+                            yoksa_eklenecekler_divler.addClass("remove-item");
+
+                            var kontrol_secenekleri_divler =  $("#kontrol_secenekleri > .eslesme_liste ");
+                            kontrol_secenekleri_divler.removeClass("eslesme_liste");
+                            kontrol_secenekleri_divler.removeClass("stok_ozellikleri");
+                            kontrol_secenekleri_divler.removeClass("esli_drag");
+                            kontrol_secenekleri_divler.removeClass("ui-droppable");
+                            kontrol_secenekleri_divler.addClass("remove-item");
+
+
+                            suruklenebilirAlanlar();
+
+                            $("#xmluygula").css("display", "block");
+                            $("#islemmesaj").html("");
+                            loading(false);
+
+                        }catch (e) {
+
+                            console.log(e);
+
+                            swalert("error", "Hata", "URL Adresini Kontol Edin!");
+                            $("#analizbtn").css("display", "block");
+                            $("#islemmesaj").html("");
+                            loading(false);
+                        }
+
+                    });
+
+            }
+
+
+            function removeitem() {
+
+
+            }
+
+            function eslidrag() {
+
+
+                $(".esli_drag").on("click",function(){
+
+                    $("#addselectedModalHtml").html("");
+
+                    $(this).clone().appendTo( "#addselectedModalHtml" );
+
+                    var eklenen = $("#addselectedModalHtml > .eslesme_liste ");
+
+                    var kod = $("#kod").val();
+
+                    kod = parseInt(kod);
+
+                    eklenen.removeClass("eslesme_liste");
+
+                    eklenen.removeClass("stok_ozellikleri");
+
+                    eklenen.removeClass("esli_drag");
+
+                    eklenen.removeClass("ui-droppable");
+
+                    eklenen.addClass("remove-item");
+
+                    eklenen.attr("kod",kod);
+
+                    $("#addselectedModal").modal();
+
+                    $("#kod").val(kod+1);
+
+                });
+
+
+                removeitem();
+
+            }
+
+            function suruklenebilirAlanlar() {
+
+                $(".draggable").draggable();
+
+                $(".droppable").droppable({
+
+                    classes: {
+                        "ui-droppable-active": "ui-state-active",
+                        "ui-droppable-hover": "ui-state-hover"
+                    },
+                    drop: function (event, ui) {
+
+                        var uiname = ui.draggable[0].innerText;
+
+                        $(this).attr("data-eslesme-adi", uiname);
+
+                        $(this).attr("data-status", 1);
+
+                        $(this).addClass("ui-state-highlight");
+
+                        $(this).removeClass("ui-state-disabled");
+
+                        $(this).removeClass("draggable");
+
+                        $(this).removeClass("droppable");
+
+                        $(this).addClass("esli_drag");
+
+                        var inner_text = $(this).html();
+
+                        inner_text = inner_text + " - " + uiname;
+
+                        $(this).html(inner_text);
+
+                        $("[dataid = '" + uiname + "']").remove();
+
+                        eslidrag();
+
+                    }
+                });
+
+
+
+                eslidrag();
+
+
+
+
+
+            }
+
+            suruklenebilirAlanlar();
+
+            {% if yukle == 1 %}
+            var xml_data = JSON.parse('{{xml_data | raw}}');
+            $("#xmlfirma").val(xml_data.xml_firma);
+            $("#xmlhatirlatma").val(xml_data.xml_not);
+            xmlAnalizKontrol(xml_data);
+            {% endif %}
+
+
+            removeitem();
+
+            $(document).ready(function() {
+
+
+                $(document).on("click", ".remove-item" , function() {
+
+                    var r = confirm("Silme İşlemini Onaylıyormusunuz?");
+
+                    if (r == true) {
+
+                        $(this).remove();
+
+                    }
+
+                });
+
+
+            });
+
+        </script>
+
+    {% endblock %}
+
+

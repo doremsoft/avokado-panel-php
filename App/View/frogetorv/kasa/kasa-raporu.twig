@@ -1,0 +1,65 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+      <div class="row">
+          
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Kasa Raporu</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/kasa/kasa-raporlari-goster" method="post">
+                            {{csrf | raw}}
+
+
+                            <div class="row">
+
+
+
+
+                                <div class="col-md-4">
+                                    <label>Kasa</label>
+                                    <select class="form-control" name="kasa_id">
+                                        {% for kasa in kasalar  %}
+                                            <option value="{{kasa.id}}" >{{kasa.kasa_adi}}</option>
+
+
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Rapor Başlama Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bas_tarih" value="{{bugun}}"/>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label>Rapor Bitiş Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bit_tarih" value="{{bugun}}"/>
+                                </div>
+
+
+                                <div class="col-md-4">  <label>İşlem</label> 
+
+                                    <button type="submit" class="form-control btn btn-primary">Kasa Raporunu Getir</button> </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </div>
+
+
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Yeni Stok</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/stok/save" method="post" enctype="multipart/form-data">
+                                {{csrf | raw}}
+
+                                {% if noframe == 'ok'  %}
+                                    <input type="hidden" name="noframe" value="ok" />
+                              
+                                {% endif %}
+
+                                <div class="form-group">
+                                    <label>Ad</label>
+                                    <input type="text" class="form-control" name="stok_adi" id="stok_adi_input_f" required />
+                                </div>
+
+                                <input type="hidden" class="form-control" name="stok_cinsi">
+
+                                    <div class="form-group">
+                                        <label>Birimi</label>
+                                        <select name="stok_birimi" class="form-control">
+                                            {% for birim in birimler %}
+                                                <option value="{{birim.stok_birim_adi}}">{{birim.stok_birim_adi}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Standart Adet</label>
+                                        <input type="text" class="form-control" name="stok_standart_adet" value="1">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Sınıfı</label>
+                                        <select name="stok_sinif" class="form-control">
+                                            {% for sinif in siniflar %}
+                                                <option value="{{sinif.id}}">{{sinif.stok_sinif_adi}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Grubu</label>
+                                        <select name="stok_grup" class="form-control">
+                                            <option value="0">Grup Seçiniz</option>
+                                            {% for grup in gruplar %}
+                                                <option value="{{grup.id}}">{{grup.stok_grup_adi}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Minimum Seviyesi</label>
+                                        <input type="text" class="form-control" name="stok_min_seviyesi" value="0">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Maksimum Seviyesi</label>
+                                        <input type="text" class="form-control" name="stok_max_seviyesi" value="99999">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Son Alış Fiyatı</label>
+                                        <input type="text" class="form-control" name="stok_alis_fiyati" value="0">
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Alım İskonto Oranı %</label>
+                                        <input type="text" class="form-control" name="stok_alim_iskonto_oran" value="0">
+
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+                                        <label>Satış Fiyatı</label>
+                                        <input type="text" class="form-control" name="stok_satis_fiyati" value="0">
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>İndirimli Satış Fiyatı</label>
+                                        <input type="text" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="0">
+                                            <small>* 0 Etkisiz olarak bırakır</small>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Satış İskonto Oranı %</label>
+                                        <input type="text" class="form-control" name="stok_alim_iskonto_oran" value="0">
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label>Para Birimi</label>
+                                        <select name="stok_doviz" class="form-control">
+                                            {% for doviz in dovizler %}
+
+                                                {% if doviz.doviz_kod == "TL" %}
+
+                                                    <option value="{{doviz.doviz_kod}}" selected>{{doviz.doviz_adi}}</option>
+                                                {% else %}
+                                                    <option value="{{doviz.doviz_kod}}">{{doviz.doviz_adi}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Kdv Oranı</label>
+                                        <input type="text" class="form-control" name="stok_kdv_oran" value="18">
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label> Vergi Durumu</label>
+                                        <select class="form-control" name="fiyatVergiDurum">
+                                            <option value="2">Vergiler Dahil Fiyatlar</option>
+                                            <option value="1">Vergiler Hariç Fiyatlar</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Stok Detay</label>
+                                        <textarea name="stok_detayi" class="form-control"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Resim</label>
+                                        <input type="file" name="stok_resim">
+                                    </div>
+
+     
+                                       <div class="form-group">
+                                <label>Varyant Üst Id</label>
+                                <input type="text" class="form-control" name="stok_parent_id" value="{{stok.stok_parent_id}}">
+                            </div>
+                            
+                                   <div class="form-group">
+                                <label>Varyant Üst Stok Kod</label>
+                                <input type="text" class="form-control" name="stok_parent_stok_kod" value="{{stok.stok_parent_stok_kod}}">
+                            </div>
+
+                                <div class="form-group">
+                                <label>Varyant Varyant Adi</label>
+                                <input type="text" class="form-control" name="stok_varyant_adi" value="{{stok.stok_varyant_adi}}">
+                            </div>
+                            
+                            
+                               
+                         <div class="form-group">
+                                <label>Varyant eğer</label>
+                                <input type="text" class="form-control" name="stok_varyant_deger" value="{{stok.stok_varyant_deger}}">
+                            </div>
+                            
+
+                                    <div class="form-group">
+                                        <label>Stok Kod</label>
+                                        <input type="text" class="form-control" name="stok_kod">
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Stok Özel Kod</label>
+                                        <input type="text" class="form-control" name="stok_ozel_kod">
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label> Marka</label>
+                                        <select name="stok_marka" class="form-control">
+                                            <option value="0">Marka Seçiniz</option>
+                                            {% for marka in markalar %}
+
+
+
+                                                <option value="{{marka.id}}">{{marka.marka_adi}}</option>
+
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+                                        <label>Etiketler (CTRL tuşu ile birden fazla seçim yapabilirsiniz)</label>
+                                        <select  multiple  name="etiketler[]" class="form-control multiple " style="height:300px;" >
+
+                                            {% for tag in tags %}
+                                                <option value="{{ tag.id }}" >{{ tag.tag_name }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+                                        <label>Stok Barkod</label>
+                                        <input type="text" class="form-control" name="stok_barkod_no">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Ekle</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+    <script>
+
+    function inputfocus(){
+        
+        
+  document.getElementById("stok_adi_input_f").focus();
+}
+
+        
+    </script>
+
+{% endblock %} 
+

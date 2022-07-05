@@ -1,0 +1,226 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+
+        <link href="{{asset('plugins/morris/morris.css')}}" rel="stylesheet" type="text/css" />
+
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+
+                background-color: #e6f2ff;
+
+            }
+
+            #aramasonuc{
+
+
+
+            }
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">receipt</i>
+
+                                        </span>
+                        <span class="logo-text h4">Fiş</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Fiş İşlemleri</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider" style="padding-bottom: 15px;"></div>
+
+
+
+                            <li class="nav-item">
+                                <a href="{{url}}/fis" class="nav-link ripple sid-nav-link accent "><span>Fiş Özet</span></a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a href="{{url}}/fis/liste" class="nav-link ripple sid-nav-link"><span>Fişler</span></a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{url}}/fis/giris" class="nav-link ripple sid-nav-link"><span>Yeni Alım Fişi</span></a>
+                            </li>
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a href="{{url}}/fis/cikis" class="nav-link ripple sid-nav-link" ><span>Yeni Satış Fişi</span></a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="contacts-list" style="padding-bottom: 20px;">
+
+
+
+                    <div class="col-md-12 card" >
+                        <div id="morris-line-example" style="height: 300px"></div>
+                    </div>
+
+
+
+
+                </div>
+                <!-- / CONTACT LIST -->
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{asset('plugins/morris/morris.min.js')}}"></script>
+    <script src="{{asset('plugins/raphael/raphael.min.js')}}"></script>
+    <script src="{{asset('plugins/apexcharts/apexcharts.min.js')}}"></script>
+
+
+    <script>
+        var satislar = JSON.parse('{{ satislar | raw }}');
+        var alimlar = JSON.parse('{{ alimlar | raw }}');
+
+
+        var year = "{{ year }}";
+
+
+
+
+        !function($) {
+            "use strict";
+
+            var MorrisCharts = function() {};
+
+
+            MorrisCharts.prototype.createLineChart = function(element, data, xkey, ykeys, labels, lineColors) {
+                Morris.Line({
+                    element: element,
+                    data: data,
+                    xkey: xkey,
+                    ykeys: ykeys,
+                    labels: labels,
+                    hideHover: 'auto',
+                    gridLineColor: '#eef0f2',
+                    resize: true,
+                    lineColors: lineColors
+                });
+            },
+
+                MorrisCharts.prototype.init = function() {
+
+                    var $data  = [
+                        { y: year+'-01', a: satislar[1], b: alimlar[1] },
+                        { y:  year+'-02', a: satislar[2] , b: alimlar[2]},
+                        { y:  year+'-03', a: satislar[3], b: alimlar[3]},
+                        { y:  year+'-04', a: satislar[4], b: alimlar[4]},
+                        { y:  year+'-05', a: satislar[5], b: alimlar[5]},
+                        { y:  year+'-06', a:satislar[6], b: alimlar[6]},
+                        { y:  year+'-07', a:satislar[7], b: alimlar[7]},
+                        { y:  year+'-08', a: satislar[8] , b: alimlar[8]},
+                        { y:  year+'-09', a: satislar[9] , b: alimlar[9]},
+                        { y:  year+'-10', a: satislar[10] , b: alimlar[10]},
+                        { y:  year+'-11', a: satislar[11] , b: alimlar[11]},
+                        { y:  year+'-12', a: satislar[12] , b: alimlar[12]}
+                    ];
+
+                    this.createLineChart('morris-line-example', $data, 'y', ['a', 'b'], ['Satış', 'Alım'], [ '#0078ff','#ffc400']);
+
+                },
+                //init
+                $.MorrisCharts = new MorrisCharts, $.MorrisCharts.Constructor = MorrisCharts
+        }(window.jQuery),
+
+
+            function($) {
+                "use strict";
+                $.MorrisCharts.init();
+            }(window.jQuery);
+
+
+
+    </script>
+
+
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+ <div class="row">
+     
+       <div class="col-md-12" style="margin-bottom: 15px;">
+         <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+       </div>
+        
+
+    <div class="col-md-12">
+        <div class="card">
+            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/marka/append" method="post">
+                            {{csrf | raw}}
+                          
+                                 <div class="form-group">
+                                <label>Marka Adını Yazınız:</label>
+                                <input type="text" name="marka_adi" class="form-control" required/>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Markalar</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+
+                                 <thead>
+                                                <tr>
+                                                    <th>Marka Adı</th>
+                                                    <th>Resim</th>
+                                                   
+                                                       <th>İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                <tbody>
+                                    {% for marka in markalar  %}
+                                        
+                                        
+                                        <tr>
+                                            
+                                            
+                                          <td>
+
+                                              
+ <label style="padding:10px;" id="editable-{{marka.id}}" class="editable" data-url="{{url}}/marka/update" data-id="{{marka.id}}" title="Düzenlemek İçin Tıklayın">{{marka.marka_adi}}</label>
+
+                                           
+                                            </td>
+
+                                   
+                                            <td width="150px">
+                                           
+                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{marka.id}}')"><i class="fa fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                        
+                                        {% endfor %}
+                                
+                                </tbody>
+                                
+                                
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+{% endblock %}

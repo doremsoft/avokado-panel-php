@@ -1,0 +1,168 @@
+{% extends "layout-light.twig" %}
+
+{% block backbtn %}
+
+    <a href="{{url}}/yazilimlar/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Yazılımlara Dön</a>
+    {% endblock %}
+
+
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>{{ yazilim.takma_adi }} - {{ yazilim.device_type }} </h5>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/yazilimlar/update" method="post">
+                                {{csrf | raw}}
+
+                                <input type="hidden" name="id" value="{{ yazilim.id }}"/>
+                                
+                                <div class="form-group">
+                                    <label>Takma Adı:</label>
+                                    <input type="text" name="takma_adi" class="form-control"  value="{{ yazilim.takma_adi }}" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Master Cari Hesap Id:</label>
+                                    <input type="text" name="master_parakende_cari_hesap_id" class="form-control"  value="{{ yazilim.master_parakende_cari_hesap_id }}" required/>
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Standart Çıkış Yapılacak Depo :</label>
+
+                                    <select name="cikis_yapacagi_depo_id" class="form-control">
+                                        {% for depo in depolar  %}
+                                            {% if yazilim.cikis_yapacagi_depo_id ==  depo.id%}
+                                                <option value="{{depo.id}}" selected>{{depo.stok_depo_adi}} </option>
+                                            {% else %}
+                                                <option value="{{depo.id}}">{{depo.stok_depo_adi}} </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Standart Tahsilat Yapılacak Kasa :</label>
+                                    
+                                           <select name="kasa_id" class="form-control">
+                                        {% for kasa in kasalar  %}
+                                            {% if yazilim.kasa_id ==  kasa.id%}
+                                                <option value="{{kasa.id}}" selected>{{kasa.kasa_adi}} </option>
+                                            {% else %}
+                                                <option value="{{kasa.id}}">{{kasa.kasa_adi}} </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+
+
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Standart Pos Hesabı :</label>
+                                    
+                                        <select name="pos_hesap_id" class="form-control">
+                                        {% for hesap in hesaplar  %}
+                                            
+                                            {% if yazilim.pos_hesap_id ==  hesap.id%}
+                                                
+                                                <option value="{{hesap.id}}" selected>{{hesap.hesap_adi}} </option>
+                                            {% else %}
+                                                <option value="{{hesap.id}}">{{hesap.hesap_adi}} </option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    
+                                    
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Durum (Aktif / Pasif) :</label>
+
+                                    
+                                               <select name="activate" class="form-control">
+                                     
+                                            {% if yazilim.activate ==  1%}
+                                                <option value="1" selected>Aktif </option>
+                                                  <option value="0">Pasif</option>
+                                            {% else %}
+                                                <option value="1" >Aktif </option>
+                                                  <option value="0" selected>Pasif</option>
+                                            {% endif %}
+                                        
+                                    </select>
+                                    
+                                    
+                                </div>
+
+
+                                <button type="submit" class="btn btn-primary">Yazılım Ayarlarını Güncelle</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function hesap_sil(id) {
+
+
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+
+
+                if (result.value) {
+                    document.getElementById('hesap-sil-form-' + id).submit();
+                }
+
+
+
+
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+
+                if (dismiss === 'cancel') {
+
+                }
+
+
+            });
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

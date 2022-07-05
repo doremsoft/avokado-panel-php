@@ -1,0 +1,61 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="row justify-content-center">
+
+
+
+ 
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Miktar Kritiğindeki Stok Listesi</h5>
+         
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                       
+                                        <th>Stok Adı</th>
+                                        <th>Mevcut</th>
+                                        <th> < Uyarı Limiti</th>
+                                         <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for stok in stoklar.result  %}
+                                        <tr>
+                                       
+                                            <td><a href="{{url}}/stok/show/{{stok.id}}">{{stok.stok_adi}}</a></td>
+                                            <td>{{adet(stok.stok_adet)}}</td>
+                                            <td>{{adet(stok.stok_min_seviyesi)}}</td>
+                                       <td><a href="{{url}}/stok/show/{{stok.id}}">Göster</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div> <div class="card-body">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {{paginate(stoklar.paginate,"stok/kritiktekiler") | raw }}
+                    </ul>
+                </nav>
+            </div>   </div>
+    </div>    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock %}

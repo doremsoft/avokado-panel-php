@@ -1,0 +1,134 @@
+{% extends "layout-light.twig" %}
+
+                
+
+
+{% block content %}
+
+    {% if mobile == 1 %}
+        <div class="row">
+
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <a href="{{url}}/cari/list" class="btn btn-danger waves-effect waves-light">
+                    <i class="fa fa-backward mr-2"></i>Geri Dön</a>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div class="row justify-content-center">
+
+    <div class="col-md-12">
+        <div class="card">
+    
+            <div class="card-body">
+                
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/cari/save" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="tur" value="{{ tur }}"/>
+
+                            <div class="form-group">
+                                <label>Ad Soyad / Unvan</label>
+                                <input type="text" class="form-control" name="cari_adi" required="">
+                            </div>
+                            <div class="form-group">
+                                <label>Vergi No / Tc Kimlik No</label>
+                                <input type="text" class="form-control" name="cari_vergi_no" required="">
+                            </div>
+                            <div class="form-group">
+                                <label>Vergi Dairesi</label>
+                                <input type="text" class="form-control" name="cari_vergi_daire">
+                            </div>
+                            <div class="form-group">
+                                <label>Telefon</label>
+                                <input type="text" class="form-control tr_telephone" data-mask="(999) 999-99-99" name="cari_telefon">
+                            </div>
+                            <div class="form-group">
+                                <label>Gsm</label>
+                                <input type="text" class="form-control tr_telephone" name="cari_gsm" data-mask="(999) 999-99-99">
+                            </div>
+                            <div class="form-group">
+                                <label>e-Posta</label>
+                                <input type="email" class="form-control" name="cari_mail">
+                            </div>
+                            
+                            
+                          <!--  <div class="form-group"> !-->
+                               <!--    <label>Cari Özel Kod</label>!-->
+                                <input type="hidden" class="form-control" name="cari_kod">
+                            <!--   </div>!-->
+
+                            <div class="form-group">
+                                <label>Adres</label>
+                                <textarea name="cari_adres" class="form-control"></textarea>
+                            </div>
+                            
+                               
+                            
+                            <div class="form-group">
+                                <label>Not</label>
+                                <textarea name="cari_detay" class="form-control"></textarea>
+                            </div>
+
+
+                                       <div class="form-group">
+                                    <label>Vade Günü</label>
+                                    <br><small>Fatura tarihine ek ödeme süresi</small>
+                                    <input type="text" class="form-control" name="cari_vade_gun" value="0">
+                                </div>
+                            {% if tur == 1 %}
+                                <div class="form-group">
+                                    <label>Cari Limit (TL)</label>
+                                    <input type="text" class="form-control" name="cari_kredi_limit" value="0">
+                                </div>
+
+
+                     
+                            {% elseif tur == 2 %}
+                                <input type="hidden" name="cari_kredi_limit" value="0"/>
+                              
+                            {% endif %}
+                            
+
+                            <button type="submit" class="btn btn-primary">Ekle</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+    <script src="{{asset('plugins/inputmask/js/inputmask.min.js')}}"></script>
+
+    <script src="{{asset('plugins/inputmask/js/jquery.inputmask.min.js')}}"></script>
+
+    <script src="{{asset('plugins/inputmask/js/autoNumeric.js')}}"></script>
+
+    <script src="{{asset('js/pages/form-masking-custom.js')}}"></script>
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            $(".tr_telephone").inputmask({
+                mask: "(999) 999-99-99"
+            });
+
+
+        });
+    </script>
+
+{% endblock %} 
+

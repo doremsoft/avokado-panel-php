@@ -1,0 +1,224 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+        .form-group>label {
+
+            margin-top: 15px;
+        }
+
+        hr{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+        }
+
+        .md-has-value{
+            margin-top: 0px !important;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+<div class="col-md-12"><div class="row">
+
+    <div class="col-md-4 m-t-15">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12" style="text-align: center;">
+                        <form id="servis-durum-form" action="{{url}}/xml-export/servis-ac-kapa" method="post">
+
+
+                                {{csrf | raw}}
+                        <label class="switch" style="margin: auto;">
+                            <input type="checkbox" name="durum" id="xmlservisswitch" {% if servis_durum == 1 %} checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label> <br>
+                        <label  style="font-weight: bold;">Xml Paylaşım Sistemi</label>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-8 m-t-15">
+        <div class="card">
+
+            <div class="card-body" style=" padding: 10px;">
+                <form id="logout-form" action="{{url}}/xml-export/ip-ekle" method="post">
+
+                        <div class="row">
+
+
+                                {{csrf | raw}}
+
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom02"> İp Adresi</label>
+
+                                <input type="text" name="ip_adres"  class="form-control"/>
+
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label for="validationCustom02"> Paylaşım Adı</label>
+
+                            <input type="text" name="aciklama"  class="form-control"/>
+
+                        </div>
+
+
+                            <div class="col-md-4 mb-3 m-t-10">
+
+                                <button type="submit" style="margin-top: 15px;" class="btn btn-dark">KAYDET</button>
+
+                            </div>
+
+
+
+
+
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Xml Paylaşım Url Adresi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 ">
+
+                            <a href="{{ xml_url }}" target="_blank">{{ xml_url }}</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Xml Paylaşım İndirme Url Adresi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 ">
+
+                            <a href="{{ xml_url }}/indir" target="_blank">{{ xml_url }}/indir</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-header">
+                <h5>Xml Paylaşımına İzin Verilen İp Adresleri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12 ">
+
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>İp</th>
+                                    <th>Açıklama</th>
+                                    <th>İşlem</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                    {% for ip in ip_adresleri %}
+
+
+                                        <tr>
+
+                                        <th>
+                                            {{ ip.ip_adress }}
+                                        </th>
+                                        <th>
+                                            {{ ip.aciklama }}
+                                        </th>
+
+                                        <th>
+                                            <form action="{{url}}/xml-export/ip-iptal" method="post">
+
+
+
+                                                        {{csrf | raw}}
+
+                                                <input type="hidden" name="ip_adres" value="{{ ip.ip_adress }}">
+                                                <input type="hidden" name="id" value="{{ ip.id }}">
+
+                                                <button type="submit"  class="btn btn-danger">İptal</button>
+
+
+                                            </form>
+
+                                        </th>
+
+
+                                        </tr>
+
+                                    {% endfor %}
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div></div>
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#xmlservisswitch').change(function() {
+
+
+            document.getElementById("servis-durum-form").submit();
+
+
+        });
+    </script>
+
+{% endblock %}
+
+

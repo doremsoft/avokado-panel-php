@@ -1,0 +1,140 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+<div class="col-md-12 m-t-15">
+<div class="card">
+<div class="card-header">
+<h5>Yeni Kullanıcı</h5>
+</div>
+<div class="card-body">
+<div class="row">
+<div class="col-md-12">
+<form id="logout-form" action="{{url}}/user/append" method="post" enctype="multipart/form-data">
+{{csrf | raw}}
+
+
+
+<div class="form-group">
+<label for="exampleInputPassword1">Ad</label>
+<input type="text" class="form-control" name="name" value="" placeholder="Ad"  required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Soyad</label>
+<input type="text" class="form-control" name="surname" value="" placeholder="Soyad"  required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputEmail1">Email Adresi</label>
+<input type="email" class="form-control" name="email"  aria-describedby="emailHelp"  value="" placeholder="Email adresi"  required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Telefon</label>
+<input type="text" class="form-control" name="phone"  value="" placeholder="Telefon"  required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Şifre</label>
+<input type="text" class="form-control" name="password"  value="" required/>
+</div>
+
+
+
+
+<div class="form-group">
+<label for="exampleInputPassword1">Cinsiyet</label>
+<select name="gender" class="form-control">
+<option value="famale">Kadın</option>
+<option value="male" >Erkek</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Resim</label>
+<div class="input-group mb-3">
+<input type="file" name="image" class="form-control">
+</div>
+</div>
+
+
+
+
+
+<div class="form-group">
+<label>Admin</label>
+<select name="admin" class="form-control">
+<option value="1">Aktif</option>
+<option value="0">Pasif</option>
+</select>
+</div>
+
+
+<h4>Kısıtlamalar</h4>
+<small>(Admin Kullanıcılarda Bu Kısıtlama işe Yaramaz)</small> <br>
+
+<div class="form-group">
+<label>Offline İşlemler</label>
+<select name="offline_activate" class="form-control">
+<option value="1">Aktif</option>
+<option value="0">Pasif</option>
+</select>
+</div>
+
+
+
+<div class="form-group">
+<label>Api Yetkisi  </label>
+<select name="api_permission" class="form-control">
+<option value="1">Aktif</option>
+<option value="0">Pasif</option>
+</select>
+</div>
+
+
+<div class="form-group">
+<label>Web Kullanımı </label>
+<select name="web" class="form-control">
+<option value="1">Aktif</option>
+<option value="0">Pasif</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Mobil Api Kullanımı</label>
+<select name="mobile_api" class="form-control">
+<option value="1">Aktif</option>
+<option value="0">Pasif</option>
+</select>
+</div>
+
+    <div class="form-group">
+        <label>Perakende Kasa  </label>
+        <select name="kasa_id" class="form-control">
+
+            <option value="0" selected>Kasa Seçimi Yapınız</option>
+
+            {% for kasa in kasalar %}
+
+                <option value="{{ kasa.id }}" {% if user_data.kasa_id == kasa.id %} selected="" {% endif %}>{{ kasa.kasa_adi }}</option>
+            {% endfor %}
+
+
+
+        </select>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Ekle</button>
+</form>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+{% endblock %}

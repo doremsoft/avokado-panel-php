@@ -1,0 +1,42 @@
+{% extends "layout-light.twig" %}
+
+
+    
+{% block backbtn %}
+
+    <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+    {% endblock %}
+    
+{% block content %}
+
+    <div class="row justify-content-center">
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlem İçin Masa Grubu Seçiniz:</h5>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+               
+                       
+                                    {% for masa in masa_kategoriler  %}
+                               <div class="col-md-12" > 
+                                   <center>
+                                   <p>  
+                                       <a href="{{ url }}/masa/islem/{{ masa.id }}" class="btn btn-icon btn-primary col-md-6" >{{masa.masa_kategori_adi}}</a>
+                                    </p>
+                                      </center>
+                               </div>       
+                                   
+                                    {% endfor %}
+                               
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

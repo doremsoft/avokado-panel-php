@@ -1,0 +1,137 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Kasalar Arası Virman</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="virman-form" action="{{url}}/kasa/virman-ok" method="post">
+                                {{csrf | raw}}
+
+
+                                <div class="row">
+
+
+
+
+                                    <div class="col-md-3">
+                                        <label>Kaynak Kasa</label>
+                                        <select class="form-control" name="kaynak_kasa_id">
+                                            {% for kasa in kasalar  %}
+                                                <option value="{{kasa.id}}" >{{kasa.kasa_adi}} ({{ Tl(kasa.kasa_toplam_tutar) }} TL)</option>
+
+
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+
+
+
+
+                                    <div class="col-md-3">
+                                        <label>Hedef Kasa</label>
+                                        <select class="form-control" name="hedef_kasa_id">
+                                            {% for kasa in kasalar  %}
+                                                <option value="{{kasa.id}}" >{{kasa.kasa_adi}} ({{ Tl(kasa.kasa_toplam_tutar) }} TL)</option>
+
+
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <label>Virman Tarihi</label>
+
+
+                                        <input type="date" class="form-control" name="tarih" value="{{bugun}}"/>
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <label>Virman Tutarı</label>
+
+
+                                        <input type="text" class="form-control" name="tutar" value="0" />
+                                    </div>
+
+
+
+
+                                    <div class="col-md-12" style="margin-top: 25px;">  
+                                        <button type="button" id="virmanok-btn" class="form-control btn btn-primary">Virmanı Gerçekleştir</button> </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+{% block footer %}
+
+    <script>
+
+        function virman() {
+
+
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Bir Kasanızdan Diğerine Para Transferi Yapmak Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Onaylıyorum!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+                if (result.value) {
+
+                    document.getElementById("virman-form").submit();
+                }
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+
+                if (dismiss === 'cancel') {
+
+                }
+
+
+            });
+
+
+
+
+
+
+
+        }
+
+
+        $("#virmanok-btn").click(function () {
+
+            virman();
+
+        });
+        </script>
+    {% endblock %}

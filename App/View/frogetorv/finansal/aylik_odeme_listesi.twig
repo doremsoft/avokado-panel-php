@@ -1,0 +1,180 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <form id="logout-form"  class="col-md-12" action="{{url}}/finansal/aylik-odeme-listesi-getir" method="post">
+                            {{csrf | raw}}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Ay</label>
+
+                                    <select class="form-control" name="ay">
+
+                                        {% for ay in aylar %}
+
+                                            {% if mevcut_ay == ay %}
+                                                <option value="{{ ay }}" selected>{{ ay }}</option>
+                                            {% else %}
+                                                <option value="{{ ay }}">{{ ay }}</option>
+                                                {% endif %}
+
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label>Yıl</label>
+
+
+                                   <select class="form-control" name="yil">
+
+
+                                       {% for yil in yillar %}
+                                           {% if mevcut_yil == yil %}
+                                               <option value="{{ yil }}" selected>{{ yil }}</option>
+                                           {% else %}
+                                               <option value="{{ yil }}">{{ yil }}</option>
+                                               {% endif %}
+
+                                       {% endfor %}
+
+                                   </select>
+                                </div>
+
+
+
+                                <div class="col-md-4">
+                                    <label>İşlem</label>
+
+                                    <button type="submit" class="form-control btn btn-primary">Rapor Getir</button> </div>
+
+
+                            </div>
+
+
+
+
+
+                        </form>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>({{ mevcut_ay }}-{{ mevcut_yil }}) Ayı İçerisindeki Ödemeleriniz</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+
+                                    <thead>
+                                    <tr>
+                                        <th>Ödeme Tarihi</th>
+
+                                        <th>Hesap Adı</th>
+                                        <th>Ödeme Adı</th>
+                                        <th>Ödeme Tutarı</th>
+
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% set toplam_tutar = 0 %}
+                                    {% for odeme in sabit_odemeler  %}
+
+
+                                        <tr>
+
+                                            <td>
+
+                                                {{ odeme.gun }}-{{ mevcut_ay }}-{{ mevcut_yil }}
+
+                                            </td>
+
+
+
+
+
+                                            <td>
+
+
+                                                {{ odeme.cari_adi }}
+
+                                            </td>
+
+
+                                            <td>
+
+
+                                                {{ odeme.baslik }}
+
+                                            </td>
+
+                                            <td width="150px">
+                                                {{ Tl(odeme.tutar ,2 ,"non") }} {{ odeme.tutar_doviz }}
+                                                {% set toplam_tutar = toplam_tutar + odeme.tutar %}
+
+                                            </td>
+
+
+
+                                    {% endfor %}
+
+
+                                        </tr>
+
+
+                                    <tr>
+
+                                        <td> </td>
+                                        <td></td>
+
+
+                                        <td> </td>
+
+                                        <td width="150px"><label style="font-weight: bold;">{{ toplam_tutar }} TL</label></td>
+
+
+
+                                    </tr>
+
+
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

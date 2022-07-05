@@ -1,0 +1,54 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="row">
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Banka İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/banka/sec" class="btn btn-primary col-md-12" style="margin-top: 15px;">Yeni Banka Hareket</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Banka Raporları</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/banka/hesap-ozetleri" class="btn btn-primary col-md-12" style="margin-top: 15px;">Hesap Özetleri</a>
+                            <a href="{{url}}/banka/hareket-raporlari" class="btn btn-primary col-md-12" style="margin-top: 15px;">Hesap Hareket Dökümleri</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

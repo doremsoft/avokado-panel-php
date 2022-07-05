@@ -1,0 +1,446 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+    <style>
+        .cariIsımleArama{
+            list-style: none;
+            position:relative;
+
+            background-color:white;
+
+            padding: 10px;
+
+        }
+
+        .cariIsımleArama li{
+
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .cariIsımleArama li:hover{
+
+            background-color: #e6f2ff;
+            color: black;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance_wallet</i>
+
+                                        </span>
+                    <span class="logo-text h4">Nakit İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" id="timeline-tab"  href="{{ url }}/kasa/index" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" id="about-tab"  href="{{ url }}/kasa/kasa-raporlari"  >Nakit Hareketleri</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-virman" >Kasa Virman</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/yeni-haraket" >Yeni Haraket</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-iptal-raporlari" >İptal Kayıtları</a>
+                </li>
+
+            </ul>
+        </div>   </div>
+
+
+ <div class="row">
+    <div class="col-md-12">
+        <div class="card" style="border-radius: 0px;">
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Hesap Seçiniz:</label>
+                            <input type="text" class="form-control" id="cariname" onkeyup="cariarama(this.value)">
+                                <div id="aramasonuc"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="card" style="border-radius: 0px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12" >
+                        <form id="kasa-haraket-form"  class="col-md-12" action="{{url}}/kasa/kasa-haraket-ekle" method="post">
+                            {{csrf | raw}} 
+
+                            
+                            
+                            <div id="kasaharaketeklemealan" class="col-lg-12">
+                                        
+
+                              <center><h5>Hesap Seçimi Yapın</h5></center>
+                      
+                    </div>
+                              </form>
+                </div>
+            </div>
+        </div>
+    </div>  </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+
+        let kasa_json = '{{kasalar | raw}}';
+
+        try {
+
+            kasa_json = JSON.parse(kasa_json);
+
+            console.log(kasa_json);
+        } catch (e) {
+            console.log(e);
+        }
+
+
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                            console.log(data);
+
+
+                            document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                            if (data == "non") {
+
+                                document.getElementById("aramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                            } else {
+
+
+                                var cari_data = JSON.parse(data);
+
+                                var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                                if (cari_data.durum == "ok") {
+
+
+
+                                    $.each(cari_data.cari, function (key, val) {
+
+
+                                        lihtml += liurunbas(val);
+
+                                    });
+
+
+
+                                } else {
+
+                                    console.log("Cari Bulunamadı");
+
+
+
+                                    lihtml += cariyok();
+
+
+                                }
+
+                                document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+
+
+
+
+
+        }
+
+        function cariyok() {
+
+            var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+
+
+
+        function liurunbas(data) {
+
+            var html = "<li data-id=\"" + data.id + "\"  data-json='" + JSON.stringify(data) + "' onclick=\"alanGetir(" + data.id + ")\">" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function divYaz(label,input){
+            
+            
+var html = "<div class=\"form-group row\"> <label for=\"example-text-input\" class=\"col-sm-2 col-form-label text-right\">"+label+"</label><div class=\"col-sm-10\">";
+                                                    
+       html += input+"</div> </div>";   
+   return html;
+    }
+
+        function alanGetir(id) {
+            var data = JSON.parse($("[data-id=" + id + "]").attr("data-json"));
+
+            //kasaharaketeklemealan
+
+            console.log(data);
+
+
+            var html = "";
+            
+            html += divYaz("Cari Hesap:","<input type=\"hidden\" name=\"kasa_haraket_cari_id\" value=\"" + data.id + "\" /><h4 id=\"cari_adih4\">"+data.cari_adi+"</h4>");
+            
+
+            var tip = "<select class=\"form-control\" id=\"kasa_haraket_tip_select\" name=\"kasa_haraket_tip\" >";
+            tip += "<option value=\"1\">Para Girişi</option>";
+            tip += "<option value=\"2\">Para Çıkışı</option>";
+            tip += "</select>";
+            
+            
+            var kasalarselect = "<select class=\"form-control\" name=\"kasa_id\" >";
+            kasalarselect += kasalar();
+            kasalarselect += "</select>";
+            
+            
+            
+            
+            html += divYaz("Haraket Türü:",tip);
+
+            html += divYaz("Kasa:",kasalarselect);
+            
+            
+          html += divYaz("Tutar:","<input type=\"text\" name=\"kasa_haraket_tutar\" id=\"kasa-tutar\" class=\"form-control\" value=\"0.00\" />");
+            
+            
+        html += divYaz("Tarih:","<input type=\"date\" name=\"kasa_haraket_tarih\" class=\"form-control\" value=\"{{bugun}}\" />");
+       
+       
+         html += divYaz("Not:","<input type=\"text\" name=\"kasa_haraket_not\" class=\"form-control\" />");
+         
+        html += divYaz("İşlem:","<input type=\"button\"  onClick=\"kasa_haraket_ekle()\" value=\"Kaydet\" class=\"btn btn-danger waves-effect waves-light\" />");
+
+
+
+
+
+
+            $("#kasaharaketeklemealan").html(html);
+
+            document.getElementById("aramasonuc").innerHTML = "";
+            document.getElementById("aramasonuc").style.border = "0px";
+
+            $("#cariname").val("");
+
+
+        }
+
+
+function kasa_haraket_ekle(){
+    
+    
+ 
+        event.preventDefault();
+
+            var form = $("#kasa-haraket-form");
+            var url = form.attr('action');
+
+            var hesap_adi = $("#cari_adih4").html();
+
+            var tip = $("#kasa_haraket_tip_select").val();
+
+            /*
+                var tip = "<select class=\"form-control\" id=\"kasa_haraket_tip_select\" name=\"kasa_haraket_tip\" >";
+            tip += "<option value=\"1\">Para Girişi</option>";
+            tip += "<option value=\"2\">Para Çıkışı</option>";
+            tip += "</select>";
+             */
+
+    var uyari_mesaj = "";
+
+            if(tip == 1){
+
+
+                 uyari_mesaj = hesap_adi+" ,  hesabınıza para GİRİŞİ yapmak üzeresiniz! ";
+
+            }else if(tip == 2){
+
+                 uyari_mesaj = hesap_adi+" ,  hesabınızdan para ÇIKIŞI yapmak üzeresiniz! ";
+            }
+
+
+
+
+    swal({
+        title: 'Eminmisiniz?',
+        text: uyari_mesaj,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Anladım , Onaylıyorum!',
+        cancelButtonText: 'İptal',
+        confirmButtonClass: 'btn btn-success text-white',
+        cancelButtonClass: 'btn btn-danger text-whit ml-2',
+        buttonsStyling: false
+    }).then(function (result) {
+
+        if (result.value) {
+
+
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(), // serializes the form's elements.
+                success: function (data)
+                {
+                    data = data.trim();
+
+                    console.log(data);
+
+                    if(data == "ok"){
+
+
+
+
+                        $("#kasa-tutar").val("");
+
+
+
+
+                    }else
+                    {
+
+
+                        swalert("danger", "İşlem Başarısız!", "Kayıt Gerçekleştirilemedi!");
+                    }
+                }
+            });
+
+
+
+        }
+
+    }, function (dismiss) {
+        // dismiss can be 'cancel', 'overlay',
+        // 'close', and 'timer'
+
+        if (dismiss === 'cancel') {
+
+        }
+
+
+    });
+
+
+
+
+
+     
+    
+    
+    
+}
+
+
+        function kasalar() {
+
+
+            var html = "";
+
+
+            $.each(kasa_json, function (key, val) {
+
+                html += "<option value=\"" + val.id + "\">" + val.kasa_adi +" </option>";
+
+            });
+
+            return html;
+
+
+        }
+
+
+
+
+    </script>
+
+
+{% endblock %}

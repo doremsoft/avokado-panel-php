@@ -1,0 +1,326 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+        .form-group>label {
+
+            margin-top: 15px;
+        }
+
+        hr{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+        }
+
+        .md-has-value{
+            margin-top: 0px !important;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+<div class="col-md-12"><div class="row">
+
+    <div class="col-md-6"><div class="row">
+
+            <div class="col-md-12 m-t-15">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Xml Dosyası İndir</h5>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <label>URL Adresi</label>
+                                <input type="text" name="xml_download_url" id="xml_download_url" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label>Xml Dosya Adı</label>
+                                <input type="text" name="xmldosyaadi" id="xmldosyaadi" class="form-control"/>
+                            </div>
+
+                            <div class="col-md-12">
+                                <button type="button" onclick="xmlDownload()" class="btn btn-secondary  m-t-15"><i
+                                            class="mdi mdi-alert-outline mr-2"></i>Xml Dosyası İndir
+                                </button>
+                            </div>
+                        </div> </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-md-12 m-t-15">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" >
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>URL</th>
+                                            <th>Dosya Adı</th>
+                                            <th>Güncelleme</th>
+                                            <th>İşlem</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+
+
+                                        {% for dosya in xmlDosyaListesi %}
+
+
+                                            <tr>
+
+                                                <th>
+                                                    {{ dosya.dosya_url_adresi }}
+
+
+                                               </th>
+                                                <th>{{ dosya.ad }}</th>
+
+                                                <th>{{ dosya.update_date }}</th>
+                                                <th>
+                                                    <a class="btn btn-danger" href="{{ url }}/xml-import/xml-re-download/{{ dosya.id }}">Yenile</a>
+
+
+                                                </th>
+
+
+
+
+
+                                            </tr>
+
+                                        {% endfor %}
+
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div></div>
+
+    <div class="col-md-6"><div class="row">
+
+
+            <div class="col-md-12 m-t-15">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Kullanımdaki Yüklemeler</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 ">
+
+
+                                <button onclick="window.location.href='{{ url }}/xml-import/stok-yukle'" class="btn btn-danger" >Yeni XML den Yükleme Oluştur</button>
+
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>İşlem Adı</th>
+                                            <th>İşlem Tarihi</th>
+                                            <th>Firma Adı</th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+
+
+                                        {% for xml in kullanimdaki_xml_yuklemeler.result %}
+
+
+                                            <tr>
+
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}"> {{ xml.xml_adi }}</a>
+                                                </th>
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}"> {{tarih(xml.created_date,"d.m.Y H:i")}}</a>
+                                                </th>
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}">{{xml.firma_adi}}</a>
+                                                </th>
+
+
+
+
+
+                                            </tr>
+
+                                        {% endfor %}
+
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination justify-content-end">
+                                        {{paginate(kullanimdaki_xml_yuklemeler.paginate,"xml-import") | raw }}
+                                    </ul>
+                                </nav>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 m-t-15">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Xml Yükleme Geçmişi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 ">
+
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>İşlem Adı</th>
+                                            <th>İşlem Tarihi</th>
+                                            <th>Firma Adı</th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+
+
+                                        {% for xml in xml_yuklemeler.result %}
+
+
+                                            <tr>
+
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}"> {{ xml.xml_adi }}</a>
+                                                </th>
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}"> {{tarih(xml.created_date,"d.m.Y H:i")}}</a>
+                                                </th>
+                                                <th>
+                                                    <a class="" href="{{ url }}/xml-import/stok-yukle/{{ xml.id }}">{{xml.firma_adi}}</a>
+                                                </th>
+
+
+
+
+
+                                            </tr>
+
+                                        {% endfor %}
+
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-end">
+                                            {{paginate(xml_yuklemeler.paginate,"xml-import") | raw }}
+                                        </ul>
+                                    </nav>
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div></div>
+    </div></div>
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+
+        function xmlDownload() {
+
+            loading(true);
+            var url_adres = $("#xml_download_url").val();
+
+
+            $.post("{{ url }}/xml-import/xml-download", {url: url_adres , dosyaadi : $("#xmldosyaadi").val()})
+                .done(function (data) {
+
+                    console.log(data);
+                    loading(false);
+
+                    if(data == 1){
+
+                        swalert("success", "Tamamlandı", "İndirme Tamamlandı...");
+
+
+                    }else if(data == 2){
+                        swalert("error", "Hata", "İndirme Başarısız Oldu!");
+
+
+                    }else if(data == 3){
+
+                        swalert("error", "Hata", "İndirmeye Çalıştığınız Dosya Zaten Mevcut!");
+
+                    }
+
+                });
+
+        }
+
+    </script>
+
+{% endblock %}
+
+

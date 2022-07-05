@@ -1,0 +1,49 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+       <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+     
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Fiyat Güncellemesi Yapmak İstediğiniz Ürünün Barkodunu Okutunuz:</label>
+                             <form id="logout-form" action="{{url}}/stok/get-fast-price" method="post">
+                            {{csrf | raw}}
+                            <input type="text" class="form-control" id="barcodeilegetirinput" name="stok_barkod_no"/>
+                             </form>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+{% endblock %}
+
+
+{% block footer %}
+
+    <script>
+        window.onload = function () {
+            document.getElementById("barcodeilegetirinput").focus();
+        };
+
+
+$(window).on('click',function(){
+     document.getElementById("barcodeilegetirinput").focus();
+    
+});
+
+    </script>
+
+
+
+
+{% endblock %}

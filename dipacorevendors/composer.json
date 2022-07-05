@@ -1,0 +1,12 @@
+{
+    "require-dev": {
+        "dogus/dipanelcore": "^1.0.1",
+		"nezamy/route": "^1.2",
+        "twig/twig": "^3.0"
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.0",
+        "wisembly/elephant.io": "^3.3",
+        "phpoffice/phpspreadsheet": "^1.13"
+    }
+}

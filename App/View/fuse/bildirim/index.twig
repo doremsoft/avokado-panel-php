@@ -1,0 +1,276 @@
+{% extends "layout-light.twig" %}
+
+        {% block head %}
+
+
+
+            <link href="{{asset('plugins/calendar/packages/core/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/daygrid/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/timegrid/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/list/main.css')}}" rel="stylesheet" type="text/css" />
+
+
+            <style>
+                .selected > a{
+                    background-color: black;
+                    color: white;
+                }
+            </style>
+
+        {% endblock %}
+    {% block content %}
+
+        <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+            <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+                <div class="col">
+
+                    <div class="row no-gutters align-items-center flex-nowrap">
+
+                        <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                            <i class="icon icon-menu"></i>
+                        </button>
+
+                        <!-- APP TITLE -->
+                        <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                       <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">notifications_none</i>
+                                        </span>
+                            <span class="logo-text h4">Bildirimler</span>
+                        </div>
+                    </div>
+                    <!-- / APP TITLE -->
+                </div>
+
+
+            </div>
+            <!-- / HEADER -->
+    <div class="page-content-wrapper">
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Bildirim İşlemleri</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item m-t-15" >
+                                <a class="nav-link ripple sid-nav-link {% if tur == null %}accent{% endif %} " href="{{ url }}/bildirim/liste">
+                                    <span>Bugün Bildirimler</span>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item" >
+                                <a class="nav-link ripple active  sid-nav-link   {% if tur == 1 %}accent{% endif %}" href="{{ url }}/bildirim/liste/1">
+                                    <span>Bütün Bildirimler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 2 %}accent{% endif %} " href="{{ url }}/bildirim/liste/2">
+                                    <span>Geçmiş Bildirimler</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" >
+                                <a class="nav-link ripple sid-nav-link {% if tur == 3 %}accent{% endif %} " href="{{ url }}/bildirim/liste/3">
+                                    <span>Gelecek Bildirimler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 4 %}accent{% endif %} " href="{{ url }}/bildirim/liste/4">
+                                    <span>Görüntülenmiş Bildirimler</span>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item" >
+                                <a class="nav-link ripple sid-nav-link {% if tur == 5 %}accent{% endif %} " href="{{ url }}/bildirim/liste/5">
+                                    <span>Görülmemiş Bildirimler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 6 %}accent{% endif %} " href="{{ url }}/bildirim/liste/6">
+                                    <span>İptal Bildirimler</span>
+                                </a>
+                            </li>
+
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+            </aside>
+
+
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6">
+
+            <div class="card" style="border-radius: 0px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                                   <form  action="{{url}}/bildirim/ekle" method="post">
+                                       {{csrf | raw}}
+                                       <div class="row">
+
+                                           <input type="hidden" name="type" value="1">
+
+                                       <div class="col-md-5">
+                                           <input type="text" class="form-control" name="mesaj" placeholder="Hatırlatma Mesajı" required>
+                                       </div>
+
+
+                                   <div class="col-md-3">
+                                               <input type="date" class="form-control" name="tarih" value="{{ bugun }}" required>
+
+
+                                           </div>
+                                           <div class="col-md-2">
+                                               <input type="time" class="form-control" name="saat" value="{{ saat }}" required>
+
+
+                                           </div>
+                                   <div class="col-md-2">
+
+                                       <button type="submit" class="form-control btn btn-primary">Ekle</button>
+                                   </div>
+
+                                       </div>
+                                   </form>
+
+
+                        </div></div></div>
+
+
+            </div>
+
+
+
+
+                <div class="card m-t-15" style="border-radius: 0px;">
+
+
+
+
+                    <div class="card-body m-t-15">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="table-responsive">
+
+                                    <table id="e-commerce-products-table" class="table dataTable table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Bildirim Zamanı</th>
+
+                                            <th>Görüntüleme</th>
+                                            <th>Bildirim Mesajı</th>
+                                            <th>Tip</th>
+                                            <th>İşlem</th>
+
+
+                                        </tr>
+                                        </thead>
+
+                                        <tbody id="stoklist-table-body">
+                                        {% set i = 0 %}
+                                        {% for bildirim in bildirimler.result  %}
+                                            {% set i = i + 1 %}
+                                            <tr>
+
+                                                <td>{{tarih(bildirim.zaman,"d-m-Y H:i")}}</td>
+                                                <td>{% if bildirim.goruntuleme == 1 %}
+                                                        <i class="text-success mat-icon notranslate material-icons " role="img" aria-hidden="true">remove_red_eye</i>
+                                                    {% else %}
+                                                        <i class="text-red s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">new_releases</i>{% endif %}</td>
+
+                                                <td>
+                                                        {{ get_html( bildirim.bildirim_mesaj) }}
+                                                 </td>
+                                                <td>{{ bildirim.tip }}</td>
+
+                                                <td>
+                                                    {% if tur != 6 %} <a href="{{ url }}/bildirim/remove/{{ bildirim.id }}">İptal</a> {% endif %}
+
+                                                   </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                        {% if i == 0 %}
+
+                                            <tr>
+
+                                                <td colspan="5">Bildirim Bulunmamaktadır...</td>
+                                            </tr>
+
+                                        {% endif %}
+
+
+
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div> <div class="card-body">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                {{paginate(bildirimler.paginate,urladres) | raw }}
+                            </ul>
+                        </nav>
+                    </div>   </div>
+
+
+
+
+            </div>
+
+    </div>
+
+
+            <!-- / CONTENT -->
+        </div>
+
+
+
+
+    {% endblock %}
+
+    {% block footer %}
+
+        <script>
+            {% if i > 0 %}
+            setDataTable("#e-commerce-products-table", 0,"", "");
+            {% endif %}
+            </script>
+
+
+
+    {% endblock %}

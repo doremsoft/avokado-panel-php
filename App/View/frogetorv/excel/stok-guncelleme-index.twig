@@ -1,0 +1,150 @@
+
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+
+
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Excele Güncellenecek Stokları İndirme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <form id="logout-form" action="{{url}}/excel-export/stok-guncelleme-list-export" method="post" target="blank">
+                                {{csrf | raw}}
+                                <h2>Dikkat</h2>
+                                
+                                <p>İndirdiğiniz excel üzerinde yanlızca fiyat düzenlemesi yapın!</p>
+                                <p>Hiç bişekilde satır yada sütünlarda yer değişikliği yapmayın!</p>
+                                <p>ID sütnunda kesinlikle değiklik yapmayın Sistem üzerindeki otamatik tanımlanmış numarasıdır id numarasından güncelleme kaydı atılır!</p>
+
+                                <hr>
+                                
+                                <div class="form-group">
+                                    <label>Yanlızca Alım Yaptığım Stoklar</label>
+                                    <select name="yalnizca_alimlarla" class="form-control">
+
+                                        <option value="1" selected>Evet</option>
+                                        <option value="2">Hayır</option>
+
+
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Vergiler Dahil Fiyatları Ekle</label>
+                                    <select name="vergi_oran_durum" class="form-control">
+
+                                        <option value="2" selected>Fiyatlara Vergiler Dahil</option>
+                                        <option value="1">Fiyatlardan Vergiler Hariç</option>
+
+
+                                    </select>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-danger waves-effect waves-light">Stokları Excele İndir</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Excelden Stok Güncellemeleri Yukleme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/excel-import/stok-update-upload" method="post"  enctype="multipart/form-data">
+                                {{csrf | raw}}
+                                <div class="form-group">
+                                    <label>Excel Dosyası Seçiniz:</label>
+                                    <input type="file" class="form-control" name="stoklar" id="stokfileinput" required>
+
+                                        <small>Yanlızca .xlx ve .xlxs Dosyaları ve 3mb Dosyalar Kabul Edilir!</small>
+                                </div>
+
+
+
+
+                                <div class="form-group">
+                                    <label>Alış / Satış Fiyatlarına Vergiler Dahilmidir?</label>
+                                    <select name="vergi_oran_durum" class="form-control">
+
+                                        <option value="2" selected>Fiyatlara Vergiler Dahil</option>
+                                        <option value="1">Fiyatlardan Vergiler Hariç</option>
+
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>İsim Düzeltme</label>
+                                    <select name="isim_duzeltme" class="form-control">
+
+                                        <option value="0" selected>İşlem Yapma</option>
+                                        <option value="1" >Baş Harfler Büyük</option>
+                                        <option value="2" >Bütün Harfler Büyük</option>
+                                        <option value="3" >Bütün Harfler Küçük</option>
+
+
+
+                                    </select>
+                                </div>
+
+
+                                <button type="submit" class="btn btn-warning waves-effect waves-light"><i class="mdi mdi-alert-outline mr-2"></i>Stokları Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#stokfileinput').bind('change', function () {
+
+
+            var file_size = this.files[0].size;
+
+
+            if (file_size > 3000000) {
+
+                notify("Dosya Boyutu lilmiti aşıyor", "danger");
+
+                //$('#stokfileinput').val('');
+
+            }
+
+        });
+    </script>
+
+{% endblock %}
+
+

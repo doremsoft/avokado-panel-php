@@ -1,0 +1,151 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+<div class="col-md-12 m-t-15">
+<div class="card">
+<div class="card-header">
+<h5>Bilgi Güncelleme</h5>
+</div>
+<div class="card-body">
+<div class="row">
+<div class="col-md-12">
+<form id="logout-form" action="{{url}}/user/update" method="post" enctype="multipart/form-data">
+{{csrf | raw}}
+
+
+<input type="hidden" name="user_id" value="{{ user_data.id }}"/>
+
+
+
+<div class="form-group">
+<label for="exampleInputPassword1">Ad</label>
+<input type="text" class="form-control" name="name" value="{{user_data.name}}" placeholder="Ad" required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Soyad</label>
+<input type="text" class="form-control" name="surname" value="{{user_data.surname}}" placeholder="Soyad" required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputEmail1">Email Adresi</label>
+<input type="email" class="form-control" name="email"  aria-describedby="emailHelp"  value="{{user_data.email}}" placeholder="Email adresi" required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Telefon</label>
+<input type="text" class="form-control" name="phone"  value="{{user_data.phone}}" placeholder="Telefon" required/>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Cinsiyet</label>
+<select name="gender" class="form-control">
+<option value="famale" {% if user_data.gender == "famale" %} selected="" {% endif %}>Kadın</option>
+<option value="male" {% if user_data.gender == "male" %} selected="" {% endif %}>Erkek</option>
+</select>
+</div>
+
+<div class="form-group">
+<label for="exampleInputPassword1">Resim</label>
+<div class="input-group mb-3">
+<input type="file" name="image" class="form-control">
+</div>
+</div>
+
+
+
+<div class="form-group">
+<label>Admin</label>
+<select name="admin" class="form-control">
+<option value="1" {% if user_data.admin == "1" %} selected="" {% endif %}>Aktif</option>
+<option value="0" {% if user_data.admin == "0" %} selected="" {% endif %}>Pasif</option>
+</select>
+</div>
+
+
+<h4>Kısıtlamalar</h4>
+<small>(Admin Kullanıcılarda Bu Kısıtlama işe Yaramaz)</small> <br>
+
+<div class="form-group">
+<label>Offline İşlemler</label>
+<select name="offline_activate" class="form-control">
+<option value="1" {% if user_data.offline_activate == "1" %} selected="" {% endif %}>Aktif</option>
+<option value="0" {% if user_data.offline_activate == "0" %} selected="" {% endif %}>Pasif</option>
+</select>
+</div>
+
+
+<div class="form-group">
+<label >Offline Code</label>
+<input type="text" class="form-control" name="offline_code"  value="{{user_data.offline_code}}" readonly/>
+</div>
+
+
+<div class="form-group">
+<label>Api Yetkisi  </label>
+<select name="api_permission" class="form-control">
+<option value="1" {% if user_data.api_permission == "1" %} selected="" {% endif %}>Aktif</option>
+<option value="0" {% if user_data.api_permission == "0" %} selected="" {% endif %}>Pasif</option>
+</select>
+</div>
+
+
+<div class="form-group">
+<label>Web Kullanımı </label>
+<select name="web" class="form-control">
+<option value="1" {% if user_data.web == "1" %} selected="" {% endif %}>Aktif</option>
+<option value="0" {% if user_data.web == "0" %} selected="" {% endif %}>Pasif</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Mobil Api Kullanımı</label>
+<select name="mobile_api" class="form-control">
+<option value="1" {% if user_data.mobile_api == "1" %} selected="" {% endif %}>Aktif</option>
+<option value="0" {% if user_data.mobile_api == "0" %} selected="" {% endif %}>Pasif</option>
+</select>
+</div>
+
+
+    <div class="form-group">
+        <label>Perakende Kasa  </label>
+        <select name="kasa_id" class="form-control">
+
+            <option value="0" selected>Kasa Seçimi Yapınız</option>
+
+            {% for kasa in kasalar %}
+
+                <option value="{{ kasa.id }}" {% if user_data.kasa_id == kasa.id %} selected="" {% endif %}>{{ kasa.kasa_adi }}</option>
+            {% endfor %}
+
+
+
+        </select>
+    </div>
+
+
+
+
+<hr>
+
+    <p>Şifreyi Değiştirmeyeceksniz Boş Bırakın!</p>
+
+    <div class="form-group">
+        <label for="exampleInputPassword1">Yeni Şifre</label>
+        <input type="text" class="form-control" name="password" value="" placeholder="Yeni Şifre" />
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+{% endblock %}

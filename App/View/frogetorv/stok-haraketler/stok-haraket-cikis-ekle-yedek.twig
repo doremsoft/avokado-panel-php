@@ -1,0 +1,1211 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+    <style>
+        .urunIsımleArama{
+            list-style: none;
+            position:absolute;
+            z-index:3;
+            right:0px;
+            left:0px;
+            background-color:white;
+            margin-right: 15px;
+            margin-left: 15px;
+            border: 1px solid black;
+            padding: 10px;
+
+        }
+
+        .urunIsımleArama li{
+
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .urunIsımleArama li:hover{
+
+            background-color: #e6f2ff;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Cari Hesaplar{% endblock %}
+{% block bread %}
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Hesaplar</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Cari Hesaplar</a></li>{% endblock %}
+
+    {% block content %}
+
+        <div class="row justify-content-center">
+
+            <form id="stoklistesi" class="col-md-12" action="{{url}}/stok-haraket/cikis-kaydet" method="post">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>İşlem Bilgileri</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="form-row">
+                                            <div class="col-md-4 mb-4">
+
+                                                <h4>{{cari.cari_adi}}</h4>
+                                                <h6>{{cari.cari_telefon}}</h6>
+                                                <h6>{{cari.cari_mail}}</h6>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label for="validationCustom02">Evrak No</label>
+                                                <input type="text" name="giris_evrak_no" class="form-control"/>
+                                            </div>
+                                            <div class="col-md-3 mb-3">
+                                                <label for="validationCustomUsername">Evrak Tarihi</label>
+
+                                                <input type="date" name="giris_haraket_tarih" class="form-control" value="{{bugun}}"/>
+
+                                            </div>
+                                            <div class="col-md-2 mb-2">
+                                                <label for="validationCustom02">Vade (Gün)</label>
+                                                <input type="hidden" id="max-vade-gun" value="{{cari.cari_vade_gun}}"/>
+                                                <input  type="number" name="vade_gun" id="vade-gun" class="form-control" max="{{cari.cari_vade_gun}}" value="{{cari.cari_vade_gun}}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Serinumarası İle Getir</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="form-group">
+                                            <label>Serinumarası İle Çağırınız:</label>
+                                            <input type="text" id="stok_serino_ile_getirme_input"  class="form-control" required/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Stok Seçimi Barkod</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <div class="form-group">
+                                            <label>Barkod İle Stok Çağırınız:</label>
+                                            <input type="text" id="stok_getirme_input"  class="form-control" required/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Stok Seçimi İsim</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Stok Adını Yazınız:</label>
+                                            <input type="text" class="form-control" id="stokisimlearamainput" onkeyup="urungetirisimle(this.value)">
+                                            <div id="aramasonuc"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-block p-0">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <input type="hidden" name="cari_id" value="{{hesap_id}}"/>
+                                            {{csrf | raw}}
+                                            <table class="table  invoice-detail-table">
+                                                <tdead>
+                                                    <tr class="thead-default">
+                                                        <th>#</th>
+                                                        <th>Stok Kod</th>
+                                                        <th>Stok Adı</th>
+                                                        <th>Seri No*</th>
+                                                        <th>Birim Fiyat</th>
+                                                        <th>Miktar</th>
+                                                        <th>Birim</th>
+                                                        <th>Kdv</th>
+                                                        <th>Kdv %</th>
+
+                                                        <th>Vergisiz Toplam</th>
+                                                        <th>Vergili Toplam</th>
+                                                        <th>Depo</th>
+                                                    </tr>
+                                                </tdead>
+                                                <tbody id="secili_stok_listesi"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Haraket Mali Durumu</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-responsive invoice-table invoice-total">
+                                            <tbody>
+                                            <tr>
+                                                <td>Ara Toplam:</td>
+                                                <td id="ara_total_label">0.00 TL</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kdv Tutarı:</td>
+                                                <td id="kdv_toplam_label">0.00 TL</td>
+                                            </tr>
+
+                                            <tr class="text-info">
+                                                <td>
+                                                    <hr>
+                                                    <h5 class="text-primary m-r-10">Toplam :</h5>
+                                                </td>
+                                                <td>
+                                                    <hr>
+                                                    <h5 class="text-primary" id="toplam_label">0.00 TL</h5>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Dikkat!</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        * Seri Numarası İle Girilen Ürünler Yanlızca Seri numarası İle Çıkılabilir! <br>
+                                        * Seri Numarası İle Stok Girişinde Ürünler Tek Tek Eklenmek Zorundadır.Tek Kayıt İçin Adet 1'den Fazla Girilemez! <br>
+                                        * Seri Numarası İle Stok Girişinde Miktar Sistem Tarafından 1 Olarak Belirlenir Girilen Değer Baz Alınmaz <br>
+                                        * Seri Numarasız Kayıtlar Emanet yada Rezervasyon İşlemine Tabi Tutulamaz! <br>
+                                        * Seri Numarasız Grup Girilen Kayıtlar Stok Bölme İşlemine Tabi Tututlarak Sonradan Seri Numarası Girilebilir.<br>
+                                        * Girilen Fiyata Kdv Dahil Olarak Seçilir İse Sistem Girilen Kdv Oranında Kdv Tutarı Düşerek Kayıt Alır!
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-sm-12 invoice-btn-group text-center">
+                                <button type="button" onClick="listeGonder();" class="btn btn-primary btn-print-invoice m-b-10">Kaydet</button>
+                                <button type="button" class="btn btn-secondary m-b-10 " onClick="window.location.href = '{{url}}'">İptal</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                </div>
+            </form>
+        </div>
+    {% endblock %}
+    {% block footer %}
+        <script>
+            fullcontent();
+
+            var sayi = 1;
+
+            let depo_json = '{{depolar | raw}}';
+
+            var standart_depo_id
+                = {{hesap_detay.standart_depo_id}};
+            try {
+
+                depo_json = JSON.parse(depo_json);
+
+                console.log(depo_json);
+            } catch (e) {
+                console.log(e);
+            }
+
+
+            var urun_serino_ile_getir_input = document.getElementById("stok_serino_ile_getirme_input");
+            urun_serino_ile_getir_input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    urunseriilegetir();
+                }
+            });
+
+
+
+
+            var urun_getir_input = document.getElementById("stok_getirme_input");
+            urun_getir_input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    urungetir();
+                }
+            });
+
+            function urungetirisimle(str) {
+                if (str.length <= 1) {
+                    document.getElementById("aramasonuc").innerHTML = "";
+                    document.getElementById("aramasonuc").style.border = "0px";
+                    return;
+                } else if (str.length > 1) {
+
+
+                    var jqxhr = $.post("{{url}}/stok/stok-getir-isimle", {qr: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+
+
+                            document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                            if (data == "non") {
+
+                                document.getElementById("aramasonuc").innerHTML = "Ürün Bulunamadı!";
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "<ul class=\"urunIsımleArama\">";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += liurunbas(val);
+
+                                    });
+
+                                    document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+                                } else {
+
+                                    var lihtml = "<ul class=\"urunIsımleArama\">";
+
+
+                                    lihtml += "<li>Ürün Bulunmuyor!</li>";
+                                    document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+                }
+
+
+
+
+
+
+
+            }
+
+            function liurunbas(data) {
+
+                var html = "<li data-json='" + JSON.stringify(data) + "' onclick='urunHazirlaIsımle(this)'>" + data.stok_adi +" "+ data.stok_varyant_adi + " " + data.stok_varyant_deger + " (" + parseFloat(data.stok_adet) + ")</li>";
+
+
+                return html;
+
+            }
+
+
+
+            function urunseriilegetir() {
+
+                var urun_kod = urun_serino_ile_getir_input.value;
+
+                urun_serino_ile_getir_input.value = "";
+
+
+                var jqxhr = $.post("{{url}}/stok/stok-seriile-getir", {serino: urun_kod})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+
+                        if (data == "non") {
+
+                        } else {
+
+
+                            var stok_data = JSON.parse(data);
+
+
+
+
+
+                            if (stok_data.durum == "ok") {
+
+                                urunHazirlaSeri(stok_data.stok);
+
+
+                            } else {
+
+                                console.log("Ürün Bulunamadı");
+                                notify("Ürün Bulunamadı!", "danger");
+                            }
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+
+            }
+
+
+            function urungetir() {
+
+                var urun_kod = urun_getir_input.value;
+
+                urun_getir_input.value = "";
+
+
+                var jqxhr = $.post("{{url}}/stok/stok-getir", {kod: urun_kod})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+                        if (data == "non") {
+
+                        } else {
+
+
+                            var stok_data = JSON.parse(data);
+
+                            console.log(stok_data);
+
+                            if (stok_data.durum == "ok") {
+
+                                urunHazirla(stok_data.stok);
+
+
+                            } else {
+
+                                console.log("Ürün Bulunamadı");
+                                notify("Ürün Bulunamadı!", "danger");
+                            }
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+
+            }
+
+
+
+
+
+
+            function urunHazirlaIsımle(ts) {
+
+                var li = ts;
+
+                var data = ts.getAttribute("data-json");
+
+                var data_array = JSON.parse(data);
+
+                var adet = data_array.stok_adet;
+
+                if (adet <= 0) {
+
+
+
+
+
+                    Swal.fire({
+                        title: "Ürün Stoklarda Mevcut Değil!",
+                        text: "Bu şekilde eklemek istiyormusunuz?",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'İptal',
+                        confirmButtonText: 'Ekle'
+                    }).then((result) => {
+                        if (result.value) {
+                            urunHazirla(data_array);
+
+                        }
+                    });
+
+
+
+
+
+
+
+
+                } else {
+
+                    urunHazirla(data_array);
+
+                }
+
+
+
+
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                document.getElementById("stokisimlearamainput").value = "";
+
+            }
+
+
+            function urunHazirlaSeri(data) {
+
+                if (data.stok_kdv_oran == 0) {
+
+                    kdv_oran_duzelt = 1;
+                } else {
+
+
+                    if (data.stok_kdv_oran > 9) {
+
+                        var kdv_oran_duzelt = "1." + data.stok_kdv_oran;
+
+                    } else {
+
+                        var kdv_oran_duzelt = "1.0" + data.stok_kdv_oran;
+                    }
+                }
+
+
+
+                var dahil_selected = "";
+                var haric_selected = "";
+
+                if (data.stok_fiyat_vergi_durum == 1) {
+
+
+                    var toplam_tutar = data.stok_satis_fiyati * 1;
+                    toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    kdv_tutar = kdv_tutar.toFixed(2);
+
+                    var satis_fiyat = toplam_tutar;
+
+
+                    haric_selected = " selected ";
+
+
+                } else if (data.stok_fiyat_vergi_durum == 2) {
+
+
+                    var toplam_tutar = data.stok_satis_fiyati * 1;
+                    toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    kdv_tutar = kdv_tutar.toFixed(2);
+
+
+
+
+                    var satis_fiyat = vergili_toplam_tutar;
+
+
+                    dahil_selected = " selected ";
+                }
+
+
+
+                var html = "";
+                html += '<tr class="data-tr-' + data.id + '-' + sayi + '">';
+                html += "<td><a style=\"cursor:pointer;\" onclick=\"ekliStokSil(" + data.id + "," + sayi + ")\">Sil</a></td>";
+                html += "<td><input type=\"hidden\" name=\"data['st-" + sayi + "'][stokid]\" value=\"" + data.id + "\"/> " + data.stok_kod;
+                html += "<input type=\"hidden\" data-input=\"inpt-min-satisfiyat-" + sayi + "\" value=\"" + data.stok_max_iskontolu_satis_fiyati + "\"/><input type=\"hidden\" name=\"data['st-" + sayi + "'][ozel_urun_id]\" value=\"" + data.ozel_urun_id + "\"/> </td>";
+                html += "<td data-name=\"stok-adi\">" + data.stok_adi + " " + data.stok_varyant_adi + " " + data.stok_varyant_deger + "</td> ";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-serino-" + sayi + "\" name=\"data['st-" + sayi + "'][serino]\" class=\"serinoinputs\" style=\"width:120px;\" value=\"" + data.seri_no + "\"/ readonly ></td> ";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-satisfiyat-" + sayi + "\" name=\"data['st-" + sayi + "'][satis_fiyat]\" class=\"\" style=\"width:100px;\" value=\"" + data.stok_satis_fiyati + "\"/></td>";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-miktar-" + sayi + "\" name=\"data['st-" + sayi + "'][miktar]\" data-name=\"stok-miktar\" class=\"\" style=\"width:50px;\" value=\"1\" readonly/></td>";
+                html += "<td>" + data.stok_birimi + "</td>";
+                html += "<td><select data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvtip-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tip]\"><option value=\"1\" " + dahil_selected + ">Dahil</option><option value=\"0\" " + haric_selected + ">Hariç</option></select></td>";
+                html += "<td><input type=\"number\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvoran-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_oran]\" class=\"\" style=\"width:45px;\" value=\"" + data.stok_kdv_oran + "\" readonly/>";
+                html += "<input type=\"hidden\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvtutar-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tutar]\" class=\"kdv_inputlari\" style=\"width:100px;\" value=\"" + kdv_tutar + "\"/></td>";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][toplam]\" class=\"toplam_inputlari\" style=\"width:100px;\" value=\"" + toplam_tutar + "\" readonly/></td>";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-vergili-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][vergili_toplam]\" class=\"vergili_toplam_inputlari\" style=\"width:100px;\" value=\"" + vergili_toplam_tutar + "\" readonly/></td>";
+                html += "<td><select data-id=\"" + sayi + "\" class=\"depolarselect\" data-input=\"inpt-depolar-" + sayi + "\" name=\"data['st-" + sayi + "'][depo_id]\">" + depolar() + "</select></td>";
+
+                html += "</tr>";
+
+                sayi++;
+
+                $("#secili_stok_listesi").append(html);
+
+                $(":input").bind("keyup change", function (e) {
+
+                    var dataid = $(this).attr("data-id");
+                    var datasayi = $(this).attr("data-sayi");
+                    if (dataid) {
+                        urunhesapla(dataid, datasayi);
+                        serinolarikontrolet(dataid, datasayi);
+                    }
+
+                });
+
+                serinolarikontrolet(data.id, sayi);
+                toplamhesapla();
+
+            }
+
+
+
+            function urunHazirla(data) {
+
+
+                if (data.stok_kdv_oran == 0) {
+
+                    kdv_oran_duzelt = 1;
+                } else {
+
+
+                    if (data.stok_kdv_oran > 9) {
+
+                        var kdv_oran_duzelt = "1." + data.stok_kdv_oran;
+
+                    } else {
+
+                        var kdv_oran_duzelt = "1.0" + data.stok_kdv_oran;
+                    }
+                }
+
+
+
+                var dahil_selected = "";
+                var haric_selected = "";
+
+                if (data.stok_fiyat_vergi_durum == 1) {
+
+
+                    var toplam_tutar = data.stok_satis_fiyati * 1;
+                    toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    kdv_tutar = kdv_tutar.toFixed(2);
+
+                    var satis_fiyat = toplam_tutar;
+
+
+                    haric_selected = " selected ";
+
+
+                } else if (data.stok_fiyat_vergi_durum == 2) {
+
+
+                    var toplam_tutar = data.stok_satis_fiyati * 1;
+                    toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    kdv_tutar = kdv_tutar.toFixed(2);
+
+
+
+
+                    var satis_fiyat = vergili_toplam_tutar;
+
+
+                    dahil_selected = " selected ";
+                }
+
+
+
+
+
+
+
+                var html = "";
+                html += '<tr class="data-tr-' + data.id + '-' + sayi + '">';
+                html += "<td><a style=\"cursor:pointer;\" onclick=\"ekliStokSil(" + data.id + "," + sayi + ")\">Sil</a></td>";
+                html += "<td><input type=\"hidden\" name=\"data['st-" + sayi + "'][stokid]\" value=\"" + data.id + "\"/><input type=\"hidden\" data-input=\"inpt-min-satisfiyat-" + sayi + "\" value=\"" + data.stok_max_iskontolu_satis_fiyati + "\"/> " + data.stok_kod + "</td>";
+                html += "<td data-name=\"stok-adi\">" + data.stok_adi + " " + data.stok_varyant_adi + " " + data.stok_varyant_deger + "</td> ";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\"  data-sayi=\"" + sayi + "\" data-input=\"inpt-serino-" + sayi + "\" name=\"data['st-" + sayi + "'][serino]\" class=\"serinoinputs\" style=\"width:120px;\" value=\"\"/ ></td> ";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-satisfiyat-" + sayi + "\" name=\"data['st-" + sayi + "'][satis_fiyat]\" class=\"\" style=\"width:100px;\" value=\"" + satis_fiyat + "\"/></td>";
+                html += "<td><input type=\"number\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-miktar-" + sayi + "\" name=\"data['st-" + sayi + "'][miktar]\" data-name=\"stok-miktar\" class=\"\" style=\"width:50px;\" value=\"1\"/></td>";
+                html += "<td>" + data.stok_birimi + "</td>";
+                html += "<td><select data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvtip-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tip]\"><option value=\"1\" " + dahil_selected + ">Dahil</option><option value=\"0\" " + haric_selected + ">Hariç</option></select></td>";
+                html += "<td><input type=\"number\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvoran-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_oran]\" class=\"\" style=\"width:45px;\" value=\"" + data.stok_kdv_oran + "\" readonly/>";
+                html += "<input type=\"hidden\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvtutar-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tutar]\" class=\"kdv_inputlari\" style=\"width:100px;\" value=\"" + kdv_tutar + "\"/></td>";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][toplam]\" class=\"toplam_inputlari\" style=\"width:100px;\" value=\"" + toplam_tutar + "\" readonly/></td>";
+                html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-vergili-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][vergili_toplam]\" class=\"vergili_toplam_inputlari\" style=\"width:100px;\" value=\"" + vergili_toplam_tutar + "\" readonly/></td>";
+                html += "<td><select data-id=\"" + sayi + "\" class=\"depolarselect\" data-input=\"inpt-depolar-" + sayi + "\" name=\"data['st-" + sayi + "'][depo_id]\">" + depolar() + "</select></td>";
+
+                html += "</tr>";
+
+                sayi++;
+
+                $("#secili_stok_listesi").append(html);
+
+                $(":input").bind("keyup change", function (e) {
+
+                    var dataid = $(this).attr("data-id");
+                    var datasayi = $(this).attr("data-sayi");
+                    if (dataid) {
+                        urunhesapla(dataid, datasayi);
+                        serinolarikontrolet(dataid, datasayi);
+                    }
+
+                });
+
+                serinolarikontrolet(data.id, sayi);
+                toplamhesapla();
+
+
+            }
+
+
+
+            function ekliStokSil(id, trid)
+            {
+                event.preventDefault();
+                $(".data-tr-" + id + "-" + trid).remove();
+                toplamhesapla();
+            }
+
+
+            function serinolarikontrolet(id, datasayi) {
+
+                var seri = $("[data-input = 'inpt-serino-" + id + "']");
+
+
+                var seri_no = seri.val();
+
+                if (seri_no) {
+
+                    var serikontrol = seri_no.trim();
+
+                } else {
+
+                    var serikontrol = "";
+
+                }
+
+
+
+                if (serikontrol == "") {
+
+                    seri.css("border-color", "");
+
+                } else {
+
+
+
+
+                    var inputlar = $('.serinoinputs');
+
+
+                    if (inputlar.length == 1) {
+
+                        //Müsait
+                        seri.css("border-color", "#00ff00");
+
+
+                    } else {
+
+
+
+                        var top = 0;
+                        var i = 0;
+
+
+
+                        $('.serinoinputs').each(function () {
+
+
+                            if ($(this).val() == serikontrol) {
+
+                                top++;
+                            }
+
+                        });
+
+
+
+
+
+
+
+                        if (top == 1) {
+                            //Müsait
+                            seri.css("border-color", "#00ff00");
+
+                        } else {
+                            //Dolu
+                            seri.css("border-color", "#dc3545");
+                        }
+
+
+
+
+
+                    }
+
+
+
+
+
+
+
+
+                }
+            }
+
+
+
+
+            function depo(id) {
+
+                var depolar_html = "";
+
+                $.each(depo_json, function (key, val) {
+
+                    if (val.id == id) {
+
+                        depolar_html += "<option value='" + val.id + "' selected=\"\">" + val.stok_depo_adi + "</option>";
+                    }
+
+
+                });
+
+
+                return depolar_html;
+            }
+
+
+            function depolar() {
+
+                var depolar_html = "<option value='0' selected=''>Depo Seçiniz!</option>";
+
+                $.each(depo_json, function (key, val) {
+
+                    if (standart_depo_id == val.id) {
+                        depolar_html += "<option value='" + val.id + "' selected>" + val.stok_depo_adi + "</option>";
+                    } else {
+                        depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+                    }
+
+
+                });
+
+
+                return depolar_html;
+            }
+
+
+
+
+            function urunhesapla(id, datasayi) {
+                var seri_no = $("[data-input = 'inpt-serino-" + id + "']");
+                var kdvtip = $("[data-input = 'inpt-kdvtip-" + id + "']");
+                var satis_fiyat = $("[data-input = 'inpt-satisfiyat-" + id + "']");
+                var min_satis_fiyat = $("[data-input = 'inpt-min-satisfiyat-" + id + "']");
+                var miktar = $("[data-input = 'inpt-miktar-" + id + "']");
+                var kdvoran = $("[data-input = 'inpt-kdvoran-" + id + "']");
+                var kdvtutar = $("[data-input = 'inpt-kdvtutar-" + id + "']");
+                var toplam = $("[data-input = 'inpt-toplam-" + id + "']");
+                var vergili_toplam = $("[data-input = 'inpt-vergili-toplam-" + id + "']");
+
+                var zarardurum = 0;
+
+                if (kdvoran.val() > 9) {
+
+                    var kdv_oran_duzelt = "1." + kdvoran.val();
+
+                } else {
+
+                    var kdv_oran_duzelt = "1.0" + kdvoran.val();
+                }
+
+                //KDV hariç tutar
+                if (kdvtip.val() == 0) {
+
+                    var toplam_tutar = parseFloat(satis_fiyat.val()) * parseFloat(miktar.val());
+                    toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    kdv_tutar = kdv_tutar.toFixed(2);
+
+
+                    if (parseFloat(satis_fiyat.val()) < parseFloat(min_satis_fiyat.val())) {
+                        zarardurum = 1;
+                    }
+
+
+                    //KDV dahil tutar
+                } else {
+
+
+
+
+                    if (kdvoran.val() > 0) {
+
+                        var vergili_toplam_tutar = parseFloat(satis_fiyat.val()) * parseFloat(miktar.val());
+                        vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+
+
+                        var toplam_tutar = vergili_toplam_tutar / kdv_oran_duzelt;
+                        toplam_tutar = toplam_tutar.toFixed(2);
+
+                        var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                        kdv_tutar = kdv_tutar.toFixed(2);
+
+
+
+                    } else {
+
+                        var vergili_toplam_tutar = parseFloat(satis_fiyat.val()) * parseFloat(miktar.val());
+
+                        vergili_toplam_tutar = vergili_toplam_tutar.toFixed(2);
+
+                        var toplam_tutar = parseFloat(vergili_toplam_tutar);
+
+                        toplam_tutar = toplam_tutar.toFixed(2);
+
+                        var kdv_tutar = 0;
+                        kdv_tutar = kdv_tutar.toFixed(2);
+
+                    }
+
+
+                }
+
+
+                var miktari = miktar.val();
+
+                var serikontrol = seri_no.val();
+
+                serikontrol = serikontrol.trim();
+
+                if (serikontrol != "") {
+
+                    if (miktari == 0) {
+
+                        ermsj = "Seri Numarası Girilen Ürünün Miktarı 0 olamaz! \n";
+                        ermsj += "Bu şekilde kayıt yapılır ise kayıt esnasında sistem miktarı kendisi 1 olarak düzenleyecek! \n";
+                        ermsj += "Toplam şuan gördüğünüzden farklı olacaktır!";
+                        swalert("warning", "Seri No Adet Geçersiz!", ermsj);
+
+                    } else if (miktari > 1) {
+                        ermsj = "Seri Numarası Girilen Ürünün Miktarı 1 den Fazla olamaz! \n";
+                        ermsj += "Bu şekilde kayıt yapılır ise kayıt esnasında sistem miktarı kendisi 1 olarak düzenleyecek! \n";
+                        ermsj += "Toplam şuan gördüğünüzden farklı olacaktır!";
+                        swalert("warning", "Seri No Adet Çakışması!", ermsj);
+                    }
+
+                }
+
+
+
+                if (toplam_tutar == "NaN") {
+
+                    toplam_tutar = 0;
+                }
+
+
+                if (vergili_toplam_tutar == "NaN") {
+
+                    vergili_toplam_tutar = 0;
+                }
+
+
+
+                if (kdv_tutar == "NaN" || kdv_tutar == "") {
+
+                    kdv_tutar = 0;
+                }
+
+                vergili_toplam.val(vergili_toplam_tutar);
+
+                kdvtutar.val(kdv_tutar);
+
+                toplam.val(toplam_tutar);
+
+
+
+                if (zarardurum == 1) {
+
+
+                    $(".data-tr-" + id + "-" + datasayi).css({
+                        "background-color": "#dc3545",
+                        "color": "white"
+                    });
+
+
+                } else {
+
+                    $(".data-tr-" + id + "-" + datasayi).css({
+                        "background-color": "white",
+                        "color": "#888"
+                    })
+                }
+
+                toplamhesapla();
+            }
+
+
+            function toplamhesapla() {
+
+                var toplam = 0.00;
+
+                var inputs = document.getElementsByClassName('toplam_inputlari');
+
+                for (var z = 0; z < inputs.length; z++) {
+
+                    toplam += parseFloat(inputs[z].value);
+                }
+
+
+                var kdv_toplam = 0.00;
+
+                var kdv_inputs = document.getElementsByClassName('kdv_inputlari');
+
+                for (var za = 0; za < kdv_inputs.length; za++) {
+
+                    kdv_toplam += parseFloat(kdv_inputs[za].value);
+                }
+
+
+
+                $("#kdv_toplam_label").html(kdv_toplam.toFixed(2) + " TL");
+                $("#ara_total_label").html(toplam.toFixed(2) + " TL");
+
+                var toplam_tutar = parseFloat($("#kdv_toplam_label").html()) + parseFloat($("#ara_total_label").html());
+
+
+                $("#toplam_label").html(toplam_tutar.toFixed(2) + " TL");
+
+
+            }
+
+
+
+            function listeGonder() {
+
+
+                var select_durum = false;
+                var selects = document.querySelectorAll(".depolarselect");
+                $.each(selects, function (key, val) {
+
+                    if (selects[key].value == 0) {
+                        select_durum = true;
+
+                    }
+
+                });
+
+
+                var maxvade = $("#max-vade-gun").val();
+                var tanimlivade = $("#vade-gun").val();
+
+
+                if (select_durum) {
+
+
+                    Swal.fire({
+                        title: "Seçilmeyen Depolar Mevcut!",
+                        text: "Bu şekilde kaydetmek istiyormusunuz?", type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        cancelButtonText: 'İptal',
+                        confirmButtonText: 'Uygula'
+                    }).then((result) => {
+                        if (result.value) {
+
+                            if (tanimlivade <= maxvade) {
+
+                                document.getElementById("stoklistesi").submit();
+
+                            } else {
+
+
+
+                                Swal.fire({
+                                    title: "Vade Günü Geçersiz!",
+                                    text: "Bu hesaba " + maxvade + " Günden fazla ("+tanimlivade+" Gün) vade uygulamak istiyormusunuz?",
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    cancelButtonText: 'İptal',
+                                    confirmButtonText: 'Uygula'
+                                }).then((result) => {
+                                    if (result.value) {
+
+                                        document.getElementById("stoklistesi").submit();
+
+
+                                    }
+                                });
+
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
+
+                        }
+                    });
+
+
+
+
+
+
+
+
+
+
+                } else {
+                    if (tanimlivade <= maxvade) {
+
+                        document.getElementById("stoklistesi").submit();
+
+                    } else {
+
+
+
+                        Swal.fire({
+                            title: "Vade Günü Geçersiz!",
+                            text: "Bu hesaba " + maxvade + " Günden fazla ("+tanimlivade+" Gün) vade uygulamak istiyormusunuz?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'İptal',
+                            confirmButtonText: 'Uygula'
+                        }).then((result) => {
+                            if (result.value) {
+
+                                document.getElementById("stoklistesi").submit();
+
+
+                            }
+                        });
+
+
+
+
+
+
+                    }
+
+                }
+
+
+            }
+
+
+
+            window.onload = function () {
+                document.getElementById("stok_getirme_input").focus();
+            };
+
+
+        </script>
+    {% endblock %}

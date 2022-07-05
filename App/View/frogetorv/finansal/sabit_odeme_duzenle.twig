@@ -1,0 +1,154 @@
+{% extends "layout-light.twig" %}
+
+
+
+
+{% block content %}
+
+    {% if mobile == 1 %}
+        <div class="row">
+
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <a href="{{url}}/cari/list" class="btn btn-danger waves-effect waves-light">
+                    <i class="fa fa-backward mr-2"></i>Geri Dön</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/finansal/sabit-odeme-guncelle" method="post">
+                                {{csrf | raw}}
+
+                                <input type="hidden" name="cari_id" value="{{ odeme.cari_id }}"/>
+
+
+                                <input type="hidden" name="id" value="{{ odeme.id }}"/>
+                                <div class="form-group">
+                                    <label>Ödeme Hesabı:</label>
+                                    <input type="text" class="form-control"  value="{{ odeme.cari_adi }}" readonly>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Ödeme Adı:</label>
+                                    <input type="text" class="form-control" name="baslik" required="" value="{{ odeme.baslik }}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Tutar:</label>
+                                    <input type="text" class="form-control" name="tutar" value="{{ Tl(odeme.tutar, 2 ,"non")  }}"  required="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Döviz: </label>
+                                    <select class="form-control" name="tutar_doviz">
+
+
+                                        <option value="TL">TL</option>
+
+
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Geçerlilik Tarihi:</label>
+                                    <input type="date" class="form-control" name="baslama_tarihi" value="{{ odeme.baslama_tarihi }}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Geçerlilik Son Tarihi:</label>
+                                    <input type="date" class="form-control" name="bitis_tarihi"  value="{{ odeme.bitis_tarihi }}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Düzenli Ödeme Ayın Hangi Günü ?</label>
+                                    <select class="form-control" name="gun">
+
+                                        {% for gun in gunler %}
+                                            {% if  odeme.gun == gun %}
+                                            <option value="{{ gun }}" selected>{{ gun }}</option>
+                                            {% else %}
+                                                <option value="{{ gun }}">{{ gun }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Açıklama:</label>
+                                    <textarea class="form-control" name="aciklama">{{ odeme.aciklama }}</textarea>
+                                </div>
+
+
+                                <hr>
+                                <div class="form-group">
+                                    <label>Bildirim </label>
+                                    <select class="form-control" name="bildirim_durum">
+
+
+                                        <option value="1" {% if odeme.bildirim_durum == 1 %}selected{% endif %}>Aktif</option>
+                                        <option value="0" {% if odeme.bildirim_durum == 0 %}selected{% endif %}>Pasif</option>
+
+
+                                    </select>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Önceden Bildirim Günü (Ödeme Tarihinden Seçtiğiniz Gün Kadar Önce Bildirim Gönderir max 3 Gün)</label>
+                                    <input type="number" max="3" min="0" class="form-control" value="{{ odeme.ondecen_bildirim }}" name="ondecen_bildirim" required><br>
+                                    <small>Eğer 0 yazılır ise önceden bilgirim kapalı anlamına gelir</small>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Aynı Gün Bildirim</label>
+                                    <select class="form-control" name="ayni_gun_bildirim">
+
+                                        <option value="1" {% if odeme.ayni_gun_bildirim == 1 %}selected{% endif %}>Aktif</option>
+                                        <option value="0" {% if odeme.ayni_gun_bildirim == 0 %}selected{% endif %}>Pasif</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Birgün Sonra Bildirim</label>
+                                    <select class="form-control" name="ertesi_gun_bildirim">
+
+                                        <option value="0" {% if odeme.ertesi_gun_bildirim == 0 %}selected{% endif %}>Pasif</option>
+                                        <option value="1" {% if odeme.ertesi_gun_bildirim == 1 %}selected{% endif %}>Aktif</option>
+
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Güncelle</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+
+{% endblock %}
+

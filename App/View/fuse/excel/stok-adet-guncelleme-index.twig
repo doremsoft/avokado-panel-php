@@ -1,0 +1,70 @@
+
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+
+
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Excelden Stok Adet Güncellemeleri Yukleme</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/excel-import/stok-adetler-guncelle" method="post"  enctype="multipart/form-data">
+                                {{csrf | raw}}
+                                <div class="form-group">
+                                    <label>Excel Dosyası Seçiniz:</label>
+                                    <input type="file" class="form-control" name="stoklar" id="stokfileinput" required>
+
+                                        <small>Yanlızca .xlx ve .xlxs Dosyaları ve 3mb Dosyalar Kabul Edilir!</small>
+                                </div>
+
+
+
+                                <button type="submit" class="btn btn-warning waves-effect waves-light"><i class="mdi mdi-alert-outline mr-2"></i>Stokları Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#stokfileinput').bind('change', function () {
+
+
+            var file_size = this.files[0].size;
+
+
+            if (file_size > 3000000) {
+
+                notify("Dosya Boyutu lilmiti aşıyor", "danger");
+
+                //$('#stokfileinput').val('');
+
+            }
+
+        });
+    </script>
+
+{% endblock %}
+
+

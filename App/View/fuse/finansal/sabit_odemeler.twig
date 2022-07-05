@@ -1,0 +1,196 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">payment</i>
+
+                                        </span>
+                    <span class="logo-text h4">Gider İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"   href="{{ url }}/odemeler" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odeme/cari-secim"  >Yeni Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odemeler/liste"  >Gider Dökümü</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready"  href="{{ url }}/finansal/aylik-sabit-odemeler"  >Aylık Sabit Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-cari-secim"  >Yeni Aylık Sabit Gider</a>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-listesi">Aylık Sabit Gider Listesi</a>
+                </li>
+
+
+            </ul>
+        </div>   </div>
+
+
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="card">
+
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+
+                                    <thead>
+                                    <tr >
+                                        <th style="font-weight: bold;">Sabit Gün</th>
+                                        <th style="font-weight: bold;">Geçerlilik Tarihi</th>
+                                        <th style="font-weight: bold;">Bildirim</th>
+                                        <th style="font-weight: bold;">Bildirim Zamanları</th>
+                                        <th style="font-weight: bold;">Hesap Adı</th>
+                                        <th style="font-weight: bold;">Ödeme Adı</th>
+                                        <th style="font-weight: bold;">Ödeme Tutarı</th>
+                                        <th style="font-weight: bold;">İşlem</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% set toplam_tutar = 0 %}
+                                    {% for odeme in sabit_odemeler  %}
+
+
+                                        <tr>
+
+                                            <td>
+
+                                            {{ odeme.gun }}
+
+                                            </td>
+
+                                            <td>
+
+                                                {{  tarih(odeme.baslama_tarihi) }} <> {{ tarih(odeme.bitis_tarihi)  }}
+
+                                            </td>
+
+                                            <td>
+
+                                                {% if odeme.bildirim_durum == 1 %}
+                                                    Aktif
+
+                                                {% else %}
+                                                    Bildirim Kapalı!
+                                                    {% endif %}
+
+                                            </td>
+
+
+
+
+                                            <td>
+
+                                                {% if odeme.bildirim_durum == 1 %}
+
+                                                    {% if odeme.ondecen_bildirim > 0 %}
+
+                                                     ( {{ odeme.ondecen_bildirim }} Gün Önce )
+
+                                                    {% endif %}
+
+                                                    {% if odeme.ayni_gun_bildirim == 1 %}
+
+                                                        ( Aynı Gün )
+
+                                                    {% endif %}
+
+                                                    {% if odeme.ertesi_gun_bildirim == 1 %}
+
+                                                        ( Ertesi Gün )
+
+                                                    {% endif %}
+
+                                                {% endif %}
+                                            </td>
+
+
+
+                                            <td>
+
+
+                                                {{ odeme.cari_adi }}
+
+                                            </td>
+
+
+                                            <td>
+
+
+                                                {{ odeme.baslik }}
+
+                                            </td>
+
+                                            <td width="150px">
+                                                {{ Tl(odeme.tutar ,2 ,"non") }} {{ odeme.tutar_doviz }}
+                                                {% set toplam_tutar = toplam_tutar + odeme.tutar %}
+
+                                            </td>
+
+
+                                            <td width="150px">
+
+                                                <a  class="btn  btn-primary"  href="{{ url }}/finansal/sabit-odeme-duzenle/{{ odeme.id }}">Düzenle</a>
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+
+                          <label style="font-weight: bold;">Toplam: {{ toplam_tutar }} TL</label>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}

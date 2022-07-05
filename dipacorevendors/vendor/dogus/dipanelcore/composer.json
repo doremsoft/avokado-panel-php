@@ -1,0 +1,21 @@
+{
+  "name": "dogus/dipanelcore",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Doğuş Dicle",
+      "email": "dogusdicle35@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dipa\\": "library"
+    }
+  },
+  "minimum-stability": "dev"
+}

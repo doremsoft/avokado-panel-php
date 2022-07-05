@@ -1,0 +1,93 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+      <div class="col-md-12 m-b-10">
+    <a href="{{url}}/parametreler/" class="btn btn-danger"><i class="feather icon-corner-up-left"></i>Parametrelere Dön</a>
+     </div>
+     
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Depo Ekle</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/stok-depolar/save" method="post">
+                            {{csrf | raw}}
+                            <div class="form-group">
+                                <label>Stok Depo Adını Yazınız:</label>
+                                <input type="text" name="stok-depo-adi" class="form-control" required/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Yeni Depo Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Depolar</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+
+                                <tbody>
+                                    {% for depo in depolar  %}
+                                        <tr>
+
+                                            <th>
+
+                                                <label style="padding:10px;" id="editable-{{depo.id}}" class="editable" data-url="{{url}}/stok-depolar/update" data-id="{{depo.id}}" title="Düzenlemek İçin Tıklayın">{{depo.stok_depo_adi}}</label>
+                                                <form id="depo-sil-form-{{depo.id}}" action="{{url}}/stok-depolar/remove" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="id" value="{{depo.id}}"/>
+                                                </form>
+                                            </th>
+
+                                            <td width="150px">
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="event.preventDefault();
+                                                         depo_sil({{depo.id}});"><i class="fa fa-trash"></i></button>
+                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{depo.id}}')"><i class="fa fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function depo_sil(id) {
+
+            swal({
+                title: "Eminmisiniz?",
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["İptal Et", "Tamam Anladım Sil!"],
+            })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            document.getElementById('depo-sil-form-' + id).submit();
+                        }
+                    });
+
+
+        }
+    </script>
+{% endblock %}

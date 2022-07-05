@@ -1,0 +1,504 @@
+{% extends "layout-light.twig" %}
+
+{% block head %}
+
+    <style>
+.nounderline{
+    text-decoration: none;
+    font-weight: bold;
+}
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    <div id="todo" class="page-layout carded left-sidebar">
+
+        <div class="top-bg bg-primary"></div>
+
+        <aside class="page-sidebar" data-fuse-bar="todo-sidebar" data-fuse-bar-media-step="md">
+            <!-- HEADER -->
+            <div class="header d-flex flex-column justify-content-between p-6 light-fg">
+                <div class="logo row no-gutters justify-content-center align-items-start justify-content-sm-start" style="padding-top: 20px;">
+                    <div class="logo-icon mr-3 mt-1">
+                        <i class="icon-cube-outline s-6"></i>
+                    </div>
+                    <div class="logo-text">
+                        <div class="h4">Ürünler</div>
+                        <div class="">{% if filtre == "" %}Bütün Stoklar
+                            {% elseif  filtre == "favoriler"  %}
+                                Favoriler
+                            {% elseif  filtre == "kritik"  %}
+                                Seviye Kritiğindekiler
+                            {% elseif  filtre == "son-eklenen"  %}
+                                Son Eklenen 20
+                            {% elseif  filtre == "onemli"  %}
+                               Önemli Stoklar
+                            {% elseif  filtre == "silinen"  %}
+                                Silinen Stoklar
+
+                            {% endif  %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- / HEADER -->
+            <div class="content custom-scrollbar ps ps--active-y">
+                {% if user.bayi == 0 %}
+                <div class="p-6">
+                    <form action="{{ url }}/stok/add" method="get">
+                        {{csrf | raw}}
+
+                        <button type="submit" class="btn btn-secondary btn-block fuse-ripple-ready">Yeni Stok</button>
+                    </form>
+
+                </div>
+                <li class="divider"></li>
+                {% endif %}
+                <ul class="nav flex-column">
+
+                    <li class="subheader">
+                        Sıralama
+                    </li>
+
+
+
+
+                    <li class="nav-item nav-link ripple fuse-ripple-ready">
+                        <select id="paginate-select" class="form-control nav-link ripple fuse-ripple-ready"><option>Sayfa Seçim yapınız</option>  {{paginate(stoklar.paginate,page_url,null,true) | raw }}</select>
+                    </li>
+
+
+
+                    <li class="divider"></li>
+
+                    <li class="subheader">
+                        Filtre
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list">
+                            <i class="icon s-4 icon-view-headline"></i>
+                            <span>Bütün Stoklar</span>
+                        </a>
+                    </li>
+
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/favoriler">
+                            <i class="icon s-4 icon-star"></i>
+                            <span>Favoriler</span>
+                        </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/kritik">
+                            <i class="icon s-4 icon-alert-circle"></i>
+                            <span>Seviyesi Azalan</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/son-eklenen">
+                            <i class="icon s-4 icon-clock"></i>
+                            <span>Son Eklenen 20</span>
+                        </a>
+                    </li>
+
+                    {% if user.bayi == 0 %}
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/onemli">
+                            <i class="icon s-4 icon-calendar-today"></i>
+                            <span>Önemli</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/silinen">
+                            <i class="icon s-4 icon-delete"></i>
+                            <span>Silinen</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; height: 426px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 234px;"></div></div></div>
+        </aside>
+
+        <div class="page-content-wrapper">
+
+            <!-- HEADER -->
+            <div class="page-header d-flex flex-column justify-content-center light-fg">
+
+                <div class="search-bar row align-items-center no-gutters bg-white text-auto">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-block d-lg-none fuse-ripple-ready" data-fuse-bar-toggle="todo-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <i class="icon-magnify s-6 mx-4"></i>
+
+                    <input class="search-bar-input col" type="text" id="stokurunarama-input" onkeyup="urungetirisimle(this.value)" placeholder="Aradığınız Ürünüz Yazınız....">
+
+
+
+
+
+                </div>
+
+
+                <div class="checkbox checkbox-danger" style="padding-top:15px;">
+
+
+                    <label class="custom-control custom-checkbox" style="width: 24px;    float: left;">
+                        <input type="checkbox" name="fatura-favorilerime-ekle"  id="checkbox6" type="checkbox" value="1" checked="" class="custom-control-input">
+                        <span class="custom-control-indicator fuse-ripple-ready" style="color:limegreen;"></span>
+
+                    </label>
+                    <label id="chboxlanel" style="cursor: pointer;">
+                            Yanlızca Stokta Mevcut Olanları Göster
+                    </label>
+                </div>
+
+
+
+            </div>
+            <!-- / HEADER -->
+
+         <div class="page-content-card">
+
+                <div class=" page-content custom-scrollbar ps">
+
+
+                  <table id="e-commerce-products-table" class="table dataTable table table-striped">
+                      <thead>
+                      <tr>
+
+                          <th>Stok Adı</th>
+                          <th>Mevcut</th>
+                          <th>Stok Kod</th>
+                          <th>Satış Fiyatı (KDV Dahil)</th>
+                          <th>İşlem</th>
+                      </tr>
+                      </thead>
+
+                                    <tbody id="stoklist-table-body">
+{% set i = 0 %}
+  {% for stok in stoklar.result  %}
+      {% set i = i + 1 %}
+                                            <tr>
+                                                <td><a class="nounderline" href="{{url}}/stok/show/{{stok.id}}">{{stok.stok_full_ad}}</a></td>
+                                                <td>{{adet(stok.stok_adet)}}</td>
+                                                <td>{{stok.stok_kod}}</td>
+                                                <td>{{Fiyat(kdv_hesapla(stok.stok_satis_fiyati,1,stok.stok_kdv_oran,'ekle',1),stok.stok_doviz,1) | raw }}</td>
+                                                <td><a class="nounderline" href="{{url}}/stok/show/{{stok.id}}">Göster</a></td>
+                                            </tr>
+{% endfor %}
+
+                                    {% if i == 0 %}
+
+                                        <tr>
+
+                                            <td colspan="5">Kayıtlı Ürün Bulunamadı</td>
+                                    </tr>
+
+                                    {% endif %}
+
+
+
+
+
+                                        </tbody>
+                                </table>
+
+
+     </div>
+
+
+
+         </div>
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+
+    <script>
+
+
+
+
+        var table_html_data = $("#stoklist-table-body").html();
+
+
+        function urungetirisimle(str) {
+            if (str.length <= 1) {
+
+                $("#stoklist-table-body").html(table_html_data);
+
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var checkbox6 = 0;
+                if($("#checkbox6").prop("checked") == true){
+
+                    checkbox6 = 1;
+                }
+
+
+                var jqxhr = $.post("{{url}}/stok/search/full", {query: str, mevcutta : checkbox6})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+
+                            if (data == "non") {
+
+
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += trurunbas(val);
+
+                                    });
+
+                                    document.getElementById("stoklist-table-body").innerHTML = lihtml;
+
+
+                                } else {
+
+
+                                    document.getElementById("stoklist-table-body").innerHTML = "<tr><td colspan=\"5\"><center>Ürün Bulunamadı!</td></tr></center>";
+
+
+
+
+
+
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+        }
+
+
+
+        function urunbarcodeilegetir(e) {
+            //See notes about 'which' and 'key'
+            if (e.keyCode == 13) {
+                var tb = document.getElementById("barcodeilegetirinput");
+
+
+                var str = tb.value;
+
+
+
+                document.getElementById("barcodeilegetirinput").value = "";
+
+
+                if (str.length <= 1) {
+                    document.getElementById("aramasonuctable").innerHTML = "";
+                    document.getElementById("arama_sonuclari_row").style.display = "none";
+
+
+                    return;
+                } else if (str.length > 1) {
+
+                    console.log(str);
+
+                    var jqxhr = $.post("{{url}}/stok/search/full", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                            console.log(data);
+
+
+
+                            if (data == "non") {
+
+
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += trurunbas(val);
+
+                                    });
+
+                                    document.getElementById("aramasonuctable").innerHTML = lihtml;
+
+                                    document.getElementById("arama_sonuclari_row").style.display = "block";
+
+                                } else {
+
+                                    console.log("Ürün Bulunamadı");
+                                    document.getElementById("aramasonuctable").innerHTML = "<tr><td colspan=\"7\"><center>Ürün Bulunamadı!</td></tr></center>";
+
+                                    document.getElementById("arama_sonuclari_row").style.display = "block";
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+                }
+                return false;
+            }
+        }
+
+
+        function trurunbas(data) {
+
+            var html = "";
+
+
+
+            if (data.stok_kdv_oran > 0) {
+
+                if (data.stok_kdv_oran > 9) {
+
+                    var kdv_oran_duzelt = "1." + data.stok_kdv_oran;
+
+                } else {
+
+                    var kdv_oran_duzelt = "1.0" + data.stok_kdv_oran;
+                }
+
+
+
+                var vergili_satis_fiyat = parseFloat(data.stok_satis_fiyati) * parseFloat(kdv_oran_duzelt);
+
+                vergili_satis_fiyat = vergili_satis_fiyat.toFixed(2);
+
+            } else {
+
+                var vergili_satis_fiyat = data.stok_satis_fiyati;
+            }
+
+
+            var stok_adi =  data.stok_adi ;
+
+            if(data.stok_varyant_adi != null || data.stok_varyant_adi != "" || data.stok_varyant_adi != "null"){
+
+                stok_adi+=" "+data.stok_varyant_adi;
+            }
+
+            if(data.stok_varyant_deger != null || data.stok_varyant_deger != "" || data.stok_varyant_deger != "null" ){
+
+                stok_adi+=" "+data.stok_varyant_deger;
+            }
+
+
+
+
+            html += "<tr>";
+
+            html += " <td><a class=\"nounderline\" href=\"{{url}}/stok/show/" + data.id + "\">" + stok_adi + "</a></td>";
+            html += " <td>" + parseFloat(data.stok_adet) + "</td>";
+            html += " <td>" + data.stok_kod + "</td>";
+            html += " <td>" + vergili_satis_fiyat +" " +data.stok_doviz+ " </td>";
+            html += "<td><a class=\"nounderline\" href=\"{{url}}/stok/show/" + data.id + "\">Göster</a></td>";
+            html += "</tr>"
+
+
+            return html;
+
+        }
+
+
+        $("#paginate-select").on('change',function(){
+
+
+            var url = $(this).val();
+
+            window.location.href = url;
+        });
+
+        $("#checkbox6").on("change",function(){
+
+
+            urungetirisimle($("#stokurunarama-input").val());
+
+        });
+
+
+
+        $("#chboxlanel").on('click',function(){
+
+
+            if($("#checkbox6").prop("checked") == true){
+
+                $("#checkbox6").prop('checked', false);
+            }else{
+
+                $("#checkbox6").prop('checked', true);
+            }
+
+
+        });
+    </script>
+
+
+
+
+{% endblock %}

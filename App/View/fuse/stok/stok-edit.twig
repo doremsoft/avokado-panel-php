@@ -1,0 +1,879 @@
+{% extends layout %}
+{% block content %}
+
+    <form id="logout-form" action="{{url}}/stok/update" method="post" enctype="multipart/form-data">
+        {{csrf | raw}}
+
+        <input type="hidden" name="stok_id" value="{{stok.id}}" />
+
+        <div id="e-commerce-product" class="page-layout simple tabbed">
+
+            {% if noframestatus == false %}
+            <!-- HEADER -->
+            <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-6">
+
+                <div class="row no-gutters align-items-center">
+
+
+                    <a href="{{ url }}/stok/show/{{ stok.id }}" class="btn btn-icon mr-4">
+                        <i class="icon icon-arrow-left"></i>
+                    </a>
+
+                    <div>{{stok.stok_adi}} {{stok.stok_varyant_adi}} {{stok.stok_varyant_deger}}   {% if stok.paket_stok == 1 %}(PAKET STOK){% endif %}</div>
+                </div>
+                <button type="submit" class="btn btn-danger fuse-ripple-ready">Güncelle</button>
+            </div>
+            {% endif %}
+            <!-- / HEADER -->
+
+
+            <!-- CONTENT -->
+            <div class="page-content">
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link btn active" id="basic-info-tab" data-toggle="tab" href="#basic-info-tab-pane" role="tab" aria-controls="basic-info-tab-pane" aria-expanded="true">Stok Temel Bilgileri</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn" id="product-varyant-tab" data-toggle="tab" href="#product-varyant-tab-pane" role="tab" aria-controls="product-images-tab-pane">Varyant Ayarları </a>
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link btn" id="product-images-tab" data-toggle="tab" href="#product-images-tab-pane" role="tab" aria-controls="product-images-tab-pane">Stok Resimleri </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link btn" id="product-paket-tab" data-toggle="tab" href="#product-paket-tab-pane" role="tab" aria-controls="product-paket-tab-pane">Paket Stok </a>
+                    </li>
+
+
+
+                    <li class="nav-item">
+                        <a class="nav-link btn" id="inventory-tab" data-toggle="tab" href="#inventory-tab-pane" role="tab" aria-controls="inventory-tab-pane">Web Ayarları</a>
+                    </li>
+
+                    {% if noframestatus == true %}
+                        <li style="padding: 3px;">
+
+                            <button type="submit" class="btn btn-danger" style="height: 100%;">Güncelle</button>
+
+                        </li>
+                    {% endif %}
+
+
+                </ul>
+
+                <div class="col-md-12 m-t-15">
+
+
+
+
+                    <div class="tab-content">
+
+
+                        {% if noframestatus == true %}
+
+
+                            <div class="font-weight-bold">{{stok.stok_adi}} {{stok.stok_varyant_adi}} {{stok.stok_varyant_deger}}   {% if stok.paket_stok == 1 %}(PAKET STOK){% endif %}</div>
+
+
+
+                        {% endif %}
+
+
+                        <div class="tab-pane fade show active" id="basic-info-tab-pane" role="tabpanel" aria-labelledby="basic-info-tab">
+
+                            <div class="card p-6">
+
+
+
+
+
+
+
+                                {% if noframe == 'ok'  %}
+                                    <input type="hidden" name="noframe" value="ok" />
+
+                                {% endif %}
+
+
+                                <div class="form-group">
+                                    <label>Ad</label>
+                                    <input type="text" class="form-control" name="stok_adi" value="{{stok.stok_adi}}">
+                                </div>
+
+                                <input type="hidden" class="form-control" name="stok_cinsi" value="{{stok.stok_cinsi}}" >
+
+                                <div class="form-group">
+                                    <label>Birimi</label>
+                                    <select name="stok_birimi" class="form-control">
+                                        {% for birim in birimler %}
+
+
+
+                                            {% if stok.stok_birimi == birim.stok_birim_adi %}
+                                                <option value="{{birim.stok_birim_adi}}" selected="">{{birim.stok_birim_adi}}</option>
+                                            {% else %}
+                                                <option value="{{birim.stok_birim_adi}}">{{birim.stok_birim_adi}}</option>
+                                            {% endif %}
+
+
+
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Standart Adet</label>
+                                    <input type="text" class="form-control" name="stok_standart_adet" value="{{adet(stok.stok_standart_adet)}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Sınıfı</label>
+                                    <select name="stok_sinif" class="form-control">
+                                        {% for sinif in siniflar %}
+
+
+                                            {% if stok.stok_sinif == sinif.id %}
+                                                <option value="{{sinif.id}}" selected="">{{sinif.stok_sinif_adi}}</option>
+                                            {% else %}
+                                                <option value="{{sinif.id}}">{{sinif.stok_sinif_adi}}</option>
+                                            {% endif %}
+
+
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Grubu</label>
+                                    <select name="stok_grup" class="form-control">
+                                        <option value="0">Grup Seçimi Yapılmamış</option>
+                                        {% for grup in gruplar %}
+
+                                            {% if stok.stok_grup == grup.id %}
+                                                <option value="{{grup.id}}" selected="">{{grup.stok_grup_adi}}</option>
+                                            {% else %}
+                                                <option value="{{grup.id}}">{{grup.stok_grup_adi}}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Minimum Seviyesi</label>
+                                    <input type="text" class="form-control" name="stok_min_seviyesi" value="{{adet(stok.stok_min_seviyesi)}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Maksimum Seviyesi</label>
+                                    <input type="text" class="form-control" name="stok_max_seviyesi" value="{{adet(stok.stok_max_seviyesi)}}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Alım Para Birimi</label>
+                                    <select name="stok_alim_doviz" class="form-control">
+                                        {% for doviz in dovizler %}
+
+                                            {% if doviz.doviz_kod == stok.stok_alim_doviz %}
+
+                                                <option value="{{doviz.doviz_kod}}" selected>{{doviz.doviz_adi}}</option>
+                                            {% else %}
+                                                <option value="{{doviz.doviz_kod}}">{{doviz.doviz_adi}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Son Alış Fiyatı</label>
+
+
+                                    {% if stok.stok_fiyat_vergi_durum == 2 %}
+
+                                        <input type="text" class="form-control" name="stok_alis_fiyati" value="{{kdv_hesapla(stok.stok_alis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+
+                                    {% else %}
+                                        <input type="text" class="form-control" name="stok_alis_fiyati" value="{{stok.stok_alis_fiyati}}">
+
+                                    {% endif %}
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Alım İskonto Oranı %</label>
+                                    <input type="text" class="form-control" name="stok_alim_iskonto_oran" value="{{stok.stok_alim_iskonto_oran}}" />
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Satış Fiyatı</label>
+                                    {% if stok.stok_fiyat_vergi_durum == 2 %}
+                                        <input type="text" class="form-control" name="stok_satis_fiyati" value="{{kdv_hesapla(stok.stok_satis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+                                    {% else %}
+                                        <input type="text" class="form-control" name="stok_satis_fiyati" value="{{stok.stok_satis_fiyati}}">
+                                    {% endif %}
+
+
+
+                                </div>
+                                <div class="form-group">
+                                    <label>Satış İskonto Oranı %</label>
+                                    <input type="text" class="form-control" name="stok_satis_iskonto_oran" value="{{stok.stok_satis_iskonto_oran}}" / >
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>İndirimli Satış Fiyatı</label>
+
+
+
+
+                                    {% if stok.stok_fiyat_vergi_durum == 2 %}
+
+
+                                        <input type="text" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="{{kdv_hesapla(stok.stok_max_iskontolu_satis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+
+                                    {% else %}
+                                        <input type="text" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="{{stok.stok_max_iskontolu_satis_fiyati}}">
+                                    {% endif %}
+
+
+                                    <small> * 0 Etkisiz olarak bırakır</small>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Para Birimi</label>
+                                    <select name="stok_doviz" class="form-control">
+                                        {% for doviz in dovizler %}
+
+                                            {% if doviz.doviz_kod == stok.stok_doviz %}
+
+                                                <option value="{{doviz.doviz_kod}}" selected>{{doviz.doviz_adi}}</option>
+                                            {% else %}
+                                                <option value="{{doviz.doviz_kod}}">{{doviz.doviz_adi}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Kdv Oranı</label>
+                                    <input type="text" class="form-control" name="stok_kdv_oran" value="{{stok.stok_kdv_oran}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label> Vergi Durumu</label>
+                                    <select class="form-control" name="fiyatVergiDurum">
+
+                                        {% if stok.stok_fiyat_vergi_durum == 2 %}
+
+                                            <option value="2" selected>Vergiler Dahil Fiyatlar</option>
+                                        {% else %}
+                                            <option value="2">Vergiler Dahil Fiyatlar</option>
+                                        {% endif %}
+
+                                        {% if stok.stok_fiyat_vergi_durum == 1 %}
+
+                                            <option value="1" selected>Vergiler Hariç Fiyatlar</option>
+                                        {% else %}
+                                            <option value="1">Vergiler Hariç Fiyatlar</option>
+                                        {% endif %}
+
+
+                                    </select>
+
+                                </div>
+                                <div class="form-group">
+                                    <label> Marka</label>
+                                    <select name="stok_marka" class="form-control">
+                                        <option value="0">Marka Seçiniz</option>
+                                        {% for marka in markalar %}
+
+                                            {% if stok.stok_marka_id == marka.id %}
+
+                                                <option value="{{marka.id}}" selected>{{marka.marka_adi}}</option>
+
+                                            {% else  %}
+                                                <option value="{{marka.id}}">{{marka.marka_adi}}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Stok Kod</label>
+                                    <input type="text" class="form-control" name="stok_kod" value="{{stok.stok_kod}}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Stok Özel Kod</label>
+                                    <input type="text" class="form-control" name="stok_ozel_kod" value="{{stok.stok_ozel_kod}}">
+                                </div>
+
+
+
+
+
+
+                                <div class="form-group">
+                                    <label>Stok Barkod</label>
+                                    <input type="text" class="form-control" name="stok_barkod_no" value="{{stok.stok_barkod_no}}">
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="tab-pane fade" id="product-varyant-tab-pane" role="tabpanel" aria-labelledby="product-varyant-tab">
+
+                            <div class="card p-6">
+
+
+                                <div class="form-group">
+                                    <div>
+                                        <button type="button" data-toggle="modal" data-target="#yeniKalemModal" class="btn btn-danger fuse-ripple-ready">Üst Stok Seç</button>
+                                        <button type="button" id="varyant-secim-temizle-btn" onclick="secimTemizle()"  class="btn btn-danger fuse-ripple-ready">Seçim Temizle</button>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group m-t-15 ">
+                                    <label>Varyant Üst Stok Adı</label>
+                                    <div id="varyant-ust-stok-adi"  > - </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Varyant Üst Id</label>
+                                    <input type="text" class="form-control" id="stok_parent_id" name="stok_parent_id" value="{{stok.stok_parent_id}}">
+                                </div>
+
+                                <input type="hidden" class="form-control" name="stok_parent_stok_kod" value="">
+
+
+                                <div class="form-group">
+                                    <label>Varyant Varyant Adi</label>
+                                    <input type="text" class="form-control" name="stok_varyant_adi" value="{{stok.stok_varyant_adi}}">
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Varyant Değer</label>
+                                    <input type="text" class="form-control" name="stok_varyant_deger" value="{{stok.stok_varyant_deger}}">
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="tab-pane fade" id="product-paket-tab-pane" role="tabpanel" aria-labelledby="product-paket-tab">
+
+
+                            <div class="card p-6">
+
+
+                                Eğer İşlem Yapacağanız Stok Birden Fazla Stoktan Oluşuyor İse Stok Paketleme İle Tek Seferde Birden Fazla Stoğa Haraket Kaydı Gerçekleştirebilirsiniz. <br>
+                                Dikkat!! Paketlenmiş Stok Özelliği Açık Değilse Seçim Yapmış Olsanız Bile Sistem Aktif Olmaz!
+
+
+                            </div>
+
+
+                            <div class="card p-6 m-t-15">
+
+                                <div class="col-md-12">
+
+
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+
+                                            <button type="button" data-toggle="modal" data-target="#yeniGrupKalemModal" class="btn btn-danger fuse-ripple-ready">Stok Seç</button>
+
+
+
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="switch" style="margin: auto;">
+
+                                                <input type="checkbox" id="paketlenmisurunswitch" name="paketlenmisurun" {% if stok.paket_stok == 1 %}checked{% endif %}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                            <label  style="font-weight: bold;">Paketlenmiş Stok Özelliği</label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="card p-6 m-t-15">
+
+                                <div class="table-responsive text-nowrap">
+
+                                    <table class="table table-striped">
+
+                                        <thead>
+                                        <tr>
+                                            <th>Stok Adı</th>
+                                            <th >Miktar</th>
+                                            <th>İşlem</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody id="grup-secimler-table">
+
+
+                                        {% for gstok in grup_stoklar %}
+                                       <tr id='sg-id-{{ gstok.grup_stok_id }}'>
+
+                                         <td>
+                                            {{ gstok.stok_adi}} {{ gstok.stok_varyant_adi}} {{ gstok.stok_varyant_deger}}
+                                             </td>
+                                          <td style="max-width: 250px;">
+                                           <input type='text' name='grupstoklari[{{ gstok.grup_stok_id }}]' class='' style="max-width: 120px;border:1px solid black;"   value='{{ gstok.gsmiktar }}' /> <label> {{ gstok.stok_birimi }}</label>
+                                         </td>
+                                           <td>
+
+                                          <button type="button" onclick='removeGroupElement({{ gstok.grup_stok_id }})' class="btn btn-danger btn-fab btn-sm fuse-ripple-ready"><i class="icon-delete"></i></button>
+                                             </td>
+                                      </tr>
+
+                                        {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <div class="tab-pane fade" id="inventory-tab-pane" role="tabpanel" aria-labelledby="inventory-tab">
+
+                            <div class="card p-6">
+
+
+                                <div class="form-group">
+                                    <label>Title (Başlık)</label>
+                                    <input type="text" name="stok_web_title"  class="form-control" value="{{stok.stok_web_title}}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Description (Kısa Açıklama)</label>
+                                    <textarea name="stok_web_description" class="form-control">{{stok.stok_web_description}}</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Stok Detay</label>
+                                    <textarea name="stok_detayi" id="editor2" class="form-control">{{stok.stok_detayi}}</textarea>
+                                </div>
+
+
+
+
+                                <div class="form-group">
+                                    <label>Etiketler (CTRL tuşu ile birden fazla seçim yapabilirsiniz)</label>
+                                    <select  multiple  name="etiketler[]" class="form-control multiple " style="height:300px;" >
+
+                                        {% for tag in tags %}
+
+                                            {%if  tag.id in select_tags|keys %}
+                                                <option value="{{ tag.id }}"  selected>{{ tag.tag_name }}</option>
+                                            {% else %}
+                                                <option value="{{ tag.id }}" >{{ tag.tag_name }}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="product-images-tab-pane" role="tabpanel" aria-labelledby="product-images-tab">
+
+                            <div class="card p-6">
+
+                                <div class="row">
+
+
+                                            <div class="form-group col-md-12">
+                                        <label>Stok Resmi</label>
+
+                                        <img src="{{ public_media(stok.stok_resim) }}" style="max-width: 200px;" class="image"  id="img-fieldID-1">
+
+                                        <br>
+                                        <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=public&callback=publi_image_callback&type=1&popup=1&field_id=fieldID-1&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                                        <input type="text" onkeyup="imageKontrol('fieldID-1')" class="form-control" name="stok_resim" id="fieldID-1" value="{{stok.stok_resim}}">
+                                    </div>
+
+
+
+                                    <hr>
+
+
+                                        <div class="form-group col-md-12">
+                                            <label>Stok Resmi2</label>
+
+                                            <img src="{{ public_media(stok.stok_resim2) }}" style="max-width: 200px;" class="image"  id="img-fieldID-12">
+
+                                            <br>
+                                            <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=public&callback=publi_image_callback&type=1&popup=1&field_id=fieldID-12&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                                            <input type="text" onkeyup="imageKontrol('fieldID-12')" class="form-control" name="stok_resim2" id="fieldID-12" value="{{stok.stok_resim2}}">
+                                        </div>
+
+
+
+
+                                    <hr>
+
+
+                                        <div class="form-group col-md-12">
+                                            <label>Stok Resmi3</label>
+
+                                            <img src="{{ public_media(stok.stok_resim3) }}" style="max-width: 200px;" class="image"  id="img-fieldID-13">
+
+                                            <br>
+                                            <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=public&callback=publi_image_callback&type=1&popup=1&field_id=fieldID-13&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                                            <input type="text" onkeyup="imageKontrol('fieldID-13')" class="form-control" name="stok_resim3" id="fieldID-13" value="{{stok.stok_resim3}}">
+                                        </div>
+
+                                    <hr>
+
+
+                                        <div class="form-group col-md-12">
+                                            <label>Stok Resmi4</label>
+
+                                            <img src="{{ public_media(stok.stok_resim4) }}" style="max-width: 200px;" class="image"  id="img-fieldID-14">
+
+                                            <br>
+                                            <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=public&callback=publi_image_callback&type=1&popup=1&field_id=fieldID-14&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                                            <input type="text" onkeyup="imageKontrol('fieldID-14')" class="form-control" name="stok_resim4" id="fieldID-14" value="{{stok.stok_resim4}}">
+                                        </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>    </div>
+
+            </div>
+            <!-- / CONTENT -->
+        </div>
+    </form>
+
+
+    <div class="modal fade" id="yeniKalemModal" role="dialog">
+        <div class="modal-dialog yeni-stok-modal-dialog">
+            <div class="modal-content-yeni-stok">
+                <div class="modal-body" style="padding:0px;">
+                    <div class="col-md-12 m-t-15">
+                        <div class="card m-t-15">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ürün Adı:</label>
+                                            <input type="text" class="form-control" id="stokisimlearamainput2"  onkeyup="urungetirisimle(this.value , 2)">
+                                            <div id="aramasonuc2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="yeniGrupKalemModal" role="dialog">
+        <div class="modal-dialog yeni-stok-modal-dialog">
+            <div class="modal-content-yeni-stok">
+                <div class="modal-body" style="padding:0px;">
+                    <div class="col-md-12 m-t-15">
+                        <div class="card m-t-15">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Ürün Adı:</label>
+                                            <input type="text" class="form-control" id="stokisimlearamainput3"  onkeyup="urungetirisimle(this.value , 3)">
+                                            <div id="aramasonuc3" class="stokarama-sonuclari"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{asset('plugins/ckeditor/ckeditor.js')}}"></script>
+
+    <script>
+
+
+        CKEDITOR.replace('editor2');
+
+
+        $("#varyant-secim-temizle-btn").hide();
+
+
+        function secimTemizle(){
+            $("#varyant-secim-temizle-btn").hide();
+            $("#stok_parent_id").val(0);
+            $("#varyant-ust-stok-adi").html(" - ");
+        }
+
+
+
+        function urungetirisimle(str,ino) {
+            if (str.length <= 1) {
+
+                document.getElementById("aramasonuc"+ino).innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var ust = 1;
+
+                if(ino == 3){
+                    ust = 0;
+                }
+
+                var jqxhr = $.post("{{url}}/stok/stok-getir-isimle", {qr: str,ust :ust})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+
+
+
+                        if (data == "non") {
+
+                            document.getElementById("aramasonuc"+ino).innerHTML = "Ürün Bulunamadı!";
+
+                        } else {
+
+
+                            var stok_data = JSON.parse(data);
+
+
+
+                            if (stok_data.durum == "ok") {
+
+                                var lihtml = "<ul class=\"urunIsımleArama\">";
+
+                                $.each(stok_data.stok, function (key, val) {
+
+
+                                    lihtml += liurunbas(val,ino);
+
+                                });
+
+                                document.getElementById("aramasonuc"+ino).innerHTML = lihtml + "</ul>";
+
+                            } else {
+
+                                console.log("Ürün Bulunamadı");
+                                notify("Ürün Bulunamadı!", "danger");
+                            }
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+
+
+
+
+
+        }
+
+
+        function liurunbas(data,ino) {
+
+            console.log(data);
+
+
+            var stok_adi =  data.stok_adi ;
+
+            if(ino == 3){
+
+                if(data.stok_varyant_adi != null || data.stok_varyant_adi != "" || data.stok_varyant_adi != "null"){
+
+                    stok_adi+=" "+data.stok_varyant_adi;
+                }
+
+                if(data.stok_varyant_deger != null || data.stok_varyant_deger != "" || data.stok_varyant_deger != "null" ){
+
+                    stok_adi+=" "+data.stok_varyant_deger;
+                }
+
+
+            }
+
+
+
+            var html = "<li data-json='" + JSON.stringify(data) + "' onclick='urunHazirlaIsımle(this,"+ino+")'>" +stok_adi+"</li>";
+
+            return html;
+
+        }
+
+        function removeGroupElement(id){
+
+            $("#sg-id-"+id).remove();
+        }
+
+        function urunHazirlaIsımle(ts,ino) {
+
+            var li = ts;
+
+            var data = ts.getAttribute("data-json");
+            var stok_data = JSON.parse(data);
+
+            if(ino == 2){
+                $('#yeniKalemModal').modal('hide');
+                $("#stok_parent_id").val(stok_data.id);
+                $("#varyant-ust-stok-adi").html(stok_data.stok_adi);
+                $("#varyant-secim-temizle-btn").show();
+
+            }else if(ino == 3){
+
+
+
+                if (($("#sg-id-"+stok_data.id).length > 0)){
+
+
+                    swalert("error","","Grup Stoğu Zaten Listede Mevcut!");
+                }else{
+
+
+                    var stok_adi = stok_data.stok_adi;
+
+                    if(stok_data.stok_varyant_adi != null || stok_data.stok_varyant_adi != "" || stok_data.stok_varyant_adi != "null"){
+
+                        stok_adi+=" "+stok_data.stok_varyant_adi;
+                    }
+
+                    if(stok_data.stok_varyant_deger != null || stok_data.stok_varyant_deger != "" || stok_data.stok_varyant_deger != "null" ){
+                        stok_adi+=" "+stok_data.stok_varyant_deger;
+                    }
+
+                    var html = "<tr id='sg-id-"+stok_data.id+"'>";
+                    html += "<td >";
+                    html +=  stok_adi;
+                    html += "</td>";
+                    html += "<td style=\"max-width: 250px;\">";
+                    html += "<input type='text' name='grupstoklari["+stok_data.id+"]' class='' style=\"max-width: 120px;border:1px solid black;\"   value='1' /> <label> "+stok_data.stok_birimi+"</label>";
+                    html += "</td>";
+                    html += "<td>";
+
+                    html +="<button type=\"button\" onclick='removeGroupElement("+stok_data.id+")' class=\"btn btn-danger btn-fab btn-sm fuse-ripple-ready\"><i class=\"icon-delete\"></i></button>";
+                    html += "</td>";
+                    html += "</tr>";
+
+
+                    $("#grup-secimler-table").append(html);
+                    $('#yeniGrupKalemModal').modal('hide');
+
+
+                }
+
+
+
+
+
+
+            }
+
+
+
+
+        }
+    </script>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,259 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Cari Hesaplar{% endblock %}
+{% block bread %}  
+    
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Hesaplar</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Cari Hesaplar</a></li>{% endblock %}
+
+    
+    {% block head %}
+    <style>
+        .cariIsımleArama{
+            list-style: none;
+            position:absolute;
+            z-index:3;
+            right:0px;
+            left:0px;
+            background-color:white;
+            margin-right: 10px;
+            margin-left: 10px;
+            border: 1px solid black;
+            padding: 10px;
+
+        }
+
+        .cariIsımleArama li{
+
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .cariIsımleArama li:hover{
+
+            background-color: #e6f2ff;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+
+
+    <div class="row justify-content-center">
+        
+        
+          <div class="col-md-12">
+        <div class="card">
+          
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Cari Hesap Arama:</label>
+                            <input type="text" class="form-control" id="cariname" onkeyup="cariarama(this.value)">
+                                <div id="aramasonuc" ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+                    
+                    
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                             <div class="table-responsive">
+                                            <table class="table table-bordered mb-0 table-centered">
+
+                                <thead>
+                                    <tr>
+                                    
+                                        <th>Hesap Adı</th>
+                                            <th>Hesap Tip</th>
+
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for cari in cariler.result  %}
+                                        <tr>
+                                           
+                                            <td><a href="{{url}}/cari/show/{{cari.id}}">{{cari.cari_adi}}</a></td>
+                                             <th>{% if cari.cari_turu == 1%}
+                                                     Müşteri
+                                                 {% elseif cari.cari_turu == 2 %}
+                                                     Tedarikçi
+                                               {% elseif cari.cari_turu == 3 %}
+                                                   Personel
+
+                                                 {% endif %}
+
+
+                                             </th>
+
+                                            <td><a href="{{url}}/cari/show/{{cari.id}}">Göster</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                                
+                                <div class="card-body">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                        {{paginate(cariler.paginate,uri) | raw }}
+                    </ul>
+                </nav>
+            </div> 
+        </div>
+    </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+
+        let kasa_json = '{{kasalar | raw}}';
+
+        try {
+
+            kasa_json = JSON.parse(kasa_json);
+
+            console.log(kasa_json);
+        } catch (e) {
+            console.log(e);
+        }
+
+
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                           
+
+                            //document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                            if (data == "non") {
+
+                                document.getElementById("aramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                            } else {
+
+
+                                var cari_data = JSON.parse(data);
+
+                                var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                                if (cari_data.durum == "ok") {
+
+
+
+                                    $.each(cari_data.cari, function (key, val) {
+
+
+                                        lihtml += liurunbas(val);
+
+                                    });
+
+
+
+                                } else {
+
+                                    console.log("Cari Bulunamadı");
+
+
+
+                                    lihtml += cariyok();
+
+
+                                }
+
+                                document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+
+
+
+
+
+        }
+
+        function cariyok() {
+
+            var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+
+
+
+        function liurunbas(data) {
+
+            var html = "<li data-id=\"" + data.id + "\"  data-json='" + JSON.stringify(data) + "' onclick=\"window.location.href='{{url}}/cari/show/" + data.id + "'\" >" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function divYaz(label,input){
+            
+            
+var html = "<div class=\"form-group row\"> <label for=\"example-text-input\" class=\"col-sm-2 col-form-label text-right\">"+label+"</label><div class=\"col-sm-10\">";
+                                                    
+       html += input+"</div> </div>";   
+   return html;
+    }
+
+   
+
+
+
+    </script>
+
+
+{% endblock %}

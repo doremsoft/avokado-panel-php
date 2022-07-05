@@ -1,0 +1,141 @@
+{% extends "layout-light.twig" %}
+{% block backbtn %}
+
+    <a href="{{url}}/stok/fast-price-update" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Geri Dön...</a>
+    {% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>   {{stok.stok_adi}}    </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/stok/fast-price-update-st" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="stok_id" value="{{stok.id}}" />
+                      
+                               
+                        
+                
+                            <input type="hidden" name="stok_ad" value="{{stok.stok_adi}}" />
+                   
+
+
+                            <div class="form-group">
+                                <label>Satış Fiyatı</label>
+                                   {% if stok.stok_fiyat_vergi_durum == 2 %}
+                             <input type="text" id="satisfiyatinput" class="form-control" name="stok_satis_fiyati" value="{{kdv_hesapla(stok.stok_satis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+                           {% else %}
+                                  <input type="text" id="satisfiyatinput" class="form-control" name="stok_satis_fiyati" value="{{stok.stok_satis_fiyati}}">
+                                   {% endif %}
+                                               
+                              
+                                
+                            </div>
+
+                                 <div class="form-group">
+                                     <label>Maksimum İskontolu Satış Fiyatı</label>
+                
+                                    
+                                    
+                                           
+                                       {% if stok.stok_fiyat_vergi_durum == 2 %}
+       
+                      
+                                                    <input type="text" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="{{kdv_hesapla(stok.stok_max_iskontolu_satis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+
+                             {% else %}
+                                                     <input type="text" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="{{stok.stok_max_iskontolu_satis_fiyati}}">
+                                     {% endif %}
+                                    
+                                    
+                                    <small> * 0 Etkisiz olarak bırakır</small>
+                            </div>
+
+                                     
+                            <div class="form-group">
+                                <label>Alış Fiyatı</label>
+                           
+                                    
+                                       {% if stok.stok_fiyat_vergi_durum == 2 %}
+       
+                                <input type="text" class="form-control" name="stok_alis_fiyati" value="{{kdv_hesapla(stok.stok_alis_fiyati,1,stok.stok_kdv_oran,'ekle','duz')}}">
+
+                             {% else %}
+                                      <input type="text" class="form-control" name="stok_alis_fiyati" value="{{stok.stok_alis_fiyati}}">
+                                   
+                                     {% endif %}
+                                    
+                                    
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Kdv Oranı</label>
+                                <input type="text" class="form-control" name="stok_kdv_oran" value="{{stok.stok_kdv_oran}}">
+                            </div>
+                            
+                                <div class="form-group">
+                                <label> Vergi Durumu</label>
+                                <select class="form-control" name="fiyatVergiDurum">
+                                    
+                                    {% if stok.stok_fiyat_vergi_durum == 2 %}
+                                        
+                                        <option value="2" selected>Vergiler Dahil Fiyatlar</option>
+                                           {% else %}
+                                                 <option value="2">Vergiler Dahil Fiyatlar</option>
+                                               {% endif %}
+                                               
+                                                     {% if stok.stok_fiyat_vergi_durum == 1 %}
+                                        
+                                         <option value="1" selected>Vergiler Hariç Fiyatlar</option>
+                                           {% else %}
+                                                <option value="1">Vergiler Hariç Fiyatlar</option>
+                                               {% endif %}
+                                    
+                                   
+                                </select>
+                                      
+                            </div>
+                                               
+                                               
+                                  <div class="form-group">
+                                <label>Standart Adet</label>
+                                <input type="text" class="form-control" name="stok_standart_adet" value="{{stok.stok_standart_adet}}">
+                            </div>
+                                
+               
+                   
+
+                            <div class="form-group">
+                                <label>Minimum Seviyesi</label>
+                                <input type="text" class="form-control" name="stok_min_seviyesi" value="{{stok.stok_min_seviyesi}}">
+                            </div>
+
+
+
+                       
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                            
+                            
+                      </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+                          </div>
+
+{% endblock %}
+
+
+
+

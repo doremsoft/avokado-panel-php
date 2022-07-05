@@ -1,0 +1,373 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+<style>
+
+    .form-group>label {
+
+        -webkit-transform-origin: center;
+        -ms-transform-origin: center;
+        transform-origin: center;
+    }
+</style>
+
+    {% endblock %}
+{% block content %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2"
+                            data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img"
+               aria-hidden="true">web</i>
+
+                                        </span>
+                        <span class="logo-text h4">Websitesi</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+
+                            {% for key , val  in menuler %}
+
+                                <li class="nav-item" style="padding-top:16px;">
+                                    <a class="nav-link ripple active  sid-nav-link {% if aktif_url == val %}accent{% endif %} "
+                                       href="{{ url }}/{{ val }}">
+                                        <span>{{ key }}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+
+
+                <div class="card m-t-15">
+                    <div class="card-header">Yayındaki Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.active_template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Düzenlenen Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </aside>
+
+
+            <div class="page-content col-md-12 p-4 p-sm-6">
+
+                <div class="row">
+
+
+                    <div class="col-md-12">
+
+                        <h4>Slayt Düzenle</h4>
+
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="card m-t-15">
+                            <div class="card-header">Yeni Slayt Kalemi</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center;">
+
+
+                                        <form id="slayt-kalemler-ekle-form" action="{{ url }}/web/slayt-kalem-ekle" method="post">
+                                            {{ csrf | raw }}
+
+                                            <input type="hidden" name="slider_kod" value="{{ slayt.slide_kod }}"/>
+
+                                            <div class="table-responsive">
+                                                <table id="satislartable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead>
+                                                    <tr>
+
+                                                        <th style="width: 200px;">Resim</th>
+                                                        <th>Açıklamalar</th>
+
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+
+                                            <tr id="salayt-kale">
+
+                                                <td>
+
+                                                    <img src="" id="img-img-yeni-img" style="width: 100px;height: 100px;"> <br><br>
+                                                    <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&akey={{ayar.connection_key}}&hesap_no={{  hesap_detay.account_id  }}&klasor=public&type=2&popup=1&amp;field_id=img-yeni-img')" class="btn" type="button">Resim Seç</a> <br> <br>
+                                                   </td>
+
+                                                <td>
+                                                    <label>Resim Url</label>
+                                                    <input id="img-yeni-img" name="image_url" class="form-control" type="text">
+                                                    <label>Url Adresi</label>
+                                                    <input type="text"  name="url" class="form-control" >
+                                                    <label>Başlık</label>
+                                                    <input type="text" class="form-control"  name="title">
+                                                    <label>Açıklama</label>
+                                                    <textarea class="form-control" name="aciklama"></textarea>
+
+                                                </td>
+
+
+                                            </tr>
+                                                    </tbody>
+                                                </table>
+
+
+                                            </div>
+
+                                            <button type="button" onclick="slaytKalemEkle();" class="btn btn-danger">Ekle</button>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="card m-t-15">
+                            <div class="card-header">Slayt Kalemleri</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12" style="text-align: center;">
+
+                                        <form id="slayt-kalemler-duzenle-form" action="{{ url }}/web/slayt-guncelle" method="post">
+                                            {{ csrf | raw }}
+
+                                            <input type="hidden" name="slider_kod" value="{{ slayt.slide_kod }}"/>
+
+                                        <div class="table-responsive">
+                                            <table id="satislartable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                <thead>
+                                                <tr>
+
+                                                    <th style="width: 200px;">Resim</th>
+                                                    <th>Açıklamalar</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tbody id="slayt_listesi">
+
+                                                {% set ii = 0 %}
+
+                                                {% for kalem in kalemler  %}
+                                                    <tr id="salayt-kalem-{{kalem.id}}">
+
+                                                        <td>
+
+                                                            <img src="{{ kalem.image_url }}" id="img-fieldID-{{kalem.id}}" style="width: 100px;height: 100px;"> <br><br>
+                                                            <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&akey={{ayar.connection_key}}&hesap_no={{  hesap_detay.account_id  }}&klasor=public&type=2&popup=1&amp;field_id=fieldID-{{kalem.id }}')" class="btn" type="button">Resim Seç</a> <br> <br>
+                                                            <button class="btn btn-danger" onclick="slaytSil({{kalem.id}})">Sil</button></td>
+
+                                                        <td>
+                                                            <label>Resim Url</label>
+                                                            <input id="fieldID-{{kalem.id}}" name="slide[{{ kalem.id }}][image_url]" class="form-control" type="text" value="{{ kalem.image_url }}">
+                                                            <label>Url Adresi</label>
+                                                            <input type="text"  name="slide[{{ kalem.id }}][url]" class="form-control" value="{{ kalem.url }}">
+                                                            <label>Başlık</label>
+                                                            <input type="text" class="form-control"  name="slide[{{ kalem.id }}][title]" value="{{ kalem.title }}">
+                                                            <label>Açıklama</label>
+                                                            <textarea class="form-control" name="slide[{{ kalem.id }}][aciklama]">{{ kalem.aciklama }}</textarea>
+                                                            <input type="hidden" class="form-control slide-inputlari" data-inp-id = "{{kalem.id}}" id="kalem-sira-input-{{kalem.id}}"  name="slide[{{ kalem.id }}][sira]" value="{{ii}}">
+
+                                                        </td>
+
+
+
+
+
+                                                    </tr>
+
+                                                    {% set ii = ii + 1 %}
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+
+
+                                            <button type="submit" class="btn btn-danger">Güncelle</button>
+
+
+                                        </div>
+                                        </form>
+                                            <input type="hidden" id="lasti" value="{{ ii }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{asset_url }}/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+
+        function slaytKalemEkle() {
+
+           var imgsrc =  $("#img-yeni-img").val();
+
+           if(imgsrc.trim() == ""){
+               alert("Geçerli Bir Serim Url Adresi Yazın");
+           }else{
+
+
+               document.getElementById("slayt-kalemler-ekle-form").submit();
+
+
+           }
+            
+        }
+
+
+        function yenidensirala(){
+
+
+            $('.slide-inputlari').each(function() {
+
+
+                var yeni_id = parseInt($("#lasti").val())+1;
+
+
+
+                $(this).val(yeni_id);
+                $(this).attr("data-inp-id",yeni_id);
+
+
+                $("#lasti").val(yeni_id);
+
+            });
+
+        }
+
+        function slaytSil(id) {
+
+            $("#salayt-kalem-"+id).remove();
+
+        }
+
+
+        function responsive_filemanager_callback(field_id){
+            console.log(field_id);
+            var url=jQuery('#'+field_id).val();
+
+            $("#img-"+field_id).attr("src",url);
+
+        }
+
+
+
+        $('#slayt_listesi').sortable({
+            start: function(event, ui) {
+
+            },
+            change: function(event, ui) {
+
+
+
+            },
+            update: function(event, ui) {
+                yenidensirala();
+
+
+            }
+        });
+
+        function toSeoUrl(url) {
+            return url.toString()               // Convert to string
+                .normalize('NFD')               // Change diacritics
+                .replace(/[\u0300-\u036f]/g,'') // Remove illegal characters
+                .replace(/\s+/g,'-')            // Change whitespace to dashes
+                .toLowerCase()                  // Change to lowercase
+                .replace(/&/g,'-and-')          // Replace ampersand
+                .replace(/[^a-z0-9\-]/g,'')     // Remove anything that is not a letter, number or dash
+                .replace(/-+/g,'-')             // Remove duplicate dashes
+                .replace(/^-*/,'')              // Remove starting dashes
+                .replace(/-*$/,'');             // Remove trailing dashes
+        }
+
+        $("#t-slayt-adi").on("keyup",function () {
+
+            var string = $(this).val();
+
+            string = string.replace(/ı/g, 'i');
+            string = toSeoUrl(string);
+
+            $("#t-slayt-kod").val(string.replace(/\-/g,'_'));
+
+        });
+
+
+    </script>
+
+
+{% endblock %}

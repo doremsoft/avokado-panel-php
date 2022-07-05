@@ -1,0 +1,104 @@
+{% extends "layout-light.twig" %}
+
+{% block backbtn %}
+
+    <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+    {% endblock %}
+    
+    
+{% block content %}
+ <div class="row">
+
+    <div class="col-md-12">
+        <div class="card">
+            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/doviz/kurlari-cek" method="post">
+                            {{csrf | raw}}
+                          
+
+                            <button type="submit" class="btn btn-primary">Merkez Bankasından Güncel Kurları Çek</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Döviz Kurları</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+
+                                 <thead>
+                                                <tr>
+                                                    <th>Döviz</th>
+                                                    <th>Kod</th>
+                                                    <th>Güncelleme Tarih</th>
+                                                    <th>Kur (TL)</th>
+                                                       <th>İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                <tbody>
+                                    {% for doviz in dovizler  %}
+                                        
+                                        {% if doviz.doviz_kod != "TL" and doviz.doviz_kod != "XDR"%}
+                                        <tr>
+                                            
+                                            
+                                          <td>
+
+                                             {{doviz.doviz_adi}}
+                                               
+                                            </td>
+                                            
+                                              <td>
+
+                                             {{doviz.doviz_kod}}
+                                               
+                                            </td>
+                                            
+                                               <td>
+
+                                            {{doviz.update_date}}
+                                               
+                                            </td>
+
+                                            <td>
+
+                                                <label id="editable-{{doviz.id}}" class="editable" data-url="{{url}}/doviz/update" data-id="{{doviz.id}}" title="Düzenlemek İçin Tıklayın">{{doviz.doviz_kur}}</label>
+                                               
+                                            </td>
+
+                                            <td width="150px">
+                                           
+                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{doviz.id}}')"><i class="fa fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                        
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                                
+                                
+                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+{% endblock %}

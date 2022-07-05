@@ -1,0 +1,154 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Excelden Stok Listesi Aktarımı</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{ url }}/excel-import/stok-upload" method="post"
+                                  enctype="multipart/form-data">
+                                {{ csrf | raw }}
+                                <div class="form-group">
+                                    <label>Excel Dosyası Seçiniz:</label>
+                                    <input type="file" class="form-control" name="stoklar" id="stokfileinput" required>
+
+                                    <small>Yanlızca .xlx ve .xlxs Dosyaları ve 3mb Dosyalar Kabul Edilir!</small>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Standart Birim:</label>
+                                    <select name="birim_id" class="form-control">
+                                        {% for birim in birimler %}
+                                            <option value="{{ birim.stok_birim_adi }}">{{ birim.stok_birim_adi }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Standart Para Birim:</label>
+                                    <select name="para_birim" class="form-control">
+                                        {% for doviz in dovizler %}
+                                            {% if doviz.doviz_kod == 'TL' %}
+                                                <option value="{{ doviz.doviz_kod }}"
+                                                        selected>{{ doviz.doviz_adi }}</option>
+                                            {% else %}
+                                                <option value="{{ doviz.doviz_kod }}">{{ doviz.doviz_adi }}</option>
+                                            {% endif %}
+
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>isim Önek (no Değeri Etkisiz dir):</label>
+                                    <input type="text" name="name_pre" value="no" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Barkod'u Ekli Olan Ürünler:</label>
+                                    <select name="ekliurun" class="form-control">
+
+                                        <option value="0">Birşey Yapma</option>
+                                        <option value="1" selected>Mevcut Stoğu Güncelle</option>
+
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Standart Vergi Oranı:</label>
+                                    <select name="vergi_oran" class="form-control">
+
+                                        <option value="0">%0</option>
+                                        <option value="1" selected>%1</option>
+                                        <option value="8" selected>%8</option>
+                                        <option value="18" selected>%18</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Alış / Satış Fiyatlarına Vergiler Dahilmidir?</label>
+                                    <select name="vergi_oran_durum" class="form-control">
+
+                                        <option value="2" selected>Fiyatlara Vergiler Dahil</option>
+                                        <option value="1">Fiyatlardan Vergiler Hariç</option>
+
+
+                                    </select>
+                                </div>
+<h4>Stok Sütun Dizilimi:</h4>
+                                <p>
+
+
+                                    <b> A </b>Barkod <br>
+                                    <b> B </b>Stok Kod <br>
+                                        <b> C </b>Stok Adi <br>
+                                            <b> D </b>Birimi <br>
+                                                <b> E </b>Alış Fiyatı <br>
+                                                    <b> F </b>Satış Fiyatı <br>
+                                                        <b> G </b>Vergi Oranı <br>
+                                                            <b> H </b>Vergi Oranı Durumu (1 - Vergi Hariç Fiyatlar, 2 - Vergi Dahil Fiyatlar) <br>
+                                                                <b> I </b>Para Birimi <br>
+                                                                    <b> J </b>Marka <br>
+                                    Dikkat!! Bu işlemi yapmadan önce sisteminizin yedeğini almalısınız! <br>
+
+
+                                </p>
+
+
+                                <button type="submit" class="btn btn-warning waves-effect waves-light"><i
+                                            class="mdi mdi-alert-outline mr-2"></i>Yükle
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#stokfileinput').bind('change', function () {
+
+
+            var file_size = this.files[0].size;
+
+
+            if (file_size > 3000000) {
+
+                notify("Dosya Boyutu lilmiti aşıyor", "danger");
+
+                //$('#stokfileinput').val('');
+
+            }
+
+        });
+    </script>
+
+{% endblock %}
+
+

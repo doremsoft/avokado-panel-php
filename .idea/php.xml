@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/melbahja/http2-pusher" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/nezamy/support" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/nezamy/route" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/dogus/dipanelcore" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/ps/image-optimizer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/claviska/simpleimage" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/composer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/league/color-extractor" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/daveismyname/sql-import" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/wisembly/elephant.io" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/log" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7.1">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+</project>

@@ -1,0 +1,203 @@
+{% extends "layout-light.twig" %}
+
+
+
+
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">payment</i>
+
+                                        </span>
+                    <span class="logo-text h4">Gider İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"   href="{{ url }}/odemeler" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odeme/cari-secim"  >Yeni Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odemeler/liste"  >Gider Dökümü</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/finansal/aylik-sabit-odemeler"  >Aylık Sabit Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  active fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-cari-secim"  >Yeni Aylık Sabit Gider</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-listesi">Aylık Sabit Gider Listesi</a>
+                </li>
+
+
+
+
+            </ul>
+        </div>   </div>
+
+
+
+
+        <div class="col-md-12 m-t-15" >
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/finansal/sabit-odeme-kayit" method="post">
+                                {{csrf | raw}}
+
+                                <input type="hidden" name="cari_id" value="{{ cari.id }}"/>
+
+
+
+                                <div class="form-group">
+                                    <label>Gider Hesabı:</label>
+                                    <input type="text" class="form-control"  value="{{ cari.cari_adi }}" readonly>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Gider Adı:</label>
+                                    <input type="text" class="form-control" name="baslik" required="">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Tutar:</label>
+                                    <input type="text" class="form-control" name="tutar"  required="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Döviz: </label>
+                                    <select class="form-control" name="tutar_doviz">
+
+
+                                        <option value="TL">TL</option>
+
+
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Geçerlilik Tarihi:</label>
+                                    <input type="date" class="form-control" name="baslama_tarihi" value="{{ bugun }}" >
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Geçerlilik Son Tarihi:</label>
+                                    <input type="date" class="form-control" name="bitis_tarihi"  value="{{ seneyebugun }}">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Düzenli Ödeme Ayın Hangi Günü ?</label>
+                                    <select class="form-control" name="gun">
+
+                                        {% for gun in gunler %}
+                                        <option value="{{ gun }}">{{ gun }}</option>
+                                        {% endfor %}
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Açıklama:</label>
+                                    <textarea class="form-control" name="aciklama"></textarea>
+                                </div>
+
+
+                                <hr>
+                                <div class="form-group">
+                                    <label>Bildirim </label>
+                                    <select class="form-control" name="bildirim_durum">
+
+
+                                            <option value="1">Aktif</option>
+                                        <option value="0">Pasif</option>
+
+
+                                    </select>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Önceden Bildirim Günü (Ödeme Tarihinden Seçtiğiniz Gün Kadar Önce Bildirim Gönderir max 3 Gün)</label>
+                                    <input type="number" max="3" min="0" class="form-control" value="1" name="ondecen_bildirim" required><br>
+                                    <small>Eğer 0 yazılır ise önceden bilgirim kapalı anlamına gelir</small>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Aynı Gün Bildirim</label>
+                                    <select class="form-control" name="ayni_gun_bildirim">
+
+                                        <option value="1">Aktif</option>
+                                        <option value="0">Pasif</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Birgün Sonra Bildirim</label>
+                                    <select class="form-control" name="ertesi_gun_bildirim">
+
+                                        <option value="0" selected>Pasif</option>
+                                        <option value="1">Aktif</option>
+
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Ekle</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+
+{% endblock %}
+

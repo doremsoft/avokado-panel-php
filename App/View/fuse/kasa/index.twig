@@ -1,0 +1,54 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="row">
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Kasa İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/kasa/yeni-haraket" class="btn btn-primary col-md-12" style="margin-top: 15px;">Yeni Kasa Hareket</a>
+                            <a href="{{url}}/kasa/kasa-virman" class="btn btn-primary col-md-12"  style="margin-top: 15px;">Kasalar Arası Virman</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Kasa Raporları</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/kasa/kasa-raporlari" class="btn btn-primary col-md-12" style="margin-top: 15px;">Hareket Kayıtları</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

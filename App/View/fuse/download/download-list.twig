@@ -1,0 +1,82 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>İndirilebilir Yazılımlar{% endblock %}
+{% block bread %}  
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Yazılımlar</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);"> Liste</a></li>{% endblock %}
+        {% block head %}
+
+
+
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="row justify-content-center">
+
+
+
+
+
+
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="senetlistesitable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Uygulama Adı</th>
+                                                <th>İşletim Sistemi</th>
+                                                <th>İndirme Adresi</th>
+                                                <th>Kurulum & Deyalı Bilgi</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+
+                                            
+                                                  <tr>
+                                                <td>Avokado Barkod</td>  
+                                                <td>Windows X86 (32 bit) </td>  
+                                                <td> <a href="#" onclick="event.preventDefault();
+                                                        document.getElementById('a-barkod-w-x86-form').submit();" class="">İndir</a>
+                                                    <form id="a-barkod-w-x86-form"  target="_blank" action="{{url}}/download/w-barkod-x86" method="post">
+                                                        {{csrf | raw}}
+                                                    </form> </td>  
+                                                <td>97 Mb </td>  
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>  </div>
+            </div>
+
+
+
+
+
+
+        {% endblock %}
+
+        {% block footer %}
+
+
+
+        {% endblock %}

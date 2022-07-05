@@ -1,0 +1,77 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="row justify-content-center">
+
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Güncel Borçlar</h5>
+
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                    
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th>Cari Hesap Adı</th>
+                                            <th>Borç Tutarı</th>
+
+                                            <th>İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                         {% set toplami = 0 %}
+                                         
+                                        {% for borc in borclar %}
+
+
+
+
+
+                                            {% set bakiye = borc.toplam_borc_bakiyesi - borc.odeme_tutar %}
+
+
+
+                                        
+                                            {%  if bakiye > 0.001  %}
+                                                
+                                                   {% set toplami = toplami + bakiye %}
+                                                <tr>
+
+                                                    <td><a href="{{url}}/cari/show/{{borc.cari_id}}">{{borc.cari_adi}}</a></td>
+                                                    <td>{{Tl( bakiye)}} TL</td>
+                                                    <td><a href="{{url}}/cari/show/{{borc.cari_id}}">Hesabı Göster</a></td>
+                                                </tr>
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div> <div class="card-body">
+                           Toplam : {{ Tl(toplami) }} TL
+                </div>   </div>
+        </div>    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock %}

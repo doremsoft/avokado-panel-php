@@ -1,0 +1,51 @@
+{% extends "layout-light.twig" %}
+{% block backbtn %}
+
+    <a href="{{ url }}/stok/show/{{stokid }}" class="btn btn-danger waves-effect waves-light">
+        <i class="mdi mdi-eye mr-2"></i>Stoğu Göster</a>
+    {% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Silme Onayı</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if kontrol == 0 %}
+                            
+                            Bu Stok Üzerinde Daha Önceden İşlem Yapılmış! <br>
+                            
+                            Hareket Kayıtlarını Kaldırmadan Bu Stoğu Silemezsiniz!
+                            
+                        {%  elseif kontrol == 1  %}
+                            
+                               <form id="logout-form" action="{{url}}/stok/removeok" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="stok_id" value="{{stokid}}" />
+                        
+                       
+                            <button type="submit" class="btn btn-danger">Stokğu Kalıcı Olarak Sil</button>
+                            
+                      </form>
+                            
+                            {% endif %}
+                     
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>   </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+{% endblock %} 
+

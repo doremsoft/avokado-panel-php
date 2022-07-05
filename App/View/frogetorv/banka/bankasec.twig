@@ -1,0 +1,36 @@
+{% extends "layout-light.twig" %}
+
+
+    
+{% block content %}
+
+    <div class="row justify-content-center">
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>İşlem İçin Banka Seçiniz:</h5>
+            </div>
+            <div class="card-body ">
+                <div class="row">
+               
+                       
+                                    {% for banka in bankalar  %}
+                               <div class="col-md-12" > 
+                                   <center>
+                                   <p>  
+                                       <a href="{{ url }}/banka/hesap/hareket/{{ banka.id }}" class="btn btn-icon btn-primary col-md-6" >{{banka.banka_adi}} Hesap İşlemleri</a>
+                                    </p>
+                                      </center>
+                               </div>       
+                                   
+                                    {% endfor %}
+                               
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

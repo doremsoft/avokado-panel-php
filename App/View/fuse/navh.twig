@@ -1,0 +1,333 @@
+
+
+
+
+<div class="aside-toolbar">
+
+    <div class="logo">
+        <span class="logo-icon">F</span>
+        <span class="logo-text">FUSE</span>
+    </div>
+
+    <button id="toggle-fold-aside-button" type="button" class="btn btn-icon d-none d-lg-block" data-fuse-aside-toggle-fold>
+        <i class="icon icon-backburger"></i>
+    </button>
+
+</div>
+<ul class="nav flex-column custom-scrollbar" id="sidenav" data-children=".nav-item">
+
+
+    <li><a href="{{url}}"><i class="mdi mdi-home"></i><span>Anasayfa</span></a></li>
+
+    <!--   <li class="menu-title">Hesap İşlemleri</li>-->
+
+
+    <li  class="nav-item">
+
+        <a href="#"><i class="mdi mdi-book-open"></i>Muhasebe</a>
+        <ul class="submenu">
+            <li  class="nav-item">
+                <a href="#">Hesaplar</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/cari/add/1">Yeni Müşteri</a></li>
+                    <li class="s-hr"><a href="{{url}}/cari/list/1">Müşteri Listesi</a></li>
+                    <li><a href="{{url}}/cari/add/2">Yeni Tedarikçi</a></li>
+                    <li class="s-hr"><a href="{{url}}/cari/list/2">Tedarikçi Listesi</a></li>
+                    <li><a href="{{url}}/cari/add/3">Yeni Personel</a></li>
+                    <li><a href="{{url}}/cari/list/3">Personel Listesi</a></li>
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Fatura</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/fatura/yeni-fatura">Yeni Fatura</a></li>
+                    <li><a href="{{url}}/stok-haraket/giris">Faturalar</a></li>
+                </ul>
+            </li>
+            <li  class="nav-item">
+                <a href="#">İrsaliye</a>
+                <ul class="submenu">
+                    <li><a href="#">Yapım Aşamasında</a></li>
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Sipariş</a>
+                <ul class="submenu">
+                    <li><a href="#">Yapım Aşamasında</a></li>
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Teklif</a>
+                <ul class="submenu">
+                    <li><a href="#">Yapım Aşamasında</a></li>
+                </ul>
+            </li>
+
+
+
+
+
+
+
+
+        </ul>
+
+    </li>
+
+
+
+    <li  class="nav-item">
+
+        <a href="#"><i class="mdi mdi-cash-multiple"></i>Finans</a>
+        <ul class="submenu">
+
+
+            <li  class="nav-item">
+                <a href="#">Sabit Ödemeler</a>
+                <ul class="submenu">
+
+
+                    <li><a href="{{url}}/finansal/aylik-odeme-cari-secim">Yeni Sabit Ödeme</a></li>
+
+                    <li><a href="{{url}}/finansal/aylik-sabit-odemeler">Sabit Ödeme Listesi</a></li>
+
+                </ul>
+            </li>
+
+
+
+
+            <li  class="nav-item">
+                <a href="#">Tahsilat & Ödeme</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/tahsilat/cari-secim">Tahsilat Ekle</a></li>
+                    <li><a href="{{url}}/odeme/cari-secim">Ödeme Ekle</a></li>
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Kasa</a>
+                <ul class="submenu">
+
+                    <li><a href="{{url}}/kasa/yeni-haraket">Yeni Kasa Hareket</a></li>
+
+                    <li><a href="{{url}}/kasa/kasa-virman">Kasa Virman</a></li>
+
+
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Banka</a>
+                <ul class="submenu">
+
+                    <li><a href="{{url}}/banka/sec">Yeni Banka Hareket</a></li>
+                    <li><a href="{{url}}/banka/hesap-ozetleri">Hesap Ozetleri</a></li>
+
+
+
+
+
+                </ul>
+            </li>
+
+
+
+
+
+            <li  class="nav-item">
+                <a href="#">Senetler</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/senet/ekle">Yeni Senet</a></li>
+                    <li><a href="{{url}}/senet/">Senet Listesi</a></li>
+
+
+
+
+
+                </ul>
+            </li>
+
+
+
+
+        </ul>
+
+    </li>
+
+
+
+    <li  class="nav-item">
+        <a href="#"><i class="mdi mdi-package"></i> Stok</a>
+        <ul class="submenu">
+
+            <li><a href="{{url}}/stok/add">Yeni Stok</a></li>
+            <li><a href="{{url}}/stok/fast-price-update">Hızlı Stok Güncelleme</a></li>
+            <li><a href="{{url}}/stok/list">Stoklar</a></li>
+            <li><a href="{{url}}/stok-haraket/ic-transfer">Stok İç Transfer</a></li>
+            <li><a href="{{url}}/stok/kritiktekiler">Adet Kritiğindeki Stoklar</a></li>
+
+            <li><a href="{{url}}/stok-depolar/list">Depo Listesi</a></li>
+
+        </ul>
+    </li>
+
+
+
+
+    <li  class="nav-item">
+        <a href="#"><i class="mdi mdi-google-analytics"></i> Rapor</a>
+        <ul class="submenu">
+            <li  class="nav-item">
+                <a href="#">Satış Raporları</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/finansal/ozet-durum">Özet Durum</a></li>
+                    <li><a href="{{url}}/satislar/iki-tarih-gore-satislar">İki Tarih Arası Döküm</a></li>
+                    <li><a href="{{url}}/satislar/iki-tarih-gore-satislar/analiz">İki Tarih Arası Analiz</a></li>
+                    <li><a href="{{url}}/">En Çok Satan Ürünler</a></li>
+                </ul>
+            </li>
+            <li  class="nav-item">
+                <a href="#">Nakit İşlemleri</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/finansal/aylik-odeme-listesi">Nakit Özet</a></li>
+                    <li><a href="{{url}}/finansal/aylik-odeme-listesi">Nakit Girişleri</a></li>
+                    <li><a href="{{url}}/finansal/aylik-odeme-listesi">Nakit Çıkışları</a></li>
+                </ul>
+            </li>
+            <li  class="nav-item">
+                <a href="#">Ödemeler</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/finansal/aylik-odeme-listesi">Aylık Sabit Ödeme Listesi</a></li>
+                </ul>
+            </li>
+            <li  class="nav-item">
+                <a href="#">Borç / Alacak</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/finansal/borclarim-guncel">Güncel Borç Listem</a></li>
+                    <li class="s-hr"><a href="{{url}}/finansal/alacaklarim-guncel">Güncel Alacak Listem</a></li>
+                    <li><a href="{{url}}/finansal/borclarim">Toplam Borç Listem</a></li>
+                    <li><a href="{{url}}/finansal/alacaklarim">Toplam Alacak Listem</a></li>
+                </ul>
+            </li>
+
+
+            <li  class="nav-item">
+                <a href="#">Alımlar & Satışlar</a>
+                <ul class="submenu">
+
+                    <li><a href="{{url}}/alimlar/iki-tarih-gore-alimlar">Alım Raporları</a></li>
+                </ul>
+            </li>
+
+
+            <li  class="nav-item">
+                <a href="#">Kasa & Banka</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/kasa/kasa-raporlari">Kasa Raporları</a></li>
+                    <li><a href="{{url}}/banka/hareket-raporlari">Banka Hesap Hareketleri</a></li>
+
+                </ul>
+            </li>
+
+
+        </ul>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li  class="nav-item">
+
+        <a href="#"><i class="mdi mdi-settings"></i> İşlem</a>
+
+        <ul class="submenu">
+
+            <li><a href="{{url}}/parametreler/">Paremetreler</a></li>
+
+            <li><a href="{{url}}/yazilimlar/">Yazılım & Cihazlar </a></li>
+
+            <li><a href="{{url}}/download/list">İndirilebilir Yazılımlar </a></li>
+
+            <li><a href="{{url}}/barkod/">Barkod Baskı Sayfası</a></li>
+
+
+
+
+            <li  class="nav-item">
+                <a href="#">Excel Aktarımlar</a>
+                <ul class="submenu">
+
+                    <li><a href="{{url}}/excel-export/stok-excel-hazirla">Stokları Excel'e Aktarma</a></li>
+
+                    <li><a href="{{url}}/excel-import/stok-list">Stokları Sisteme Aktarma</a></li>
+                    <li><a href="{{url}}/excel-import/stok-guncelleme-index">Stokları Güncelleme Sistemi</a></li>
+
+
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+                <a href="#">Xml Aktarımlar</a>
+                <ul class="submenu">
+                    <li><a href="{{url}}/xml-import/stok-yukle">Stokları Sisteme Aktarma</a></li>
+
+
+                </ul>
+            </li>
+
+            <li  class="nav-item">
+
+                <a href="#">Kullanıcı</a>
+
+
+                <ul class="submenu">
+
+                    <li><a href="{{url}}/user/add">Yeni Kullanıcı Ekle</a></li>
+
+                    <li><a href="{{url}}/user/edit">Bilgi Güncelleme</a></li>
+                    <li><a href="{{url}}/user/password-edit">Şifre İşlemleri</a></li>
+
+
+                    <li><a href="{{url}}/user/list">Kullanıcılar</a></li>
+
+
+                </ul>
+            </li>
+
+
+
+
+        </ul>
+
+    </li>
+
+
+    <li>
+        <a href="#" href="#" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"><i class="mdi mdi-logout"></i><span>Oturumu Kapat</span></a>
+
+    </li>
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+

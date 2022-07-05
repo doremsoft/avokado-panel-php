@@ -1,0 +1,148 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">payment</i>
+
+                                        </span>
+                    <span class="logo-text h4">Gider İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready"   href="{{ url }}/odemeler" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odeme/cari-secim"  >Yeni Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/odemeler/liste"  >Gider Dökümü</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/finansal/aylik-sabit-odemeler"  >Aylık Sabit Gider</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-cari-secim"  >Yeni Aylık Sabit Gider</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready"  href="{{ url }}/finansal/aylik-odeme-listesi">Aylık Sabit Gider Listesi</a>
+                </li>
+
+
+
+            </ul>
+        </div>
+
+
+
+
+        <div class="col-md-9 m-t-15">
+            <div class="card" style="border-radius: 0px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                    <thead>
+                                    <tr>
+                                        <th>Gider Kanalı</th>
+                                        <th>Tarih</th>
+                                        <th>Hesap</th>
+                                        <th>Tutar</th>
+
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for odeme in odemeler  %}
+                                        <tr>
+
+
+                                            <td>{% if odeme.odeme_tip == "kasanakit"  %} Kasa Nakit{% elseif   odeme.odeme_tip == "banka" %} Banka{% else %}{{  odeme.odeme_tip }}{% endif %}</td>
+                                            <td>{{odeme.odeme_tarih | date('d-m-Y')}}</td>
+
+                                            <td>{{odeme.cari_adi}}</td>
+                                            <td>{{Fiyat(odeme.odeme_tutar,"TL",2) | raw}}</td>
+
+
+
+
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-3 m-t-15">
+
+        </div>
+
+
+    </div>
+    </div>
+
+
+
+
+
+{% endblock %}
+{% block footer %}
+
+    <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+    <script>
+
+        setDataTable("#datatable-buttons", 0, "kasaraporu", "");
+
+    </script>
+{% endblock %}

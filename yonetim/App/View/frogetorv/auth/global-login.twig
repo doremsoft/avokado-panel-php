@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<meta charset="utf-8" />
+<title>Avokado Yazılım</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Avokado Yazılım Profesyonel Satış Sistemleri" name="description" />
+
+<meta name="robots" content="nofollow">
+<meta name="googlebot" content="noindex">
+<meta name="csrf-token" content="{{csrf_token}}">
+<link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon">
+<!-- App css -->
+<link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('css/icons.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('css/metismenu.min.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body class="account-body">
+
+        <!-- Log In page -->
+        <div class="row vh-100">
+            <div class="col-lg-3  pr-0">
+                <div class="card mb-0 shadow-none">
+                    <div class="card-body">
+                        
+                        <div class="px-3">
+                            <div class="media">
+                                <a href="index.html" class="logo logo-admin"><img src="{{asset('images/logo-sm.png')}}" height="55" alt="logo" class="my-3"></a>
+                                <div class="media-body ml-3 align-self-center">                                                                                                                       
+                                    <h4 class="mt-0 mb-1">Avokado Panel</h4>
+                                    <p class="text-muted mb-0">Abone Hesap Oturumu</p>
+                                </div>
+                            </div>                            
+                     
+                                
+                                       <form class="form-horizontal my-4" action="{{'login-attack' | route}}" method="POST">
+                                        {{csrf | raw}}
+                                        
+           
+              
+                   <div class="form-group">
+                                    <label for="username">Hesap No</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="mdi mdi-account-outline font-16"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control"  name="account_no" id="accountno" placeholder="Hesap No">
+                                    </div>                                    
+                                </div>
+              
+                                <div class="form-group">
+                                    <label for="username">Email</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="mdi mdi-mail-ru font-16"></i></span>
+                                        </div>
+                                        <input type="email" class="form-control"  name="email" id="username" placeholder="Email">
+                                    </div>                                    
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="userpassword">Şifre</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon2"><i class="mdi mdi-key font-16"></i></span>
+                                        </div>
+                                        <input type="password" class="form-control" id="userpassword" name="password" placeholder="Şifre">
+                                    </div>                                
+                                </div>
+    
+                                <div class="form-group row mt-4">
+                                    <div class="col-sm-6">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customControlInline">
+                                            <label class="custom-control-label" for="customControlInline">Beni Hatırla</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 text-right">
+                                        <a href="#" class="text-muted font-13"><i class="mdi mdi-lock"></i> Şifremi Unuttum?</a>                                    
+                                    </div>
+                                </div>
+    
+                                <div class="form-group mb-0 row">
+                                    <div class="col-12 mt-2">
+                                        <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">Oturum Aç<i class="fas fa-sign-in-alt ml-1"></i></button>
+                                    </div>
+                                </div>  
+
+  <!-- [ aler ] start -->
+                                 
+
+
+                            </form>
+                        </div>
+                  
+                        <div class="m-3 text-center p-3 text-primary">
+                        {% if  session['session_message']['type'] == "primary" %}
+
+                                        <div class="alert alert-info border-0" role="alert">
+                                         {{session['session_message']['message']}}
+                                        </div>
+                                        
+
+                                    {% elseif  session['session_message']['type'] == "success" %}  
+
+                                        <div class="alert alert-success border-0" role="alert">
+                                        {{session['session_message']['message']}}
+                                   </div>  
+                                        
+                               
+
+                                    {% elseif  session['session_message']['type'] == "danger" %}  
+
+                                        <div class="alert alert-danger border-0" role="alert">
+                                            {{session['session_message']['message']}}
+                                        </div>
+                                    {% elseif  session['session_message']['type'] == "fail" %}  
+
+                                        <div class="alert alert-danger border-0" role="alert">
+                                            {{session['session_message']['message']}}
+                                        </div>   
+
+                                    {% elseif  session['session_message']['type'] == "warning" %}  
+
+                                        <div class="alert alert-warning border-0" role="alert">
+                                            {{session['session_message']['message']}}
+                                        </div>
+
+                                    {% endif %}  </div>                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 p-0 d-flex justify-content-center">
+                <div class="accountbg d-flex align-items-center"> 
+                    <div class="account-title text-white text-center">
+                        <img src="{{asset('images/logo-sm.png')}}" alt="" class="thumb-sm">
+                        <h4 class="mt-3">Avokado Panel</h4>
+                           <p class="font-14 mt-3">Profesyonel Satış Takip ve Yönetim Sistemleri</p>
+                        <div class="border w-25 mx-auto border-primary"></div>
+                        <h1 class="">Hoşgeldiniz</h1>
+                        <p class="font-14 mt-3">Mevcut Bir Hesabınız Yokmu? <a href="http://avokadoyazilim.com/abone-kayit" class="text-primary">Kayıt Ol!</a></p>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Log In page -->
+
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/metisMenu.min.js')}}"></script>
+<script src="{{asset('js/waves.min.js')}}"></script>
+<script src="{{asset('js/jquery.slimscroll.min.js')}}"></script>
+<!-- App js -->
+<script src="{{asset('js/app.js')}}"></script>
+
+    </body>
+</html>

@@ -1,0 +1,60 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">storage</i>
+
+                                        </span>
+                    <span class="logo-text h4">Depolar</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Depo Adı</th>
+                               
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for depo in depolar  %}
+                                        <tr>
+                                            <td>{{depo.stok_depo_adi}}</td>
+                                      
+                                            <td><a href="{{url}}/stok-depolar/show/{{depo.id}}">Göster</a> </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

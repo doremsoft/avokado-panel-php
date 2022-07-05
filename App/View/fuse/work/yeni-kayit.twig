@@ -1,0 +1,2311 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 0px;
+                margin-left: 0px;
+
+            }
+
+            .cariIsımleArama li{
+                color: #040f12;
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+                color: #040f12;
+                background-color: #e6f2ff;
+
+            }
+
+            #cariaramasonuc{
+
+                margin-top: 10px;
+
+
+            }
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+    <form id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">ballot</i>
+
+                                        </span>
+                        <span class="logo-text h4">Yeni İş Emri</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <form   action="{{url}}/web/yeni-is-kaydet"  class="col-md-12"  method="post">
+
+       <div class="row" style="padding: 10px;">
+
+            <div class="col-md-3">
+
+                <button type="button"  onclick="window.location.href='{{ url }}/work'" class="btn btn-danger col-md-12" >İptal</button>
+
+
+
+                            <div class="card m-t-15">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+
+
+
+                                                <div class="form-group">
+                                                    <input type="text" id="cs_cari_unvan" class="form-control" name="cari_unvan"  placeholder="Hesap Seçimi Yapın...">
+
+                                                </div>
+
+
+
+   <div class="form-group m-t-15" >
+   <button type="button" class="btn  btn-primary col-md-12"  data-toggle="modal" data-target="#cariStockModal">Hesap Seç</button>
+   </div>
+
+
+                                                <div class="form-group m-t-15" id="carisecimiptaldiv">
+
+                                                    <button type="button" class="btn btn-danger col-md-12" onclick="cariSecimIptal();">Seçim İptal</button>
+                                                </div>
+
+                                                <input type="hidden" id="cs_cari_id"  name="cari_id" value="0"/>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+         <div class="card m-t-15">
+
+                        <div class="card-body" style="padding-bottom:8px">
+                            <div class="row">
+                                <div class="col-md-12" >
+
+                                    <div class="form-group" >
+                                        <label>İş Emri Durumu:</label>
+
+                                        <select  class="form-control">
+                                        <option value="0">Taslak</option>
+                                        <option value="1" selected>Onay Bekliyor</option>
+                                        <option value="2">Ekip Ataması Bekliyor</option>
+                                        <option value="2">Malzeme Bekleniyor</option>
+                                        <option value="2">Tedarik Bekleniyor</option>
+                                        <option value="2">İmalat Bekleniyor</option>
+                                        <option value="2">Ödeme Bekleniyor</option>
+                                        <option value="2">Nakliye Bekleniyor</option>
+                                        <option value="3" >Aktif</option>
+                                        <option value="4">Servise Gidiliyor</option>
+                                        <option value="5">Üzerinde Çalışılıyor</option>
+                                        <option value="6">Kısmen Tamamlandı</option>
+                                        <option value="7">Tamamlandı</option>
+                                        <option value="9">İptal Edildi</option>
+
+
+
+
+</select>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                <div class="card m-t-15">
+
+                        <div class="card-body" style="padding-bottom:8px">
+                            <div class="row">
+                                <div class="col-md-12" >
+
+                                    <div class="form-group" >
+                                        <label>Standart Depo:</label>
+
+                                        <select id="standart-depolar-select" class="form-control"></select>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+
+
+                <div class="page-content col-md-9 ">
+
+                    <div class="row">
+
+
+
+      <div class="col-md-12 servisdetaylari">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                              <div class="form-group">
+                                              <label>İş Başlığı</label>
+                                                    <input type="text"  class="form-control" name="is_baslik"  >
+
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                             <div class="col-md-12 m-t-15 servisdetaylari">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+
+                                              <div class="form-group">
+                                              <label>İş Açıklaması</label>
+                                                    <textarea type="text"  class="form-control" name="is_baslik"  ></textarea>
+
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-12 m-t-15 servisdetaylari">
+                            <div class="card">
+                                <div class="card-block p-0">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="table-responsive">
+
+
+
+                                                {{csrf | raw}}
+
+                                                <div class="col-md-12 t-header-box">
+                                                    <div class="row" id="secili-urunler-baslik-row">
+
+                                                    </div>
+                                                </div>
+
+                                                <div id="secili_stok_listesi"></div>
+
+                                                <div class="col-md-12 m-t-15  m-b-15 " style="text-align: center;">
+
+                                                    <button type="button"  data-toggle="modal" data-target="#yeniKalemModal" class="btn btn-secondary btn-fab fuse-ripple-ready">
+                                                        <i class="icon-plus"></i>
+                                                    </button>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-12  m-t-15   servisdetaylari ">
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="col-md-6"></div>
+
+
+
+                                            <div class="col-md-12">
+
+
+                                                <div class="row">
+
+                                                    <div class="col-md-2" style="font-weight: bold; padding-top:10px;">İskonto Oran %:</div>
+                                                    <div class="col-md-2"><input type="text" id="iskonto_oran_label" class="form-control col-md-12" value="0"></div>
+
+
+                                                    <div class="col-md-2" style="font-weight: bold; padding-top:10px;">İsk. Toplamı:</div>
+                                                    <div class="col-md-2"><input type="text" id="indirim_total_label" class="form-control col-md-12" value="0.00"><input type="hidden" id="indirim_total_label_old" class="form-control" value="0.00"></div>
+
+     <div class="col-md-2" style="font-weight: bold; padding-top:10px;">Ortalama Süre:</div>
+                                                    <div class="col-md-2"><input type="text" id="ortalama_sure_label" class="form-control col-md-12" value="0 DK"></div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12" style="padding-top: 20px;">
+
+
+                                                <div class="row">
+
+                                                    <div class="col-md-2" style="font-weight: bold; padding-top:10px;">Ara Toplam:</div>
+                                                    <div class="col-md-2"><input type="text" id="ara_total_label" class="form-control col-md-12" value="0.00" readonly></div>
+
+
+
+                                                    <div class="col-md-2" style="font-weight: bold; padding-top:10px;">Kdv Tutarı:</div>
+                                                    <div class="col-md-2"><input type="text" id="kdv_toplam_label" class="form-control col-md-12" value="0.00" readonly></div>
+
+
+
+                                                    <div class="col-md-2" style="font-weight: bold; padding-top:10px;">
+
+                                                        Toplam:
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <input type="text" id="toplam_label" class="form-control col-md-12" value="0.00" readonly>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="col-md-12 m-t-15   servisdetaylari" style="text-align: center;">
+
+                            <button type="button"  class="btn btn-danger">İŞ EMRİNİ KAYDET</button>
+
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+
+  </div>
+
+
+    </form>
+
+    </div>
+
+
+
+    </div>
+
+
+
+
+
+    <div class="modal fade" id="yeniKalemModal" role="dialog">
+        <div class="modal-dialog yeni-stok-modal-dialog">
+            <div class="modal-content-yeni-stok">
+                <div class="modal-body" style="padding:0px;">
+                    <div class="col-md-12 m-t-15">
+
+
+                        <div class="card">
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+
+                                            <button type="button" class="form-control btn btn-info btn-lg" data-toggle="modal" data-target="#newStockModal">Yeni Ürün</button>
+
+
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="card m-t-15">
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+
+
+                                        <div class="form-group">
+                                            <label>Ürün Adı:</label>
+                                            <input type="text" class="form-control" id="stokisimlearamainput2"  onkeyup="urungetirisimle(this.value , 2)">
+                                            <div id="aramasonuc2"></div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+
+
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addStockModel" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="padding:0px;">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div id="stok-adi-label-div" style="color:black;text-align: center;"></div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="number" id="stok-ekleme-adet-input" class="form-control"  />
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="hidden" id="stok-ekleme-jsondata" >
+                            <button type="button" class="btn btn-primary" onClick="adettenEkle()">Ekle</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="newStockModal" role="dialog">
+        <div class="modal-dialog yeni-stok-modal-dialog">
+            <div class="modal-content-yeni-stok">
+                <div class="modal-body" style="padding:0px;">
+                    <iframe id="yenistokiframe" src="{{ url }}/stok/add?noframe=ok&csrftoken={{ csrf_token }}" frameborder="0" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cariStockModal" role="dialog">
+        <div class="modal-dialog yeni-stok-modal-dialog">
+            <div class="modal-content-yeni-stok">
+                <div class="modal-body" style="">
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Hesap Adını Yazınız:</label>
+                            <input type="text" class="form-control" id="cariname" onkeyup="cariarama(this.value)">
+                            <div id="cariaramasonuc"></div>
+                        </div>
+
+                        <hr>
+
+
+
+
+                        <div class="form-group">
+
+                            <button type="button" class="btn btn-danger" onclick="cariSecimIptal();">Seçim İptal</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+
+
+
+        function gosterGizle(i){
+
+            if(i == false){
+                $(".servisdetaylari").hide();
+                $('#carisecimiptaldiv').hide();
+
+            }else{
+                $(".servisdetaylari").show();
+                $('#carisecimiptaldiv').show();
+
+            }
+
+
+        }
+        gosterGizle(false);
+
+
+        var detaylibaslikhtml ="<div class=\"col-md-4 t-header-text\">Hizmet Adı</div> <div class=\"col-md-1 t-header-text\">Birim</div><div class=\"col-md-1 t-header-text\">Miktar</div><div class=\"col-md-1 t-header-text\">Kdv</div><div class=\"col-md-1 t-header-text\">Vergi</div><div class=\"col-md-1 t-header-text\">İsk %</div><div class=\"col-md-1 t-header-text pointer\"  "+ttip("top","Ara Toplam")+">A.Top.</div><div class=\"col-md-1 t-header-text\">Toplam</div><div class=\"col-md-1 t-header-text\">Depo</div>";
+        var ozetbaslikhtml ="<div class=\"col-md-4 t-header-text\">Hizmet Adı</div> <div class=\"col-md-2 t-header-text\">Birim Fiyat</div><div class=\"col-md-1 t-header-text\">Miktar</div><div class=\"col-md-2 t-header-text\">Ara Toplam</div><div class=\"col-md-1 t-header-text\">Vergi</div><div class=\"col-md-2 t-header-text\">Toplam</div>";
+
+        var dovizkurlari =  JSON.parse('{{ dovizkurlari | raw}}');
+
+
+
+        if($("#detayligorunumswitch").prop("checked") == true){
+
+
+            $("#secili-urunler-baslik-row").html(detaylibaslikhtml);
+
+        }else{
+
+            $("#secili-urunler-baslik-row").html(ozetbaslikhtml);
+        }
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("cariaramasonuc").innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+                        console.log(data);
+
+
+
+
+                        if (data == "non") {
+
+                            document.getElementById("cariaramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                        } else {
+
+
+                            var cari_data = JSON.parse(data);
+
+                            var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                            if (cari_data.durum == "ok") {
+
+
+
+                                $.each(cari_data.cari, function (key, val) {
+
+
+                                    lihtml += cariliurunbas(val);
+
+                                });
+
+
+
+                            } else {
+
+                                console.log("Cari Bulunamadı");
+
+
+
+                                lihtml +=cariyok();
+
+
+                            }
+
+                            document.getElementById("cariaramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+
+
+
+
+
+        }
+
+        function cariyok() {
+
+            var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function cariliurunbas(data) {
+
+            console.log(data);
+
+            var html = "<li data-dismiss=\"modal\"  onclick='seciliCariDegistir(\""+ data.cari_adi+"\","+data.id+",\""+data.cari_vergi_daire+"\",\""+data.cari_vergi_no+"\",\""+data.cari_adres+"\")'>" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+        function seciliCariDegistir(cari_adi , cari_id , vd,vno , adres){
+
+
+            document.getElementById("cariname").value = "";
+            document.getElementById("cariaramasonuc").innerHTML = "";
+
+
+            $('#cariStockModal').modal('hide');
+
+            $("#cs_cari_id").val(cari_id);
+            $("#cs_cari_unvan").val(cari_adi);
+
+
+            if(vd == "null"){
+                vd = "";
+            }
+
+            if(vno == "null"){
+                vno = "";
+            }
+
+            if(adres == "null"){
+                adres = "";
+            }
+
+            $("#cs_cari_vergi_daire").val(vd);
+            $("#cs_cari_vergi_no").val(vno);
+            $("#cs_cari_vergi_adres").val(adres);
+
+            gosterGizle(true);
+
+
+        }
+
+        function cariSecimIptal(){
+
+            document.getElementById("cariname").innerHTML = "";
+            document.getElementById("cariaramasonuc").innerHTML = "";
+
+            $('#cariStockModal').modal('hide');
+            $("#cs_cari_id").val(0);
+            $("#cs_cari_unvan").val("");
+            $("#cs_cari_vergi_daire").val("");
+            $("#cs_cari_vergi_no").val("");
+            $("#cs_cari_vergi_adres").val("");
+            gosterGizle(false);
+        }
+
+
+
+
+
+        function open_new_stock_frame(){
+
+            $("#newStockModal").modal();
+
+
+            document.getElementById("yenistokiframe").contentWindow.inputfocus();
+        }
+
+
+        $("#stok-ekleme-adet-input").keypress(function(event){
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+
+            if(keycode == '13'){
+                adettenEkle();
+            }
+
+        });
+
+
+
+        $(document).keypress(function(event){
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+
+            if(keycode == '10'){
+                open_new_stock_frame();
+            }
+
+        });
+
+
+
+        function setBarcode(str){
+
+
+        }
+
+        var sayi = 1;
+
+        let depo_json  = '{{depolar | raw}}';
+
+        var standart_depo_id = {{hesap_detay.standart_depo_id}};
+
+        try{
+
+            depo_json = JSON.parse(depo_json);
+
+            console.log(depo_json);
+        }catch(e){
+            console.log(e);
+        }
+
+
+
+
+        function urungetirisimle(str,ino) {
+            if (str.length <= 1) {
+
+                document.getElementById("aramasonuc"+ino).innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/stok/stok-getir-isimle", {qr: str})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+
+
+
+                        if (data == "non") {
+
+                            document.getElementById("aramasonuc"+ino).innerHTML = "Ürün Bulunamadı!";
+
+                        } else {
+
+
+                            var stok_data = JSON.parse(data);
+
+
+
+                            if (stok_data.durum == "ok") {
+
+                                var lihtml = "<ul class=\"urunIsımleArama"+ino+"\">";
+
+                                $.each(stok_data.stok, function (key, val) {
+
+
+                                    lihtml += liurunbas(val,ino);
+
+                                });
+
+                                document.getElementById("aramasonuc"+ino).innerHTML = lihtml + "</ul>";
+
+                            } else {
+
+                                console.log("Ürün Bulunamadı");
+                                notify("Ürün Bulunamadı!", "danger");
+                            }
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+
+
+
+
+
+        }
+
+
+
+
+        $("#iskonto_oran_label").keypress(function(event){
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+
+            if(keycode == '13'){
+                genelIskontoTutarindanIndırımYap();
+            }
+
+        });
+
+
+        $("#indirim_total_label").keypress(function(event){
+
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+
+            if(keycode == '13'){
+                genelToplamdanKalemlereIskontoYap();
+            }
+
+        });
+
+
+
+
+        function liurunbas(data,ino) {
+
+
+            var stok_adi =  data.stok_adi ;
+
+            if(data.stok_varyant_adi != null || data.stok_varyant_adi != "" || data.stok_varyant_adi != "null" || data.stok_varyant_adi != null){
+
+                stok_adi+=" "+data.stok_varyant_adi;
+            }
+
+            if(data.stok_varyant_deger != null || data.stok_varyant_deger != "" || data.stok_varyant_deger != "null" || data.stok_varyant_deger != null){
+
+                stok_adi+=" "+data.stok_varyant_deger;
+            }
+
+
+            var html = "<li data-json='" + JSON.stringify(data) + "' onclick='urunHazirlaIsımle(this,"+ino+")'>" +stok_adi+ " ("+parseFloat(data.stok_adet)+")</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function getAdetSwitch(){
+
+            return true;
+        }
+
+        function setAdetSwitch(data){
+
+            $("#stok-adi-label-div").html("<h4 style='color: black;'>"+data.stok_adi+"</h4>");
+
+            var adet  =  data.stok_standart_adet;
+
+            $("#stok-ekleme-adet-input").val(adet);
+
+            $("#stok-ekleme-jsondata").val(JSON.stringify(data));
+
+            $("#addStockModel").modal();
+
+            $("#stok-ekleme-adet-input").focus();
+
+        }
+
+
+        function adettenEkle(){
+
+            var adet = $("#stok-ekleme-adet-input").val();
+
+            var data = JSON.parse($("#stok-ekleme-jsondata").val());
+
+            data.stok_standart_adet = adet;
+
+
+            if(data.stok_adet > 0){
+
+
+
+                if($("#standart-depolar-select").val() == 0){
+
+
+                    swalert("warning","Standart Depo Seçilmeli!","Standart Depo Seçimi Yapmalısınız!");
+
+                }else{
+
+
+                    urunHazirla(data);
+
+                    $('#addStockModel').modal('hide');
+                }
+
+
+
+
+
+            }else{
+
+
+                if($("#standart-depolar-select").val() == 0){
+
+
+                    swalert("warning","Standart Depo Seçilmeli!","Standart Depo Seçimi Yapmalısınız!");
+
+                }else{
+
+                    swal({
+                        title: "Stok Mevcut Değil",
+                        text: "Bu Şekilde İşlem Yapmanız Stoğunuzu Eksi'ye Düşürecektir!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Onaylıyorum!',
+                        cancelButtonText: 'İptal',
+                        confirmButtonClass: 'btn btn-success text-white fuse-ripple-ready',
+                        cancelButtonClass: 'btn btn-danger fuse-ripple-ready ml-2',
+                        buttonsStyling: false
+                    }).then(function (result) {
+                        if(result.value){
+                            urunHazirla(data);
+
+                            $('#addStockModel').modal('hide');
+                        }
+                    }, function (dismiss) {});
+
+                }
+
+            }
+
+
+
+
+
+        }
+
+
+        function urungetir() {
+
+            var urun_kod = urun_getir_input.value;
+
+            urun_getir_input.value = "";
+
+
+            var jqxhr = $.post("{{url}}/stok/stok-getir", {kod: urun_kod})
+                .done(function (data) {
+
+                    data = data.trim();
+
+                    if (data == "non") {
+
+                    } else {
+
+
+                        var stok_data = JSON.parse(data);
+
+
+                        console.log(stok_data);
+
+
+                        if (stok_data.durum == "ok") {
+
+
+                            if(getAdetSwitch()){
+
+
+                                setAdetSwitch(stok_data.stok);
+
+
+                            }else{
+
+                                urunHazirla(stok_data.stok);
+
+                            }
+
+
+
+
+
+                        } else {
+
+                            console.log("Ürün Bulunamadı");
+                            notify("Ürün Bulunamadı!", "danger");
+                            open_new_stock_frame();
+                        }
+
+
+
+                    }
+
+                })
+                .fail(function () {
+                    alert("error");
+                });
+
+
+
+        }
+
+        function formatMoney(number, decPlaces, decSep, thouSep) {
+            decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                decSep = typeof decSep === "undefined" ? "." : decSep;
+            thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+            var sign = number < 0 ? "-" : "";
+            var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+            var j = (j = i.length) > 3 ? j % 3 : 0;
+
+            return sign +
+                (j ? i.substr(0, j) + thouSep : "") +
+                i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+                (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "");
+        }
+
+
+        function urunHazirlaIsımle(ts,ino) {
+
+            var li = ts;
+
+            var data = ts.getAttribute("data-json");
+
+
+
+            if(ino == 2){
+                $('#yeniKalemModal').modal('hide');
+            }
+
+
+            if($("#standart-depolar-select").val() == 0){
+
+
+                swalert("warning","Standart Depo Seçilmeli!","Standart Depo Seçimi Yapmalısınız!");
+
+            }else{
+
+
+                var data = JSON.parse(data);
+
+
+                if(data.stok_adet > 0){
+
+                    urunHazirla(data);
+
+                    document.getElementById("aramasonuc"+ino).innerHTML = "";
+                    document.getElementById("aramasonuc"+ino).style.border = "0px";
+                    document.getElementById("stokisimlearamainput"+ino).value = "";
+
+                }else{
+
+                    swal({
+                        title: "Stok Mevcut Değil",
+                        text: "Bu Şekilde İşlem Yapmanız Stoğunuzu Eksi'ye Düşürecektir!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Onaylıyorum!',
+                        cancelButtonText: 'İptal',
+                        confirmButtonClass: 'btn btn-success text-white fuse-ripple-ready',
+                        cancelButtonClass: 'btn btn-danger fuse-ripple-ready ml-2',
+                        buttonsStyling: false
+                    }).then(function (result) {
+                        if(result.value){
+                            urunHazirla(data);
+                            document.getElementById("aramasonuc"+ino).innerHTML = "";
+                            document.getElementById("aramasonuc"+ino).style.border = "0px";
+                            document.getElementById("stokisimlearamainput"+ino).value = "";
+                        }
+                    }, function (dismiss) {});
+
+                }
+
+
+            }
+
+
+        }
+
+        function urunHazirla(data) {
+
+
+            var dovizadi = data.stok_doviz;
+
+            dovizadi = dovizadi.toString();
+
+            var doviz_adi = dovizadi.toUpperCase();
+
+            var doviz_kuru = dovizkurlari[doviz_adi];
+
+            {% if type != 1 %}
+
+            data.stok_satis_fiyati = data.stok_satis_fiyati * doviz_kuru;
+
+            {% endif %}
+
+            var indirimsiz_toplam_tutar = (data.stok_satis_fiyati * 1).toFixed(16);
+
+
+
+
+            console.log(data);
+
+
+
+
+            if(data.stok_kdv_oran == 0){
+
+                kdv_oran_duzelt = 1;
+            }else{
+
+
+                if(data.stok_kdv_oran > 9){
+
+                    var kdv_oran_duzelt = "1." + data.stok_kdv_oran;
+
+                }else{
+
+                    var kdv_oran_duzelt = "1.0" + data.stok_kdv_oran;
+                }
+            }
+
+
+
+            var dahil_selected="";
+            var haric_selected = "";
+
+
+
+            if(data.stok_fiyat_vergi_durum == 1){
+
+
+                var toplam_tutar = (data.stok_satis_fiyati * 1).toFixed(16);
+
+
+                var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                vergili_toplam_tutar = vergili_toplam_tutar.toFixed(16);
+
+                var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                kdv_tutar = kdv_tutar.toFixed(16);
+
+                var satis_fiyat =toplam_tutar.toString();
+
+
+                haric_selected = " selected ";
+
+
+            }else if(data.stok_fiyat_vergi_durum == 2){
+
+
+                var toplam_tutar = data.stok_satis_fiyati * 1;
+                toplam_tutar = toplam_tutar.toFixed(16);
+
+                var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                vergili_toplam_tutar = vergili_toplam_tutar.toFixed(16);
+
+                var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+
+                kdv_tutar = kdv_tutar.toFixed(16);
+
+
+                vergili_toplam_tutar = parseFloat(vergili_toplam_tutar);
+
+                vergili_toplam_tutar = vergili_toplam_tutar.toFixed(4);
+                var satis_fiyat =vergili_toplam_tutar.toString();
+
+
+                dahil_selected = " selected ";
+            }
+
+            var iskonto_orani =  0;
+
+
+            if(typeof data.stok_alim_iskonto_oran  !== 'undefined'){
+                iskonto_orani = data.stok_alim_iskonto_oran;
+            }
+
+
+
+            var iskonto_orani_html = parseFloat(iskonto_orani);
+
+
+            var satis_fiyat_html =parseFloat(satis_fiyat);
+
+            console.log(satis_fiyat);
+
+            if(data.stok_varyant_adi == null){
+                data.stok_varyant_adi = "";
+            }
+
+            if(data.stok_varyant_deger == null){
+                data.stok_varyant_deger = "";
+            }
+
+
+            var stok_adet_html = parseFloat(data.stok_standart_adet).toString();
+
+            var html = "";
+
+
+            var stokadiclass = "";
+
+            if(data.adet_etkisiz == 1){
+
+                stokadiclass = "text-red";
+            }else{
+
+                data.adet_etkisiz = 0;
+
+            }
+
+            if(data.shgid == undefined){
+                data.shgid = 0;
+            }
+
+
+
+                indirimsiz_toplam_tutar = parseFloat(indirimsiz_toplam_tutar);
+
+
+                html += '<div class="col-md-12 data-tr-' + data.id + '-' + sayi + '"  aria-colspan="8" style="border-bottom:1px solid #e9e9e9;padding-bottom: 5px;margin-top:10px;">';
+                html += '<div class="row" >';
+
+                html += "<input type=\"hidden\" data-id=\"" + sayi + "\" data-input=\"inpt-serino-"+ sayi +"\" name=\"data['st-" + sayi + "'][serino]\" class=\"\" style=\"width:120px;\" value=\"\"/>";
+                html +="<input type=\"hidden\" name=\"data['st-" + sayi + "'][stokid]\" value=\"" + data.id + "\"/>";
+                html +="<input type=\"hidden\" name=\"data['st-" + sayi + "'][shgid]\" value=\"" + data.shgid + "\"/>";
+                html +="<input type=\"hidden\" name=\"data['st-" + sayi + "'][adetetkisiz]\" value=\"" + data.adet_etkisiz + "\"/>";
+                html += "<div class='col-md-12'>";
+                html += '<div class="row" >';
+
+                html += "<div  class=\"col-md-4\" data-name=\"stok-adi\" ><span style='cursor:pointer;' class='"+stokadiclass+"' onclick=\"stokDetayGoster("+ data.id + "," + sayi + ");\">" + data.stok_adi + " " + data.stok_varyant_adi + " " + data.stok_varyant_deger +  "</span></div> ";
+                html += "<div class=\"col-md-2\"><input type=\"text\" data-id=\"" + sayi + "\" data-input=\"inpt-satisfiyat-"+ sayi +"\" name=\"data['st-" + sayi + "'][satis_fiyat]\" class=\"col-md-12 form-control\"  value=\"" +satis_fiyat_html + "\"/></div>";
+                html += "<div class=\"col-md-1\"><input type=\"text\" data-id=\"" + sayi + "\" data-input=\"inpt-miktar-"+ sayi +"\" name=\"data['st-" + sayi + "'][miktar]\" data-name=\"stok-miktar\" class=\"col-md-12 form-control miktarinput\"  value=\""+stok_adet_html+"\"/></div>";
+
+
+
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-indirimsiz-toplam-" + sayi + "\" name=\"data['st-" + sayi + "'][indirimsiz_toplam]\" class=\" col-md-12 form-control indirimsiztoplaminputs\"  value=\"" + indirimsiz_toplam_tutar + "\"/>";
+                html += "</div>";
+
+                html += "<div class=\"col-md-1\"><select data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvoran-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_oran]\" class=\"kdv-oran-input\" >"+kdvOranlari( data.stok_kdv_oran)+"</select></div>";
+
+
+                html += "<div class=\"col-md-2\"><input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-vergili-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][vergili_toplam]\" class=\"col-md-12 vergili_toplam_inputlari form-control moneyinput\" value=\"" + vergili_toplam_tutar + "\" readonly/></div>";
+
+
+
+
+
+
+
+
+
+                html += "</div>";
+                html += "</div>";
+
+
+
+                html += "<div class='col-md-12' id='st-detay-"+ sayi +"' data-status='0' style='background-color:#e1e1e1;padding-top:15px;padding-bottom:15px;display: none;'>";
+                html += '<div class="row" >';
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">İndirim Tutarı:</div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-i-type=\"top-in-input\" data-input=\"inpt-indirimtutar-"+ sayi +"\" name=\"data['st-" + sayi + "'][indirim_tutar]\" class=\"col-md-12 form-control top_indirim_inputlari\" value=\"0\"/>";
+                html += "</div>";
+
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Stok Kod:</div>";
+                html += "<div class=\"col-md-2\">" + data.stok_kod + "</div>";
+
+
+                // html += "<select data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" class=\"col-md-12 form-control\" data-input=\"inpt-kdvtip-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tip]\"><option value=\"1\" "+dahil_selected+">Dahil</option><option value=\"0\" "+haric_selected+">Hariç</option></select>";
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Kdv Tutar:</div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-kdvtutar-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tutar]\" class=\"kdv_inputlari col-md-12 form-control moneyinput\"  value=\"" + kdv_tutar + "\"/>";
+                html += "</div>";
+
+
+
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">İndirimsiz Toplam:</div>";
+
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" data-input=\"inpt-toplam-" + sayi + "\"  name=\"data['st-" + sayi + "'][toplam]\" class=\"toplam_inputlari col-md-12 form-control\" value=\"" + toplam_tutar+ "\" readonly/>";
+                html += "</div>";
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Vergi Oran:</div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<select data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\" class=\"col-md-12 form-control\" data-input=\"inpt-kdvtip-" + sayi + "\" name=\"data['st-" + sayi + "'][kdv_tip]\"><option value=\"1\" "+dahil_selected+">Dahil</option><option value=\"0\" "+haric_selected+">Hariç</option></select>";
+                html += "</div>";
+
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">İskonto Oran:</div>";
+                html += "<div class=\"col-md-2\"><input type=\"text\" data-id=\"" + sayi + "\" data-input=\"inpt-iskontooran-"+ sayi +"\" name=\"data['st-" + sayi + "'][iskontooran]\" class=\"col-md-12 form-control iskonto-oran-input\"value=\""+iskonto_orani_html+"\"/></div>";
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Depo:</div>";
+                html += "<div class=\"col-md-2\">";
+                {% if type == 1 %}
+                html += "<select data-id=\"" + sayi + "\"  class=\"col-md-12 depolarselect form-control\" data-input=\"inpt-depolar-"+ sayi +"\"  name=\"data['st-" + sayi + "'][depo_id]\">"+depolar(data.depo)+"</select>";
+                {% else %}
+                html += "<select data-id=\"" + sayi + "\"  class=\"col-md-12 depolarselect form-control\" data-input=\"inpt-depolar-"+ sayi +"\"  name=\"data['st-" + sayi + "'][depo_id]\">"+depolar()+"</select>";
+                {% endif %}
+                html += "</div>";
+
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Döviz Adı:</div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\"  name=\"data['st-" + sayi + "'][satis_doviz]\" class=\" col-md-12 form-control \"  value=\"" + doviz_adi + "\"/>";
+                html += "</div>";
+
+
+
+                html += "<div class=\"col-md-2\" style=\"font-weight: bold; padding-top:10px;\">Döviz Kuru:</div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<input type=\"text\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\"  name=\"data['st-" + sayi + "'][doviz_kur]\" class=\" col-md-12 form-control \"  value=\"" + doviz_kuru + "\"/>";
+                html += "</div>";
+
+
+            html += "<div class=\"col-md-12\" style=\"font-weight: bold; padding-top:10px;\">Extra Detay:</div>";
+            html += "<div class=\"col-md-12\">";
+
+            html += "<textarea  data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\"  name=\"data['st-" + sayi + "'][extra]\" class=\" col-md-12 form-control \"  />";
+
+            html += "</div>";
+
+
+
+
+                html += "<div class=\"col-md-12 m-t-15\" style=\"font-weight: bold; padding-top:10px;\"></div>";
+                html += "<div class=\"col-md-2\">";
+                html += "<a class=\"btn btn-danger text-light\" style=\"cursor:pointer;\" onclick=\"ekliStokSil(" + data.id + "," + sayi + ")\">Sil</a>";
+                html += "</div>";
+
+
+                html += "<input type=\"hidden\" data-id=\"" + sayi + "\" data-sayi=\"" + sayi + "\"  class=\"idlistinputs\"  value=\"" + sayi+ "\" />";
+                //html += "<td>" +  data.stok_birimi + "</td>";
+
+                html += "</div>";
+                html += "</div>";
+
+
+
+
+
+                html += "</div>";
+                html += "</div>";
+
+
+
+
+
+
+            $("#secili_stok_listesi").append(html);
+
+            //$('.moneyinput').mask("#.##0,0000", {reverse: true});
+            // $('.miktarinput').mask("#.####", {reverse: true});
+
+
+
+            urunhesapla(sayi);
+
+
+
+            $(":input").bind("keyup change", function (e) {
+
+                var dataid = $(this).attr("data-id");
+
+                var type = $(this).attr("data-i-type");
+                if (dataid) {
+
+                    if(type == "top-in-input"){
+
+                        console.log("Toplam İndirim ellendi");
+
+                        //toplamdaniskontoyap(dataid);
+
+                    }else{
+
+                        urunhesapla(dataid);
+
+                        toplamhesapla();
+                    }
+
+
+                }
+
+            });
+
+            $(".kdv-oran-input").on("change",function(){
+
+                var dataid = $(this).attr("data-id");
+                if (dataid) {
+                    urunhesapla(dataid);
+                    toplamhesapla();
+                }
+
+            });
+
+            $(".top_indirim_inputlari").keypress(function(event){
+
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+
+
+                if(keycode == '13'){
+                    var dataid = $(this).attr("data-id");
+
+                    var type = $(this).attr("data-i-type");
+                    if (dataid) {
+
+
+                        toplamdaniskontoyap(dataid);
+                        toplamhesapla();
+
+
+                    }}
+
+            });
+
+
+
+
+            toplamhesapla();
+
+
+            sayi++;
+
+
+        }
+
+
+
+        function stokDetayGoster(id, trid) {
+
+            var div =  $("#st-detay-"+ trid );
+            var status = div.attr("data-status");
+
+
+            if(status == 0){
+                div.attr("data-status","1");
+                document.getElementById("st-detay-"+ trid).style.display = "block";
+            }else{
+
+                document.getElementById("st-detay-"+ trid).style.display = "none";
+                div.attr("data-status","0");
+            }
+
+
+        }
+
+        function ekliStokSil(id, trid)
+        {
+            event.preventDefault();
+            $(".data-tr-" + id + "-" + trid).remove();
+            toplamhesapla();
+        }
+
+
+
+        function toplamhesapla() {
+
+            var toplam = 0.00;
+
+            var inputs = document.getElementsByClassName('toplam_inputlari');
+
+            for (var z = 0; z < inputs.length; z++) {
+
+                toplam += parseFloat(inputs[z].value);
+            }
+
+
+            var kdv_toplam = 0.00;
+
+            var kdv_inputs = document.getElementsByClassName('kdv_inputlari');
+
+            for (var za = 0; za < kdv_inputs.length; za++) {
+
+                kdv_toplam += parseFloat(kdv_inputs[za].value);
+            }
+
+
+            var indrim_toplam = 0.00;
+
+            var indirim_inputs = document.getElementsByClassName('top_indirim_inputlari');
+
+            for (var zai = 0; zai < indirim_inputs.length; zai++) {
+
+                indrim_toplam += parseFloat(indirim_inputs[zai].value);
+            }
+
+
+
+            var indirimsiz_toplam_tutarlar = 0.00;
+
+            var indirimsiztoplaminputs = document.getElementsByClassName('indirimsiztoplaminputs');
+
+            for (var zaie = 0; zaie < indirimsiztoplaminputs.length; zaie++) {
+
+                indirimsiz_toplam_tutarlar += parseFloat(indirimsiztoplaminputs[zaie].value);
+            }
+
+
+
+
+
+
+            indrim_toplam = indrim_toplam.toFixed(4);
+            kdv_toplam = kdv_toplam.toFixed(4);
+            toplam = toplam.toFixed(4);
+
+            ara_toplam_kalani = toplam - indrim_toplam;
+
+
+            var indirim_toplam_html = parseFloat(indrim_toplam);
+            var kdv_toplam_html =  parseFloat(kdv_toplam);
+            var ara_toplam_html =  parseFloat(ara_toplam_kalani);
+
+
+
+            $("#indirim_total_label").val(indirim_toplam_html);
+            $("#indirim_total_label_old").val(indrim_toplam);
+            $("#kdv_toplam_label").val(kdv_toplam_html);
+
+
+
+
+
+            var toplam_tutar = 0.00;
+
+            var v_topla_inputs = document.getElementsByClassName('vergili_toplam_inputlari');
+
+            for (var zai = 0; zai < v_topla_inputs.length; zai++) {
+
+                toplam_tutar += parseFloat(v_topla_inputs[zai].value);
+            }
+
+
+
+            toplam_tutar = toplam_tutar.toFixed(4);
+            var toplam_tutar_html = parseFloat(toplam_tutar);
+
+            $("#toplam_label").val(toplam_tutar_html);
+
+
+            var ara_top = toplam_tutar_html - kdv_toplam;
+
+            ara_top = ara_top.toFixed(4);
+
+            $("#ara_total_label").val(ara_top);
+
+
+
+            var iskonto_oran = 0;
+
+
+            var b_sayisi = indirimsiz_toplam_tutarlar;
+            var a_sayisi = indrim_toplam;
+
+
+            console.log("a:"+a_sayisi);
+
+            console.log("b:"+b_sayisi);
+
+            iskonto_oran = (a_sayisi/ b_sayisi) * 100 ;
+
+            iskonto_oran = parseFloat(iskonto_oran);
+
+            iskonto_oran = iskonto_oran.toFixed(4);
+
+
+
+
+            if(iskonto_oran == "NaN"){
+
+                iskonto_oran = 0;
+
+            }
+
+
+
+            var iskonto_orani_html = parseFloat(iskonto_oran);
+
+            console.log("Oran:"+iskonto_orani_html);
+
+            $("#iskonto_oran_label").val(iskonto_orani_html);
+
+
+
+        }
+
+
+        {% if type == 1 %}
+
+
+        function depolar(depoid){
+
+            console.log("Depo id:"+depoid);
+
+            if(depoid == 0 || depoid == "undefined" || depoid == undefined){
+
+                depoid =  $("#standart-depolar-select").val();
+            }
+
+            var depolar_html="<option value='0' selected=''>Depo Seçiniz!</option>";
+
+            $.each(depo_json, function (key, val) {
+
+                if(depoid == val.id){
+                    depolar_html += "<option value='" + val.id + "' selected>" + val.stok_depo_adi + "</option>";
+                }else{
+                    depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+                }
+
+            });
+
+
+
+            return depolar_html;
+        }
+        {% else %}
+        function depolar(){
+
+            var depolar_html="<option value='0' selected=''>Depo Seçiniz!</option>";
+
+            var standart_depo_id = $("#standart-depolar-select").val();
+
+            $.each(depo_json, function (key, val) {
+
+                if(standart_depo_id == val.id){
+                    depolar_html += "<option value='" + val.id + "' selected>" + val.stok_depo_adi + "</option>";
+                }else{
+                    depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+                }
+
+
+            });
+
+
+
+            return depolar_html;
+        }
+
+        {% endif %}
+
+
+
+
+
+        function standartDepoYaz(){
+
+            var s_depo = 0;
+            var depolar_html="<option value='0' selected=''>Depo Seçiniz!</option>";
+            $.each(depo_json, function (key, val) {
+
+                if(standart_depo_id == val.id){
+                    depolar_html += "<option value='" + val.id + "' selected>" + val.stok_depo_adi + "</option>";
+                    s_depo++;
+                }else{
+                    depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+                }
+
+
+            });
+
+
+            if(s_depo == 0){
+
+                swalert("warning","Standart Depo Bulunamadı!","Standart Depo Seçimi Yapmalısınız!");
+            }
+
+            return depolar_html;
+        }
+
+
+
+
+
+        function kdvOranlari(KdvOrani){
+
+            var oran = parseFloat(KdvOrani);
+
+            var html="";
+
+            if(oran == 0 || oran == ""){
+
+                html="<option value='0' selected>%0</option>";
+            }else {
+                html="<option value='0'>%0</option>";
+            }
+
+            if(oran == 1){
+                html += "<option value='1' selected>%1</option>";
+
+            }else{
+                html += "<option value='1' >%1</option>";
+
+            }
+
+            if(oran == 8){
+                html += "<option value='8' selected>%8</option>";
+            }else{
+                html += "<option value='8' >%8</option>";
+            }
+            if(oran == 18) {
+                html += "<option value='18' selected>%18</option>";
+            }else{
+
+                html += "<option value='18' >%18</option>";
+            }
+
+
+            return html;
+        }
+
+
+
+
+
+        function genelIskontoTutarindanIndırımYap(){
+
+
+            var iskonto_oran = $("#iskonto_oran_label").val();
+            iskonto_oran = parseFloat(iskonto_oran);
+            iskonto_oran = iskonto_oran.toFixed(16);
+            $(".iskonto-oran-input").val(iskonto_oran);
+
+
+
+            var inputs = document.getElementsByClassName('idlistinputs');
+
+            for (var z = 0; z < inputs.length; z++) {
+
+                var id = inputs[z].value;
+
+
+                //inpt-iskontooran-1
+
+                console.log("Sayi"+id);
+
+                urunhesapla(id);
+
+            }
+
+
+            toplamhesapla();
+
+
+
+        }
+
+        function genelToplamdanKalemlereIskontoYap(){
+
+
+            var indirimsiz_toplam_tutarlar = 0.00;
+
+            var indirimsiztoplaminputs = document.getElementsByClassName('indirimsiztoplaminputs');
+
+            for (var zaie = 0; zaie < indirimsiztoplaminputs.length; zaie++) {
+
+                indirimsiz_toplam_tutarlar += parseFloat(indirimsiztoplaminputs[zaie].value);
+            }
+
+
+            var top_label = $("#indirim_total_label").val();
+
+
+
+
+            var iskonto_oran = 0;
+
+//İndirimsiz toplam tutar
+            var b_sayisi = indirimsiz_toplam_tutarlar;
+
+            //İndirim tutarı
+            var a_sayisi = parseFloat(top_label);
+
+
+            console.log("a:"+a_sayisi);
+
+            console.log("b:"+b_sayisi);
+
+
+            iskonto_oran = (a_sayisi/ b_sayisi) * 100  ;
+
+
+            iskonto_oran = iskonto_oran.toFixed(16);
+
+            console.log("Oran:"+iskonto_oran);
+
+
+            $("#iskonto_oran_label").val(iskonto_oran);
+
+
+
+
+
+            genelIskontoTutarindanIndırımYap();
+
+
+            var genel_toplam_indirim_tutari_input = $("#indirim_total_label");
+            var ara_total_label_input = $("#ara_total_label");
+            var iskonto_oran_label_input = $("#iskonto_oran_label");
+
+
+
+        }
+
+
+        function toplamdaniskontoyap(id){
+
+
+            var toplam_indirim_tutar_input = $("[data-input = 'inpt-indirimtutar-"+id+"']");
+            var iskonto_oran_input =  $("[data-input = 'inpt-iskontooran-"+id+"']");
+            var miktari_input = $("[data-input = 'inpt-miktar-"+id+"']");
+            var satis_fiyati_input = $("[data-input = 'inpt-satisfiyat-"+id+"']");
+
+
+            var iskonto_orani = 0;
+            var toplam_indirim_tutar = 0;
+            var miktar = 0;
+            var birim_basina_indirim = 0;
+            var satis_fiyat = 0;
+
+            satis_fiyat = satis_fiyati_input.val().trim();
+            miktar = miktari_input.val().trim();
+            toplam_indirim_tutar =toplam_indirim_tutar_input.val().trim();;
+
+            if(satis_fiyat == ""){
+                satis_fiyat = 0;
+            }
+
+            if(toplam_indirim_tutar == ""){
+                toplam_indirim_tutar = 0;
+            }
+
+
+            if(miktar == ""){
+                miktar = 0;
+            }
+
+
+            if(toplam_indirim_tutar > 0){
+                birim_basina_indirim = parseFloat(toplam_indirim_tutar) / parseFloat(miktar);
+
+                iskonto_orani = ((birim_basina_indirim * 100) / satis_fiyat).toFixed(16);
+
+                var iskonto_oran_yaz = parseFloat(iskonto_orani).toString();
+
+
+
+
+                iskonto_oran_input.val(iskonto_oran_yaz);
+
+                urunhesapla(id);
+
+
+            }else{
+
+                iskonto_oran_input.val(0);
+
+                urunhesapla(id);
+
+
+            }
+
+        }
+
+
+        function urunhesapla(id) {
+            var seri_no = $("[data-input = 'inpt-serino-"+id+"']");
+            var kdvtip = $("[data-input = 'inpt-kdvtip-"+id+"']");
+            var satis_fiyati = $("[data-input = 'inpt-satisfiyat-"+id+"']");
+            var satis_fiyattutari = satis_fiyati.val().replace(",", ".");
+            satis_fiyati.val(satis_fiyattutari);
+            var toplam_indirim_tutar = $("[data-input = 'inpt-indirimtutar-"+id+"']");
+            var iskonto_oran =  $("[data-input = 'inpt-iskontooran-"+id+"']");
+            var miktari = $("[data-input = 'inpt-miktar-"+id+"']");
+            var kdvoran = $("[data-input = 'inpt-kdvoran-"+id+"']");
+            var kdvtutar = $("[data-input = 'inpt-kdvtutar-"+id+"']");
+            var toplam = $("[data-input = 'inpt-toplam-"+id+"']");
+            var vergili_toplam = $("[data-input = 'inpt-vergili-toplam-" + id + "']");
+            var ham_toplam =   $("[data-input = 'inpt-indirimsiz-toplam-" + id + "']");
+
+
+
+            var toplam_indirim_tutari = 0;
+
+            if(kdvoran.val() > 9){
+                var kdv_oran_duzelt = "1." + kdvoran.val();
+
+            }else{
+
+                var kdv_oran_duzelt = "1.0" + kdvoran.val();
+            }
+
+
+            var iskonto_orani = iskonto_oran.val().trim();
+
+            if(iskonto_orani == ""){
+                iskonto_orani = 0;
+            }
+
+            iskonto_orani = parseFloat(iskonto_orani);
+
+
+
+            var satis_fiyat = satis_fiyati.val().trim();
+
+            if(satis_fiyat == ""){
+                satis_fiyat = 0;
+            }
+
+
+
+            var miktar = miktari.val().trim();
+
+            if(miktar == ""){
+                miktar = 0;
+            }
+
+
+            var ham_top_tutar = satis_fiyat  * parseFloat(miktar) ;
+            ham_top_tutar = parseFloat(ham_top_tutar);
+            ham_toplam.val(ham_top_tutar);
+
+            if(iskonto_orani > 0){
+
+                var  indirimli_toplam_tutar = satis_fiyat * iskonto_orani / 100;
+
+                satis_fiyat = satis_fiyat - indirimli_toplam_tutar;
+
+
+                toplam_indirim_tutari = indirimli_toplam_tutar * parseFloat(miktar);
+
+
+                toplam_indirim_tutari = toplam_indirim_tutari.toFixed(16);
+            }
+
+
+
+
+
+            //KDV hariç tutar
+            if (kdvtip.val() == 0) {
+
+
+                var toplam_tutar = parseFloat(satis_fiyat) * parseFloat(miktar);
+
+
+                //toplam_tutar = toplam_tutar.toFixed(2);
+
+                var vergili_toplam_tutar = toplam_tutar * kdv_oran_duzelt;
+                vergili_toplam_tutar = vergili_toplam_tutar.toFixed(16);
+
+                var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                //kdv_tutar = kdv_tutar.toFixed(2);
+
+
+                //KDV dahil tutar
+            } else {
+
+
+
+
+                if(kdvoran.val() > 0){
+
+                    var vergili_toplam_tutar = parseFloat(satis_fiyat) * parseFloat(miktar);
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(16);
+
+
+
+                    var toplam_tutar = vergili_toplam_tutar / kdv_oran_duzelt;
+                    // toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var kdv_tutar = vergili_toplam_tutar - toplam_tutar;
+                    ///kdv_tutar = kdv_tutar.toFixed(2);
+
+
+
+                }else{
+
+                    var vergili_toplam_tutar = parseFloat(satis_fiyat) * parseFloat(miktar);
+
+                    vergili_toplam_tutar = vergili_toplam_tutar.toFixed(16);
+
+                    var toplam_tutar = parseFloat(vergili_toplam_tutar);
+
+                    // toplam_tutar = toplam_tutar.toFixed(2);
+
+                    var kdv_tutar =0;
+                    //kdv_tutar = kdv_tutar.toFixed(2);
+
+                }
+
+
+            }
+
+
+
+
+            var miktaria = miktari.val();
+
+            var serikontrol = seri_no.val();
+
+            serikontrol = serikontrol.trim();
+
+            if(serikontrol != ""){
+
+                if(miktaria != 1){
+                    ermsj="Seri Numarası Girilen Ürünün Miktarı 1 den Fazla olamaz! \n";
+                    ermsj+="Bu şekilde kayıt yapılır ise kayıt esnasında sistem miktarı kendisi 1 olarak düzenleyecek! \n";
+                    ermsj+="Toplam şuan gördüğünüzden farklı olacaktır!";
+                    swalert("warning","Seri No Adet Çakışması!",ermsj);
+                }
+
+            }
+
+
+
+            if (toplam_tutar == "NaN") {
+
+                toplam_tutar = 0;
+            }
+
+
+            if (vergili_toplam_tutar == "NaN") {
+
+                vergili_toplam_tutar = 0;
+            }
+
+
+
+            if (kdv_tutar == "NaN" || kdv_tutar == "") {
+
+                kdv_tutar = 0;
+            }
+
+
+
+            vergili_toplam_tutar = parseFloat(vergili_toplam_tutar);
+            vergili_toplam_tutar = vergili_toplam_tutar.toFixed(4);
+            vergili_toplam_tutar = parseFloat(vergili_toplam_tutar);
+
+            vergili_toplam.val(vergili_toplam_tutar);
+
+            kdvtutar.val(kdv_tutar);
+
+            toplam.val(toplam_tutar);
+
+
+
+            var top_indirim_yaz = parseFloat(toplam_indirim_tutari).toString();
+
+            console.log(top_indirim_yaz);
+
+            toplam_indirim_tutar.val(top_indirim_yaz);
+
+        }
+
+
+        function ajaxHataMesaji(jqXHR, textStatus, errorThrown){
+
+            swalert("error","Veri Gönderimi Başarısız Oldu!",textStatus);
+
+
+        }
+
+
+        function formuGonder(){
+
+            $.ajax({
+                type: "POST",
+                url: $("#stoklistesi").attr("action"),
+                data: $("#stoklistesi").serialize()
+            }).done(function(result) {
+
+                console.log(result);
+                var data = JSON.parse(result.trim());
+                if(data.status == 1){
+
+
+                    swal({
+                        title: "İşlem Başarılı",
+                        text: data.msg,
+                        type: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Tamam',
+                        cancelButtonText: 'İptal',
+                        confirmButtonClass: 'btn btn-success text-white fuse-ripple-ready',
+                        cancelButtonClass: 'btn btn-danger fuse-ripple-ready ml-2',
+                        buttonsStyling: false
+                    }).then(function (result) {
+
+                        if(result.value){
+
+                            location.reload();
+                        }else{
+
+                            location.reload();
+                        }
+
+
+
+                    }, function (dismiss) {
+
+                        location.reload();
+
+
+                    });
+
+
+                }else{
+                    swalert("error","İşlem Başarısız!",data.msg);
+
+                }
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+
+
+                ajaxHataMesaji(jqXHR, textStatus, errorThrown);
+
+            });
+
+
+
+
+
+        }
+
+
+        function listeGonder() {
+
+
+
+
+            var select_durum = false;
+
+
+
+            var selects = document.querySelectorAll(".depolarselect");
+
+
+            $.each(selects,function(key,val){
+
+                if(selects[key].value == 0){
+                    select_durum = true;
+
+                }
+
+            });
+
+
+
+
+            if(select_durum){
+
+
+                swalert("warning","Seçilmeyen Depolar Mevcut!","Bu şekilde kayıt gerçekleştirilemez!");
+
+
+
+            }else{
+
+
+
+                var cari_id =  $("#cs_cari_id").val();
+
+
+
+
+                if(cari_id == 0){
+
+
+                    {% if evrak_tipi == "fatura" %}
+
+
+
+
+                    swal({
+                        title: "Hesap Seçili Değil!",
+                        text: "Evrak Stok Çıkış Haraket Evrakı Olarak Uygulanacak!",
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Onaylıyorum!',
+                        cancelButtonText: 'İptal',
+                        confirmButtonClass: 'btn btn-success text-white fuse-ripple-ready',
+                        cancelButtonClass: 'btn btn-danger fuse-ripple-ready ml-2',
+                        buttonsStyling: false
+                    }).then(function (result) {
+
+
+
+                        if(result.value){
+
+                            $("#evrak_tur_input").val(0);
+
+                            formuGonder();
+
+                        }
+
+
+
+                    }, function (dismiss) {
+
+
+
+
+                    });
+
+
+
+
+                    {% elseif evrak_tipi == "haraket" %}
+
+
+                    formuGonder();
+
+                    {% endif %}
+
+
+
+
+
+                }else{
+
+
+                    var evrak_no = $("#evrak_no_input").val();
+
+
+                    if(evrak_no.trim() == ""){
+
+
+                        swalert("warning","Evrak No Yazılmalı!","Fatura Evrak Numarasız Kayıt Edilemez!");
+
+
+                    }else{
+
+
+
+                        formuGonder();
+
+
+
+                    }
+                }
+
+
+
+
+
+            }
+
+
+        }
+
+
+        {% if type == 1 %}
+
+        var kalemler = JSON.parse('{{ evrak_kalemler | raw }}');
+
+        $.each(kalemler, function( key, value ) {
+            console.log("kalem");
+            console.log(value);
+
+
+            if(value.vergi_durum == 1){
+
+                value.stok_fiyat_vergi_durum =  2;
+
+            }else   if(value.vergi_durum == 0){
+
+                value.stok_fiyat_vergi_durum = 1;
+            }else{
+
+
+                value.stok_fiyat_vergi_durum = 1;
+
+            }
+
+            urunHazirla(value);
+        });
+
+        {% endif %}
+
+
+
+
+        $("#standart-depolar-select").html(standartDepoYaz());
+
+
+
+    </script>
+
+
+{% endblock %}

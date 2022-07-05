@@ -1,0 +1,427 @@
+{% extends "layout-light.twig" %}
+
+{% block head %}
+    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+
+    <link rel="stylesheet" href="{{asset('plugins/data-tables/css/datatables.min.css')}}">
+
+    <link href="{{asset('plugins/morris/morris.css')}}" rel="stylesheet" type="text/css" />
+    <style>
+        #section-to-print{
+            display: none;
+        }
+        @media print {
+
+
+
+            body * {
+                visibility: hidden;
+            }
+            #section-to-print, #section-to-print * , #section-to-print > #print-area{
+                visibility: visible;
+                display:block;
+            }
+            #section-to-print {
+                display:block;
+                width:100%;
+                position: absolute;
+                left: 0mm;
+                top: 0mm;
+            }
+
+            #print-area{
+
+                width:58mm;
+                text-align:center;
+                text-weight:bold;
+                margin: auto;
+
+            }
+        }.p-10{
+             padding: 10px !important;
+             min-height: 40px;
+             text-shadow: 0 0 black;
+         }
+
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            color: #fff;
+            background-color: #039BE5;
+        }
+        .form-group>label {
+            color: #3c4252;
+            font-weight: 800;
+        }
+        .apexcharts-tooltip {
+            background: #f3f3f3;
+            color: #000000;
+        }
+
+        .header{
+            background: url({{ asset("images/backgrounds/dark-material-bg.jpg") }}) no-repeat;
+        }
+    </style>
+
+{% endblock %}
+
+    {% block content %}
+
+        <div class="row">
+            <style>
+                .morris-hover-point{
+                    color: #666 !important;
+                }
+            </style>
+            <div class="col-md-12" style="background-color: #1e88e5!important;color: white;">
+                <div id="morris-line-example" style="height: 300px"></div>
+            </div>
+        </div>
+
+        <div class="row">
+   <div class="col-md-12" style="background-color: white;">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+            <li class="nav-item">
+                <a class="nav-link btn active fuse-ripple-ready" id="timeline-tab" data-toggle="tab" href="{{ url }}/satislar" role="tab" aria-controls="timeline-tab-pane" aria-expanded="true">Özet Durum</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link btn fuse-ripple-ready" id="about-tab"  href="{{ url }}/satislar/iki-tarih-gore-satislar"  >Satış Dökümü</a>
+            </li>
+
+
+
+        </ul>
+   </div>   </div>
+
+        <div class="col-md-12 m-t-15">
+<div class="row">
+            <div class="col-md-9">
+                <div class="card ">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <h4>Son Satışlar</h4>
+
+                                <div class="table-responsive">
+                                    <table id="satislartable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                        <tr>
+                                            <th>Tarih</th>
+                                            <th>Evrak No</th>
+                                            <th>Hesap</th>
+                                            <th>Vergili Toplam</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for sonsatis in sonsatislar  %}
+                                            <tr>
+                                                <th scope="row" style="width:120px;">{{sonsatis.created_date|date("d-m-Y H:i:s")}}</th>
+                                                <th style="width:150px;"><button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{sonsatis.id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{sonsatis.evrak_no}}</button></th>
+                                                <th><a href="{{ url }}/cari/show/{{ sonsatis.cari_id }}">{{sonsatis.cari_adi}}</a></th>
+                                                <td style="width:120px;">{{Tl(sonsatis.genel_toplam , 2)}} TL</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="card m-t-15">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <h4>7 Günlük Satışlar</h4>
+
+                                <div class="apexchart-wrapper chart-demo">
+                                    <div id="e-dash1" class="chart-gutters"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+            <div class="col-md-3">
+
+
+
+
+
+
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="float-right">
+                                <i class="dripicons-cart  font-20 text-secondary"></i>
+                            </div>
+                            <span class="badge badge-info">Bugün Satışlar</span>
+                            <h3 class="font-weight-bold">{{Fiyat(satis_raporlari.bugun,"TL",2) | raw }}</h3>
+                            <p class="mb-0 text-muted text-truncate">
+                                {% if gecenhaftayabugun.durum == "up" %}
+                                    <span class="text-success"><i class="mdi mdi-trending-up"></i>{{gecenhaftayabugun.yuzde}}%</span>
+
+                                {% elseif gecenhaftayabugun.durum == "dw" %}
+                                    <span class="text-danger"><i class="mdi mdi-trending-down"></i>{{gecenhaftayabugun.yuzde}}%</span>
+
+                                {% elseif gecenhaftayabugun.durum == "-" %}
+
+                                    <span class="text-danger"> - </span>
+                                {% endif %}
+                                Geçen Haftaya Göre</p>
+                        </div>
+                    </div>
+
+
+                    <div class="card m-t-15">
+                        <div class="card-body">
+                            <div class="float-right">
+                                <i class="dripicons-jewel font-20 text-secondary"></i>
+                            </div>
+                            <span class="badge badge-warning">Bu Hafta Satışlar</span>
+                            <h3 class="font-weight-bold">{{Fiyat(buhaftasatislar , "TL",2) | raw}}</h3>
+                            <p class="mb-0 text-muted text-truncate">Son 7 Günlük Satışlar Toplamı</p>
+                        </div>
+                    </div>
+
+
+                    <div class="card m-t-15">
+                        <div class="card-body">
+                            <div class="float-right">
+                                <i class="dripicons-wallet font-20 text-secondary"></i>
+                            </div>
+                            <span class="badge badge-success">Toplam Satış</span>
+                            <h3 class="font-weight-bold">{{Fiyat(satis_raporlari.toplam,"TL",2) | raw }} </h3>
+                            <p class="mb-0 text-muted text-truncate">2019 Senesi Satış Durumunuz</p>
+                        </div>
+                    </div>
+
+
+
+
+
+            </div>
+</div>
+
+        </div>
+
+
+
+        <!-- sample modal content -->
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mt-0" id="myLargeModalLabel"> </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="invoicearea" class="col-md-12"></div>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    {% endblock %}
+
+ {% block footer %}
+     <script src="{{asset('plugins/morris/morris.min.js')}}"></script>
+     <script src="{{asset('plugins/raphael/raphael.min.js')}}"></script>
+     <script src="{{asset('plugins/apexcharts/apexcharts.min.js')}}"></script>
+
+     <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+     <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+     <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+     <script>
+
+
+
+
+         setDataTable("#satislartable", 0, "satislar-{{bas_tarih}}-ile-{{bit_tarih}}-arasi",false);
+
+
+         // <a href="{{ url }}/fatura/show/" ></a>
+
+
+
+         $(".satisevrakmodal").click(function(){
+
+             $("#invoicearea").html("Yükleniyor....");
+             var id = $(this).attr("data-evrak-id");
+             $("#invoicearea").load("{{ url }}/fatura/show/"+id+"/satis");
+
+         });
+
+
+
+
+
+
+
+
+         var options = {
+
+             chart: {
+                 height: 350,
+                 type: 'bar',
+             },
+             plotOptions: {
+                 bar: {
+                     columnWidth: '50%',
+                     endingShape: 'rounded'
+                 }
+             },
+             dataLabels: {
+                 enabled: false
+             },
+             stroke: {
+                 width: 2
+             },
+             series: [{
+                 name: 'Satış',
+                 data: [{% for gun, satis in son7gun  %}{{satis}},{%endfor%}],
+             }],
+             grid: {
+                 row: {
+                     colors: ['#fff', '#f7f8f9']
+                 }
+             },
+             xaxis: {
+                 labels: {
+                     rotate: -45
+                 },
+                 categories: [{% for gun, satis in son7gun  %}'{{gun}}',{%endfor%}],
+             },
+             yaxis: {
+                 labels: {
+                     formatter: function (value) {
+                         return value+" TL" ;
+                     }
+                 },
+             },
+             fill: {
+                 type: 'gradient',
+                 gradient: {
+                     shade: 'light',
+                     type: "horizontal",
+                     shadeIntensity: 0.25,
+                     gradientToColors: undefined,
+                     inverseColors: true,
+                     opacityFrom: 0.85,
+                     opacityTo: 0.85,
+                     stops: [50, 0, 100]
+                 },
+             },
+
+         }
+
+         var chart = new ApexCharts(
+             document.querySelector("#e-dash1"),
+             options
+         );
+
+
+         chart.render();
+
+
+         var satislar = JSON.parse('{{ satislar | raw }}');
+
+         console.log(satislar);
+
+         var year = "2019";
+
+         var mount = satislar;
+
+
+         !function($) {
+             "use strict";
+
+             var MorrisCharts = function() {};
+
+
+             MorrisCharts.prototype.createLineChart = function(element, data, xkey, ykeys, labels, lineColors) {
+                 Morris.Line({
+                     element: element,
+                     data: data,
+                     xkey: xkey,
+                     ykeys: ykeys,
+                     labels: labels,
+                     hideHover: 'auto',
+                     gridLineColor: '#eef0f2',
+                     gridTextColor : '#fff',
+                     resize: true,
+                     lineColors: lineColors
+                 });
+             },
+
+                 MorrisCharts.prototype.init = function() {
+
+                     //create line chart
+                     var $data  = [
+                         { y: year+'-01', a: mount[1] },
+                         { y:  year+'-02', a: mount[2] },
+                         { y:  year+'-03', a: mount[3]},
+                         { y:  year+'-04', a: mount[4]},
+                         { y:  year+'-05', a: mount[5]},
+                         { y:  year+'-06', a:mount[6]},
+                         { y:  year+'-07', a:mount[7]},
+                         { y:  year+'-08', a: mount[8] },
+                         { y:  year+'-09', a: mount[9] },
+                         { y:  year+'-10', a: mount[10] },
+                         { y:  year+'-11', a: mount[11] },
+                         { y:  year+'-12', a: mount[12] }
+                     ];
+                     this.createLineChart('morris-line-example', $data, 'y', ['a'], ['Satış'], ['#fff']);
+
+
+
+
+                 },
+                 //init
+                 $.MorrisCharts = new MorrisCharts, $.MorrisCharts.Constructor = MorrisCharts
+         }(window.jQuery),
+
+
+             function($) {
+                 "use strict";
+                 $.MorrisCharts.init();
+             }(window.jQuery);
+
+
+
+     </script>
+
+
+
+ {% endblock %}

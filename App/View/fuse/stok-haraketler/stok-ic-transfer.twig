@@ -1,0 +1,714 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+    <style>
+        .urunIsımleArama{
+            list-style: none;
+            position:absolute;
+            z-index:3;
+            right:0px;
+            left:0px;
+            background-color:white;
+            margin-right: 15px;
+            margin-left: 15px;
+            border: 1px solid black;
+            padding: 10px;
+
+        }
+
+        .urunIsımleArama li{
+
+            cursor:pointer;
+            padding: 0px;
+            margin-bottom:10px;
+            border-bottom:1px dashed black;
+
+        }
+
+        .urunIsımleArama li:hover{
+
+            background-color: #e6f2ff;
+
+        }
+
+        #aramasonuc{
+
+
+
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+    {% if mobile == 1 %}
+        <div class="row">
+
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <a href="{{url}}/fatura" class="btn btn-danger waves-effect waves-light">
+                    <i class="fa fa-backward mr-2"></i>Geri Dön</a>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div >
+
+    <form id="stoklistesi"  class="row" action="{{url}}/stok-haraket/append" method="post">
+
+
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Stok Seçimi İsim</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Stok Adını Yazınız:</label>
+                                <input type="text" class="form-control" id="stokisimlearamainput" onkeyup="urungetirisimle(this.value)">
+                                    <div id="aramasonuc"></div>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+              <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Stok Seçimi İsim</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Stok Bakordunu Okutunuz:</label>
+                                <input type="text" class="form-control"  id="barcodeilegetirinput" onkeypress="return urunbarcodeilegetir(event)">
+    
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+             <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Seçili Stok</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                          
+                               <div id="seciliurun" style="margin-top:10px;font-weight: bold;text-align: center;"></div>
+                     
+                               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        
+     
+
+        <div class="col-md-12">
+            <div class="card">
+                  <div class="card-header">
+                    <h5>Stok Transfer İşlemleri</h5>
+                </div>
+                
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <input type="hidden" name="cari_id" value="{{hesap_id}}"/>
+                                {{csrf | raw}}
+                                <table class="table  invoice-detail-table">
+                                    <tdead>
+                                        <tr class="thead-default">
+                                            <th>Depo</th>
+                                            <th>Mevcut</th>
+
+                                            <th>Seri No*</th>
+
+                                            <th>Aktarılacak Miktar</th>
+                                            <th>Hedef Depo</th>
+                                            <th>İşlem</th>
+
+
+                                        </tr>
+                                    </tdead>
+                                    <tbody id="secili_stok_listesi"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</form>
+    </div>
+{% endblock %}
+{% block footer %}
+    <script>
+        //fullcontent();
+
+        var sayi = 1;
+
+        let depo_json = '{{depolar | raw}}';
+
+        try {
+
+            depo_json = JSON.parse(depo_json);
+
+            console.log(depo_json);
+        } catch (e) {
+            console.log(e);
+        }
+
+
+        function urunbarcodeilegetir(e) {
+            //See notes about 'which' and 'key'
+            if (e.keyCode == 13) {
+                var tb = document.getElementById("barcodeilegetirinput");
+
+
+                var str = tb.value;
+
+                document.getElementById("barcodeilegetirinput").value = "";
+
+
+                if (str.length <= 1) {
+                    document.getElementById("aramasonuctable").innerHTML = "";
+                    document.getElementById("arama_sonuclari_row").style.display = "none";
+
+
+                    return;
+                    
+                } else if (str.length > 1) {
+
+                    console.log(str);
+
+                    var jqxhr = $.post("{{url}}/stok/search/full", {query: str})
+                            .done(function (data) {
+
+                                data = data.trim();
+
+                                console.log(data);
+
+
+
+                                if (data == "non") {
+
+
+
+                                } else {
+
+
+                                    var stok_data = JSON.parse(data);
+
+
+
+                                    if (stok_data.durum == "ok") {
+
+                                        var lihtml = "";
+
+                                        $.each(stok_data.stok, function (key, val) {
+
+
+                                         depourunlerinigetir(val.id ,val.stok_adi);
+                                        
+
+                                        });
+                                        
+                                  
+
+                               
+                                    }else{
+                                        
+                                          document.getElementById("seciliurun").innerHTML = "Barkod: "+str+" Stok Bulunamadı!";      
+                                        
+            }
+
+
+
+                                }
+
+                            })
+                            .fail(function () {
+                                alert("error");
+                            });
+                }
+                return false;
+            }
+        }
+        
+        
+
+
+        function urungetirisimle(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/stok/stok-getir-isimle-depoya", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                            console.log(data);
+
+
+                            document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                            if (data == "non") {
+
+                                document.getElementById("aramasonuc").innerHTML = "Ürün Bulunamadı!";
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "<ul class=\"urunIsımleArama\">";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += liurunbas(val);
+
+                                    });
+
+                                    document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+                                } else {
+
+                                    console.log("Ürün Bulunamadı");
+                                    notify("Ürün Bulunamadı!", "danger");
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+
+
+
+
+
+        }
+
+        function liurunbas(data) {
+        
+                data.stok_adi = data.stok_adi.replace("\"","^");
+
+            var html = "<li data-json='" + JSON.stringify(data) + "' onclick='depourunlerinigetir(" + data.id + ",\"" + data.stok_adi + "\")'>" + data.stok_adi + " (" + data.stok_adet + ")</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function depourunlerinigetir(id, stok_adi) {
+
+            document.getElementById("seciliurun").innerHTML = stok_adi;
+
+
+            urunleriCek(id);
+
+
+
+            document.getElementById("secili_stok_listesi").innerHTML = "";
+            document.getElementById("aramasonuc").innerHTML = "";
+            document.getElementById("aramasonuc").style.border = "0px";
+            document.getElementById("stokisimlearamainput").value = "";
+
+        }
+
+
+        function urunleriCek(id) {
+
+            var jqxhr = $.post("{{url}}/stok-depolar/urune-gore-listesi", {urun_id: id})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+                        if (data == "non") {
+
+                        } else {
+
+                            $("#secili_stok_listesi").html("");
+
+                            var stok_data = JSON.parse(data);
+
+
+                            console.log(stok_data);
+
+
+                            if (stok_data.durum == "ok") {
+
+                                var sayi = 0;
+
+                                $.each(stok_data.stok.ozel, function (key, val) {
+
+                                    urunHazirlaSeri(val, id, sayi);
+                                    sayi++;
+                                });
+
+
+                                $.each(stok_data.stok.klasik, function (keys, vals) {
+
+                                    urunHazirla(vals, id, sayi);
+                                    sayi++;
+                                });
+
+
+
+
+                            } else {
+
+                                console.log("Ürün Bulunamadı");
+                                notify("Ürün Bulunamadı!", "danger");
+                            }
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+
+        }
+
+        function urunHazirlaSeri(data, stok_id, sayi) {
+
+
+            var html = "";
+            html += '<tr class="data-tr-' + data.id + '-' + sayi + ' serinumaralilar">';
+            html += "<td>" + depo(data.depo) + "</td>";
+            html += "<td>" + data.adet + "</td>";
+            html += "<td><input type=\"text\" data-id=\"" + sayi + "\" data-input=\"inpt-serino-" + sayi + "\"  class=\"form-control\" style=\"width:150px;\" value=\"" + data.seri_no + "\"/ readonly></td>";
+            html += "<td><input type=\"number\" data-id=\"" + sayi + "\" data-input=\"inpt-cikis-adet-" + sayi + "\"  class=\"form-control\" style=\"width:100px;\" value=\"1\"/ readonly></td>";
+            html += "<td><select data-id=\"" + sayi + "\"  class=\"depolarselect form-control \" data-input=\"inpt-depolar-" + sayi + "\" >" + igdepolar(data.depo) + "</select></td>";
+            html += "<td><button type=\"button\" onclick=\"ictransferYap(" + data.depo + "," + stok_id + "," + sayi + "," + data.ozel_urun_id + ",'" + data.seri_no + "')\" class=\"btn btn-icon btn-danger\"><i class=\"mdi mdi-shuffle\"></i></button>";
+            html += "<button type=\"button\" onclick=\"seriTemizle("+data.ozel_urun_id+","+stok_id+")\" class=\"btn btn-icon btn-warning\"><i class=\"mdi mdi-delete\"></i></button></td> ";
+            html += "</tr>";
+
+            $("#secili_stok_listesi").append(html);
+
+        }
+
+
+        function urunHazirla(data, stok_id, usayi) {
+
+            if (data.cikisadet !== null) {
+
+                data.adet = data.adet - data.cikisadet;
+            }
+
+            if (data.adet > 0) {
+
+
+
+                var html = "";
+                html += '<tr class="data-tr-' + stok_id + '-' + usayi + ' serinumarasizlar">';
+                html += "<td>" + depo(data.depo) + "<input type=\"hidden\" data-input=\"inpt-alisfiyati-" + usayi + "\" value=\""+data.alis_fiyati+"\"></td>";
+                html += "<td>" + data.adet + "</td>";
+                html += "<td><input type=\"text\"  data-id=\"" + usayi + "\" data-input=\"inpt-serino-" + usayi + "\"  class=\"form-control\" style=\"width:150px;\" value=\"" + data.seri_no + "\"/ ></td>";
+                html += "<td><input type=\"number\" max=\"" + data.adet + "\" class=\"form-control\"  min=\"1\" data-id=\"" + usayi + "\" data-input=\"inpt-cikis-adet-" + usayi + "\"  style=\"width:100px;\" value=\"1\"/ ></td>";
+                html += "<td><select data-id=\"" + usayi + "\"  class=\"depolarselect form-control \" data-input=\"inpt-depolar-" + usayi + "\" >" + igdepolar(data.depo) + "</select></td>";
+                html += "<td><button type=\"button\" onclick=\"ictransferYap(" + data.depo + "," + stok_id + "," + usayi + ",0,0)\" class=\"btn btn-icon btn-danger\"><i class=\"mdi mdi-shuffle\"></i></button>";
+               
+            
+            
+            
+           html += "</td> ";
+            
+            
+            html += "</tr>";
+
+
+
+                $("#secili_stok_listesi").append(html);
+
+            }
+        }
+
+
+        function myTrim(x) {
+          return x.replace(/^\s+|\s+$/gm,'');
+        }
+
+
+        function seriTemizle(ozel_urun_id,stok_id){
+            
+            
+                  swal({
+                title: 'Eminmisiniz?',
+                text:"Ürünü Özel Ürün Ve Serinumarası Takibinden Çıkartmak Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Çıkart!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+                if(result.value){
+                            var jqxhr = $.post("{{url}}/stok-haraket/ozel-urunden-cikar", {ozel_urun_id: ozel_urun_id})
+                                .done(function (data) {
+
+                                    data = data.trim();
+
+                                    console.log(data);
+
+                                    if (data == "ok") {
+                                        urunleriCek(stok_id);
+                                        
+                                          notify("İşlem Tamamlandı...", "success");
+                                    } else {
+
+                                        notify("İşlem Tamamlanamadı!", "danger");
+
+                                    }
+
+                                })
+                                .fail(function () {
+                                    alert("error");
+                                }); 
+                           
+                }
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+             
+                 if (dismiss === 'cancel') {
+              
+                 }
+                 
+                 
+            });
+
+
+
+
+
+
+               
+        }
+
+
+        function ictransferYap(cikicak_depo, stok_id, list_no, ozel_durum, seri_no) {
+
+            var cikacak_adet = $("[data-input = 'inpt-cikis-adet-" + list_no + "']").val();
+
+            var yeni_depo = $("[data-input = 'inpt-depolar-" + list_no + "']").val();
+
+            var real_seri_no = $("[data-input = 'inpt-serino-" + list_no + "']").val();
+            
+            var alis_fiyat = $("[data-input = 'inpt-alisfiyati-" + list_no + "']").val();
+            
+            var islem = 1;
+
+
+            console.log(real_seri_no);
+            
+            real_seri_no = myTrim(real_seri_no);
+            
+             console.log(stok_id + " stok numaralı  Ürün " + cikicak_depo + " depodan " + cikacak_adet + " Adet " + yeni_depo + " Depoya aktarılacak");
+
+            if(ozel_durum == 0 && real_seri_no !=  ""){
+                
+                
+                if(cikacak_adet == 1){
+                    
+                    
+                    
+                          swal({
+                title: 'Eminmisiniz?',
+                text: "Stoğunuzdaki Ürün Grubundan Seri Numarası Takipli Özel Ürün Oluşturmak Üzeresiniz!\nStandart stok alış fiyatı işlecektir!",
+                   type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Oluştur!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+                if(result.value){
+                              var prt = prompt("Kdv Hariç Alış Fiyatınızı Yazın:", alis_fiyat);
+
+                        if (prt != null) {
+                            icTransferTamamla(stok_id,cikicak_depo,yeni_depo,cikacak_adet,ozel_durum,real_seri_no,1,prt);  
+                        }
+                           
+                }
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+             
+                 if (dismiss === 'cancel') {
+              
+                 }
+                 
+                 
+            });
+
+                    
+
+
+               }else{
+                   
+               
+                    
+                       swalert("warning", "Başarısız!", "Stoğunuzdaki Ürün Grubundan Seri Numarası Takipli Özel Ürün Oluşturmak İçin Çıkacak Stok Adedi 1 Seçilmeli!");
+
+               }
+                
+            }else{
+                
+          icTransferTamamla(stok_id,cikicak_depo,yeni_depo,cikacak_adet,ozel_durum,real_seri_no,0,0);       
+        }
+                
+
+
+
+
+
+        }
+        
+        
+        function icTransferTamamla(stok_id,cikicak_depo,yeni_depo,cikacak_adet,ozel_durum,seri_no,ozel_ceviri,alis_fiyat){
+             if (yeni_depo == 0) {
+
+                        swalert("warning", "Başarısız!", "Stok Aktarılacak Depoyu Seçmediniz!");
+
+                    } else {
+
+             var jqxhr = $.post("{{url}}/stok-haraket/ic-transfer-yap", {stok_id: stok_id, source: cikicak_depo, target: yeni_depo, adet: cikacak_adet, ozel: ozel_durum, seri: seri_no,cevir : ozel_ceviri , alis:alis_fiyat})
+                                .done(function (data) {
+
+                                    data = data.trim();
+
+                                    console.log(data);
+
+                                    if (data == "ok") {
+                                        urunleriCek(stok_id);
+                                        
+                                          notify("İşlem Tamamlandı...", "success");
+                                    } else {
+
+                                        notify("İşlem Tamamlanamadı!", "danger");
+
+                                    }
+
+                                })
+                                .fail(function () {
+                                    alert("error");
+                                }); 
+                            
+
+
+}
+        
+    }
+
+
+        function depo(depo_id) {
+
+            var depolar_html = "";
+
+            $.each(depo_json, function (key, val) {
+
+                if (val.id == depo_id) {
+                    depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+
+                }
+
+            });
+
+
+            return depolar_html;
+        }
+
+
+
+
+        function depolar() {
+
+            var depolar_html = "<option value='0' selected=''>Depo Seçiniz</option>";
+
+            $.each(depo_json, function (key, val) {
+
+                depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+            });
+
+
+            return depolar_html;
+        }
+
+
+        function igdepolar(depo_id) {
+
+            var depolar_html = "<option value='0' selected=''>Depo Seçiniz</option>";
+
+            $.each(depo_json, function (key, val) {
+
+       
+                    depolar_html += "<option value='" + val.id + "'>" + val.stok_depo_adi + "</option>";
+          
+
+
+            });
+
+
+            return depolar_html;
+        }
+
+
+
+
+       window.onload = function () {
+            document.getElementById("barcodeilegetirinput").focus();
+        };
+
+
+    </script>
+{% endblock %}

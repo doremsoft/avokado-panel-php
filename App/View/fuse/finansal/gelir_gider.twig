@@ -1,0 +1,355 @@
+{% extends "layout-light.twig" %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{{ asset('plugins/data-tables/css/datatables.min.css') }}">
+
+    <link href="{{ asset('plugins/morris/morris.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        #section-to-print {
+            display: none;
+        }
+
+        @media print {
+
+
+            body * {
+                visibility: hidden;
+            }
+
+            #section-to-print, #section-to-print *, #section-to-print > #print-area {
+                visibility: visible;
+                display: block;
+            }
+
+            #section-to-print {
+                display: block;
+                width: 100%;
+                position: absolute;
+                left: 0mm;
+                top: 0mm;
+            }
+
+            #print-area {
+
+                width: 58mm;
+                text-align: center;
+                text-weight: bold;
+                margin: auto;
+
+            }
+        }
+
+        .p-10 {
+            padding: 10px !important;
+            min-height: 40px;
+            text-shadow: 0 0 black;
+        }
+
+        .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+            color: #fff;
+            background-color: #039BE5;
+        }
+
+        .form-group > label {
+            color: #3c4252;
+            font-weight: 800;
+        }
+
+        .apexcharts-tooltip {
+            background: #f3f3f3;
+            color: #000000;
+        }
+
+        .header {
+            background: url({{ asset("images/backgrounds/dark-material-bg.jpg") }}) no-repeat;
+        }
+    </style>
+
+{% endblock %}
+
+    {% block content %}
+        <div  class="col-md-12">
+        <div class="row">
+
+
+            <style>
+                .morris-hover-point {
+                    color: #666 !important;
+                }
+            </style>
+            <div class="col-md-12" style="background-color: #1e88e5!important;color: white;">
+                <div id="morris-line-example" style="height: 300px"></div>
+            </div>
+
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="row">
+
+                <div class="col-md-3 ">
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="mt-0 header-title">{{buyil}} Yılı Alım / Satım</h4>
+                            <div id="morris-donut-buyil-ticaret" style="height: 250px"></div>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="col-md-3 m-m-t-15">
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="mt-0 header-title">{{ buayisim }} Ayı Alım / Satım </h4>
+                            <div id="morris-donut-buay-alimsatim" style="height: 250px"></div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-3 m-m-t-15 ">
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="mt-0 header-title">{{buyil}} Yılı  Gelir / Gider</h4>
+                            <div id="morris-donut-buyil" style="height: 250px"></div>
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <div class="col-md-3 m-m-t-15">
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <h4 class="mt-0 header-title">{{ buayisim }} Ayı Gelir / Gider </h4>
+                            <div id="morris-donut-buay" style="height: 250px"></div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+
+
+            </div>
+
+        </div>
+        </div>
+        </div>
+
+
+    {% endblock %}
+
+ {% block footer %}
+     <script src="{{ asset('plugins/morris/morris.min.js') }}"></script>
+     <script src="{{ asset('plugins/raphael/raphael.min.js') }}"></script>
+     <script src="{{ asset('plugins/apexcharts/apexcharts.min.js') }}"></script>
+
+
+     <script>
+
+
+         var gelirmount =    JSON.parse('{{ gelir_yillik | raw }}');
+         var gidermount =    JSON.parse('{{ gider_yillik | raw }}');
+         var satislarmount = JSON.parse('{{ satislar | raw }}');
+         var alimlarmount = JSON.parse('{{ alimlar | raw }}');
+
+         var year = "{{buyil}}";
+         var buay = {{buay}};
+
+         var gelirToplam = 0;
+
+         var giderToplam = 0;
+
+         var satislarToplam = 0;
+         var alimlarToplam = 0;
+
+
+
+         for(var i = 1 ; i < 12 ; i++){
+
+
+             satislarToplam = satislarToplam + parseFloat(satislarmount[i]);
+             alimlarToplam = alimlarToplam + parseFloat(alimlarmount[i]);
+
+
+             gelirToplam = gelirToplam +  parseFloat(gelirmount[i]);
+             giderToplam = giderToplam +  parseFloat(gidermount[i]);
+
+         }
+
+
+         var buayGelirToplam = gelirmount[{{buay}}];
+         var buayGiderToplam =gidermount[{{buay}}];
+         var buaySatislarToplam = satislarmount[{{buay}}];
+         var buayAlimlarToplam = alimlarmount[{{buay}}];
+
+         !function ($) {
+             "use strict";
+
+             var MorrisCharts = function () {
+             };
+
+
+             MorrisCharts.prototype.createLineChart = function (element, data, xkey, ykeys, labels, lineColors) {
+                 Morris.Line({
+                     element: element,
+                     data: data,
+                     xkey: xkey,
+                     ykeys: ykeys,
+                     labels: labels,
+                     hideHover: 'auto',
+                     gridLineColor: '#eef0f2',
+                     gridTextColor: '#fff',
+                     resize: true,
+                     lineColors: lineColors
+                 });
+             },  MorrisCharts.prototype.createDonutChart = function(element, data, colors) {
+                 Morris.Donut({
+                     element: element,
+                     data: data,
+                     resize: true,
+                     colors: colors
+                 });
+             },
+
+
+                 MorrisCharts.prototype.init = function () {
+
+                     //create line chart
+                     var $data = [
+                         {y: year + '-01', a: gelirmount[1], b: gidermount[1] , c:satislarmount[1] , d:alimlarmount[1]  },
+                         {y: year + '-02', a: gelirmount[2], b: gidermount[2] , c:satislarmount[2], d:alimlarmount[2] },
+                         {y: year + '-03', a: gelirmount[3], b: gidermount[3] , c:satislarmount[3], d:alimlarmount[3] },
+                         {y: year + '-04', a: gelirmount[4], b: gidermount[4] , c:satislarmount[4], d:alimlarmount[4] },
+                         {y: year + '-05', a: gelirmount[5], b: gidermount[5] , c:satislarmount[5], d:alimlarmount[5] },
+                         {y: year + '-06', a: gelirmount[6], b: gidermount[6] , c:satislarmount[6], d:alimlarmount[6] },
+                         {y: year + '-07', a: gelirmount[7], b: gidermount[7] , c:satislarmount[7], d:alimlarmount[7] },
+                         {y: year + '-08', a: gelirmount[8], b: gidermount[8] , c:satislarmount[8], d:alimlarmount[8] },
+                         {y: year + '-09', a: gelirmount[9], b: gidermount[9] , c:satislarmount[9], d:alimlarmount[9] },
+                         {y: year + '-10', a: gelirmount[10], b: gidermount[10] , c:satislarmount[10], d:alimlarmount[10] },
+                         {y: year + '-11', a: gelirmount[11], b: gidermount[11] , c:satislarmount[11], d:alimlarmount[11] },
+                         {y: year + '-12', a: gelirmount[12], b: gidermount[12] , c:satislarmount[12], d:alimlarmount[12] }
+                     ];
+                     this.createLineChart('morris-line-example', $data, 'y', ['a','b','c','d'], ['Gelir','Gider','Satış','Alım'], ['#fff','#f64069','#000','#ffc400']);
+
+
+                     var bufarkLAbel = "Kazanç";
+                     var bufarktutar = parseFloat(buayGelirToplam - buayGiderToplam).toFixed(2)
+
+                     if(bufarktutar < 0){
+
+                         bufarkLAbel = "Zarar!";
+                         bufarktutar = Math.abs(bufarktutar);
+                     }
+
+
+
+                     if(buayGiderToplam > 0 || buayGelirToplam > 0){
+
+                         var $donutData = [
+                             {label: "Gider", value: buayGiderToplam},
+                             {label: "Gelir", value:  buayGelirToplam },
+                             {label:bufarkLAbel, value: bufarktutar }
+                         ];
+                         this.createDonutChart('morris-donut-buay', $donutData, [ '#f64069', '#00caaf' , '#f8b75e']);
+
+                     }else{
+
+                        $("#morris-donut-buay").html("Hiç Kayıt Bulunmamaktadır!");
+                     }
+
+                     var farkLAbel = "Kazanç";
+                    var farktutar = parseFloat(gelirToplam - giderToplam).toFixed(2);
+
+                    if(farktutar < 0){
+
+                        farkLAbel = "Zarar!";
+
+                        farktutar = Math.abs(farktutar);
+                    }
+
+
+                     if(giderToplam > 0 || gelirToplam > 0) {
+                         var $donutDataYil = [
+                             {label: "Gider", value: parseFloat(giderToplam).toFixed(2)},
+                             {label: "Gelir", value: parseFloat(gelirToplam).toFixed(2)},
+                             {label: farkLAbel, value: farktutar}
+                         ];
+                         this.createDonutChart('morris-donut-buyil', $donutDataYil, ['#f64069', '#00caaf', '#f8b75e']);
+
+                     }else{
+
+                         $("#morris-donut-buyil").html("Hiç Kayıt Bulunmamaktadır!");
+                     }
+
+
+
+                     //Alım SAtım
+
+
+                     if(alimlarToplam > 0 || satislarToplam > 0) {
+                         var $donutDataYilTicaret = [
+                             {label: "Alımlar", value: parseFloat(alimlarToplam).toFixed(2)},
+                             {label: "Satışlar", value: parseFloat(satislarToplam).toFixed(2)}
+                         ];
+                         this.createDonutChart('morris-donut-buyil-ticaret', $donutDataYilTicaret, ['#f64069', '#00caaf']);
+
+                     }else{
+
+                         $("#morris-donut-buyil-ticaret").html("Hiç Kayıt Bulunmamaktadır!");
+                     }
+
+
+
+
+                     if(buaySatislarToplam > 0 || buayAlimlarToplam > 0) {
+                         var $donutDataYilTicaret = [
+                             {label: "Alımlar", value: parseFloat(buayAlimlarToplam).toFixed(2)},
+                             {label: "Satışlar", value: parseFloat(buaySatislarToplam).toFixed(2)}
+                         ];
+                         this.createDonutChart('morris-donut-buay-alimsatim', $donutDataYilTicaret, ['#f64069', '#00caaf']);
+
+                     }else{
+
+                         $("#morris-donut-buay-alimsatim").html("Hiç Kayıt Bulunmamaktadır!");
+                     }
+
+
+                 },
+
+$.MorrisCharts = new MorrisCharts, $.MorrisCharts.Constructor = MorrisCharts
+         }(window.jQuery), function ($) {"use strict";$.MorrisCharts.init();}(window.jQuery);
+
+
+     </script>
+
+
+
+ {% endblock %}

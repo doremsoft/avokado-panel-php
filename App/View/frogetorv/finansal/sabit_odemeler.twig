@@ -1,0 +1,138 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block content %}
+    <div class="row">
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Sabit Ödemeleriniz</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+
+                                    <thead>
+                                    <tr>
+                                        <th>Sabit Gün</th>
+                                        <th>Geçerlilik Tarihi</th>
+                                        <th>Bildirim</th>
+                                        <th>Bildirim Zamanları</th>
+                                        <th>Hesap Adı</th>
+                                        <th>Ödeme Adı</th>
+                                        <th>Ödeme Tutarı</th>
+                                        <th>İşlem</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% set toplam_tutar = 0 %}
+                                    {% for odeme in sabit_odemeler  %}
+
+
+                                        <tr>
+
+                                            <td>
+
+                                            {{ odeme.gun }}
+
+                                            </td>
+
+                                            <td>
+
+                                                {{  tarih(odeme.baslama_tarihi) }} <> {{ tarih(odeme.bitis_tarihi)  }}
+
+                                            </td>
+
+                                            <td>
+
+                                                {% if odeme.bildirim_durum == 1 %}
+                                                    Aktif
+
+                                                {% else %}
+                                                    Bildirim Kapalı!
+                                                    {% endif %}
+
+                                            </td>
+
+
+
+
+                                            <td>
+
+                                                {% if odeme.bildirim_durum == 1 %}
+
+                                                    {% if odeme.ondecen_bildirim > 0 %}
+
+                                                     ( {{ odeme.ondecen_bildirim }} Gün Önce )
+
+                                                    {% endif %}
+
+                                                    {% if odeme.ayni_gun_bildirim == 1 %}
+
+                                                        ( Aynı Gün )
+
+                                                    {% endif %}
+
+                                                    {% if odeme.ertesi_gun_bildirim == 1 %}
+
+                                                        ( Ertesi Gün )
+
+                                                    {% endif %}
+
+                                                {% endif %}
+                                            </td>
+
+
+
+                                            <td>
+
+
+                                                {{ odeme.cari_adi }}
+
+                                            </td>
+
+
+                                            <td>
+
+
+                                                {{ odeme.baslik }}
+
+                                            </td>
+
+                                            <td width="150px">
+                                                {{ Tl(odeme.tutar ,2 ,"non") }} {{ odeme.tutar_doviz }}
+                                                {% set toplam_tutar = toplam_tutar + odeme.tutar %}
+
+                                            </td>
+
+
+                                            <td width="150px">
+
+                                                <a  class="btn btn-icon btn-primary"  href="{{ url }}/finansal/sabit-odeme-duzenle/{{ odeme.id }}"><i class="fa fa-edit"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+
+                          <label style="font-weight: bold;">Toplam: {{ toplam_tutar }} TL</label>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

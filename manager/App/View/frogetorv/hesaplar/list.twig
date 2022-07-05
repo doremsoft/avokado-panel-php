@@ -1,0 +1,162 @@
+{% extends "layout-light.twig" %}
+
+        {% block head %}
+
+
+        <!-- DataTables -->
+        <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+        <!-- Responsive datatable examples -->
+        <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" /> 
+
+
+
+    {% endblock %}
+    {% block content %}
+
+ <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+
+                   <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                        <div class="form-group">
+                                        <label>Sunucu:</label>
+                                        <select id="selected_server" class="form-control">
+
+                                            <option name="avokadoyazilim.com">avokadoyazilim.com</option>
+
+
+                                        </select>
+                                    </div>
+
+
+
+<div id="toplu-guncelle-msj"></div>
+                <button type="button" onclick="topluDbGuncelle();" id="toplu-guncelle-btn" class="btn btn-danger">Toplu Veritabanı Güncelle</button>
+   </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="senetlistesitable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Hesap No</th>
+                                             
+                                                <th>Server Url</th>
+                                           
+                                                <th>Db Name</th>
+                                                <th>Server İp</th>
+                                                <th>İşlem</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for hesap in hesaplar  %}
+                                                
+                                                
+                                                {% if hesap.account_type == 2 %}
+                                                <tr>
+                                                    <td>{{ hesap.account_no }}</td>
+          
+                                                    <td>{{ hesap.server_connection_protocol}}{{ hesap.server}}</td>
+                                                  
+                                                    <td>{{ hesap.db_name }}</td>
+                                                    <td>{{ hesap.server_ip}}</td>
+                                                    <td style="width:120px;">{% if hesap.account_no != 1 %} 
+                                                        <a href="{{ url }}/database/update-prepare/{{ hesap.id }}">Db Güncelle</a> - 
+                                                        <a href="{{ url }}/database/get-stocks/{{ hesap.id }}">Stok Çek</a> - 
+                                                        <a href="{{ url }}/hesaplar/edit/{{ hesap.id }}">Düzenle</a>
+                                                        
+                                                        
+                                                        {% endif %}</td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>  </div>
+            </div>
+
+
+
+
+
+
+        {% endblock %}
+
+        {% block footer %}
+            <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+            <!-- Buttons examples -->
+            <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+            <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+            <!-- Responsive examples -->
+            <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+            <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+            <script> setDataTable("#senetlistesitable", 1, "senetler-{{bas_tarih|date("d-m-Y")}}-ile-{{bit_tarih|date("d-m-Y")}}-arasi");
+
+
+
+            function topluDbGuncelle(){
+                    $("#toplu_guncelle_msj").html("Veritabanları Güncelleniyor...");
+
+                $.post( "{{ url }}/database/all-db-update", {server : $("#selected_server").val()})
+                        .done(function( data ) {
+
+
+                            console.log(data);
+
+                            if(data == 1){
+
+                            alert( "Güncelleme Tamamlandı");
+                            }else{
+
+                            alert( "Hata Oldu");
+
+                            }
+
+
+                            $("#toplu_guncelle_msj").html("");
+                            $("#toplu-guncelle-btn").show();
+                        });
+
+            }
+
+
+
+            </script>
+
+
+
+        {% endblock %}

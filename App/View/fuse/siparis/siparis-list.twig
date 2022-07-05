@@ -1,0 +1,269 @@
+{% extends "layout-light.twig" %}
+
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">description</i>
+
+                                        </span>
+                        <span class="logo-text h4">Siparişler</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+
+
+            <div class="page-content col-md-12 p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="contacts-list" style="padding-bottom: 20px;">
+
+
+
+
+
+
+                    <div class="card">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+
+                                <table class="table ">
+
+                                    <thead>
+
+                                    <tr>
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">Sipariş Kodu</span>
+                                            </div>
+                                        </th>
+
+
+
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">Müşteri</span>
+                                            </div>
+                                        </th>
+
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">Toplam</span>
+                                            </div>
+                                        </th>
+
+
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">Durum</span>
+                                            </div>
+                                        </th>
+
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">Zaman</span>
+                                            </div>
+                                        </th>
+
+                                        <th>
+                                            <div class="table-header">
+                                                <span class="column-title">İşlem</span>
+                                            </div>
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    {% for siparis in siparisler.result %}
+                                        <tr>
+                                            <td>{{ siparis.siparis_kod }}</td>
+
+                                            <td>{{ siparis.cari_adi }}</td>
+                                            <td>{{ Tl(siparis.genel_toplam) }} TL</td>
+                                            <td>
+                                                {% if siparis.siparis_durumu == 0 %}
+
+                                                    <span class="badge badge-dark">Sipariş Onay Bekleniyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 1 %}
+
+                                                    <span class="badge badge-danger"> Ödeme Bekleniyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 2 %}
+
+                                                    <span class="badge badge-dark"> Tedarik Bekleniyor</span>
+                                                {% elseif siparis.siparis_durumu == 10 %}
+
+                                                    <span class="badge badge-dark"> İmalat Bekleniyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 3 %}
+
+                                                    <span class="badge badge-warning">Teslimat Bekleniyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 4 %}
+
+                                                    <span class="badge badge-warning">Evrak Bekleniyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 5 %}
+
+                                                    <span class="badge badge-secondary">Hazırlanıyor</span>
+
+                                                {% elseif siparis.siparis_durumu == 6 %}
+
+                                                    <span class="badge badge-info"> Kargoya Verildi</span>
+
+                                                {% elseif siparis.siparis_durumu == 7 %}
+
+                                                    <span class="badge badge-success">Teslim Edildi</span>
+
+                                                {% elseif siparis.siparis_durumu == 8 %}
+
+                                                    <span class="badge badge-danger"> İşlem Onayı Bekliyor</span>
+                                                {% elseif siparis.siparis_durumu == 9 %}
+
+                                                    <span class="badge badge-danger"> Taslak Sipariş</span>
+
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ siparis.created_date|date("d-m-Y H:i:s") }}</td>
+                                            <td>
+
+                                                <button type="button" onclick="window.location.href='{{ url }}/siparis/islem/{{siparis.id  }}'" class="btn btn-secondary waves-effect waves-light alimevrakmodal">
+                                                    İşlem
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+
+
+                                    </tbody>
+                                </table>
+
+
+                            </div>
+                            <!-- / CONTACT LIST -->
+                            <div class="col-md-12" style="padding-top: 25px;">
+                                <div class="row">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-end">
+                                            {{paginate(siparisler.paginate,"siparis") | raw }}
+                                        </ul>
+                                    </nav>
+
+                                </div>
+                            </div>
+                        </div><!--end card-body-->
+
+
+                    </div><!--end card-->
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+                <!-- / CONTACT LIST -->
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+        (function () {
+            $(document).ready(function () {
+                $('#e-commerce-orders-table').DataTable(
+                    {
+                        dom: 'rt<"dataTables_footer"ip>',
+                        columnDefs: [
+                            {
+                                // Target the id column
+                                targets: 0,
+                                width: '72px'
+                            },
+                            {
+                                // Target the price column
+                                targets: 3,
+                                render: function (data, type) {
+                                    if (type === 'display') {
+                                        return '<div class="layout-align-start-start layout-row">' + '<i class="s-4 text-muted"></i>' + '<span>' + data + '</span>' + '</div>';
+                                    }
+
+                                    return data;
+                                }
+                            },
+                            {
+                                // Target the actions column
+                                targets: 5,
+                                responsivePriority: 1,
+                                filterable: false,
+                                sortable: false
+                            }
+                        ],
+
+                        initComplete: function () {
+                            var api = this.api(),
+                                searchBox = $('#orders-search-input');
+
+                            // Bind an external input as a table wide search box
+                            if (searchBox.length > 0) {
+                                searchBox.on('keyup', function (event) {
+                                    api.search(event.target.value).draw();
+                                });
+                            }
+                        },
+                        lengthMenu: [10, 20, 30, 50, 100],
+                        pageLength: 20,
+                        scrollY: 'auto',
+                        scrollX: false,
+                        responsive: true,
+                        autoWidth: false
+                    }
+                );
+
+            });
+        })();
+    </script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+        <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Depo Listesi</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Depo Adı</th>
+                               
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for depo in depolar  %}
+                                        <tr>
+                                            <td>{{depo.stok_depo_adi}}</td>
+                                      
+                                            <td><a href="{{url}}/stok-depolar/show/{{depo.id}}">Göster</a> </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

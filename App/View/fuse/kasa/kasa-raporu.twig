@@ -1,0 +1,117 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance_wallet</i>
+
+                                        </span>
+                    <span class="logo-text h4">Nakit İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" id="timeline-tab"  href="{{ url }}/kasa/index" >Özet Durum</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready" id="about-tab"  href="{{ url }}/kasa/kasa-raporlari"  >Nakit Hareketleri</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-virman" >Kasa Virman</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/yeni-haraket" >Yeni Haraket</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-iptal-raporlari" >İptal Kayıtları</a>
+                </li>
+
+            </ul>
+        </div>   </div>
+
+
+      <div class="row">
+          
+    <div class="col-md-12">
+        <div class="card" style="border-radius: 0px;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/kasa/kasa-raporlari-goster" method="post">
+                            {{csrf | raw}}
+
+
+                            <div class="row">
+
+
+
+
+                                <div class="col-md-4">
+                                    <label>Kasa</label>
+                                    <select class="form-control" name="kasa_id">
+                                        {% for kasa in kasalar  %}
+                                            <option value="{{kasa.id}}" >{{kasa.kasa_adi}}</option>
+
+
+                                        {% endfor %}
+                                    </select>
+
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Rapor Başlama Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bas_tarih" value="{{bugun}}"/>
+                                </div>
+
+
+                                <div class="col-md-4">
+                                    <label>Rapor Bitiş Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bit_tarih" value="{{bugun}}"/>
+                                </div>
+
+
+                                <div class="col-md-4">  <label>İşlem</label> 
+
+                                    <button type="submit" class="form-control btn btn-primary">Kasa Raporunu Getir</button> </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </div>
+
+
+{% endblock %}

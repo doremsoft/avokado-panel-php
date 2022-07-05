@@ -1,0 +1,344 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+        .form-group>label {
+
+            margin-top: 15px;
+        }
+
+        hr{
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+        }
+
+        .md-has-value{
+            margin-top: 15px !important;
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+<div class="col-md-12">
+<div class="row">
+
+<div class="col-md-12 m-t-15">
+    <div class="card">
+        <div class="card-header">
+            <h5>Xml Analiz</h5>
+        </div>
+        <div class="card-body">
+
+            <div class="form-group">
+                <label>URL Adresi*</label>
+                <input type="text" name="id" id="analizUrl"  class="form-control" value="" />
+            </div>
+
+            <button type="button" onclick="xmlAnaliz()" class="btn btn-warning waves-effect waves-light"><i class="mdi mdi-alert-outline mr-2"></i>Analiz Et</button>
+
+        </div>
+    </div>
+</div>
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Xml Stok Listesi Aktarımı</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/xml-import/stok-upload" method="post"  enctype="multipart/form-data">
+                                {{csrf | raw}}
+
+                                <h4>Zorunlu Alanlar</h4>
+                                <div class="form-group">
+                                    <label>URL Adresi*</label>
+                                    <input type="text" name="xmlurl" class="form-control" value="" required/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Stok Kod*</label>
+                                    <input type="text" name="stokkod" class="form-control" value="stockCode" required/>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Stok Adı*</label>
+                                    <input type="text" name="stokadi" class="form-control" value="label" required/>
+                                </div>
+
+
+                                <hr>
+                                <h4>Seçimli Alanlar</h4>
+
+                                <h6>Dikkat!!</h6>
+                                <p>Seçim olarak non yazarsanız bu seçenek ile ilgili bir değer aranmayacak demektir.</p>
+                                <p>Standart değerler aranan değer bulunamaması yada değer alanının non olması halinde sisteme işlenecek kayıtlardır</p>
+
+
+                                <div class="form-group">
+                                    <label>Barkod  Adı</label>
+                                    <input type="text" name="barkod" class="form-control" value="barcode"/> <br>
+                                    <label>Barkod Standart Değer (Değer Yoksa Bu Değeri Yaz)</label>
+                                    <input type="text" name="barkod_def" class="form-control" value=""/> 
+
+                                </div>
+
+
+                                <hr>
+
+                                <div class="form-group">
+                                    <label>Marka Adı</label>
+                                    <input type="text" name="marka_adi" class="form-control" value="brand"/>
+                                    <label>Marka Adı Standart Değer (Değer Yoksa Bu Değeri Yaz)</label>
+                                    <input type="text" name="marka_adi_def" class="form-control" value="no"/> 
+
+                                </div>
+
+
+
+                                <hr>
+
+
+
+                                <div class="form-group">
+                                    <label>Alış Fiyatı</label>
+                                    <input type="text" name="alis_fiyat" class="form-control" value="buyingPrice"/>
+                                    <label>Alış Fiyatı Standart Değer</label>
+                                    <input type="text" name="alis_fiyat_def" class="form-control" value="0"/>
+                                </div>
+
+                                <hr>
+
+
+
+
+
+                                <div class="form-group">
+                                    <label>Satış Fiyatı</label>
+                                    <input type="text" name="satis_fiyat" class="form-control" value="price1"/>
+                                    <label>Satış Fiyatı Standart Değer</label>
+                                    <input type="text" name="satis_fiyat_def" class="form-control" value="0"/>
+                                </div>
+
+                                <hr>
+                                <div class="form-group">
+                                    <label>Vergi Oranı</label>
+                                    <input type="text" name="vergi_oran" class="form-control" value="tax"/>
+                                    <label>Vergi Oranı Standart Değer</label>
+                                    <input type="text" name="vergi_oran_def" class="form-control" value="18"/>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label> Para Birimi</label>
+                                    <input type="text" name="para_birim" class="form-control" value="currencyAbbr"/>
+                                    <label> Para Birimi Standart Değer (TL - USD - EUR)</label>
+                                    <input type="text" name="para_birim_def" class="form-control" value="TL"/>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label>  Stok Tipi</label>
+                                    <input type="text" name="stok_birimi" class="form-control" value="stockType"/>
+                                    <label>  Stok Tipi Standart Değer</label>
+                                    <input type="text" name="stok_birimi_def" class="form-control" value="Adet"/>
+                                </div>
+                                <hr>
+
+                                <div class="form-group">
+                                    <label>  Stok Açıklaması</label>
+                                    <input type="text" name="stok_detay" class="form-control" value="details"/>
+                                    <label>  Stok Açıklaması Standart Değer</label>
+                                    <input type="text" name="stok_detay_def" class="form-control" value=""/>
+                                </div>
+
+                                <hr>
+
+                                <div class="form-group">
+                                    <label>  Stok Resim</label>
+                                    <input type="text" name="stok_resim" class="form-control" value="picture1Path"/>
+                                    <label>  Stok Resim Standart Değer</label>
+                                    <input type="text" name="stok_resim_def" class="form-control" value="noimage.jpg"/>
+                                </div>
+
+
+                                <hr>
+
+                                <div class="col-md-12">
+
+                                    <h4>Varyantlar</h4>
+                                    <div class="form-group">
+                                        <label>--> Varyant Ana Grup Adı</label>
+                                        <input type="text" name="varyant_ana_adi" class="form-control" value="variants"/>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>--> Varyant Grup Adı</label>
+                                        <input type="text" name="varyant_alt_adi" class="form-control" value="variant"/>
+                                    </div>
+
+
+                                    <div class="col-md-12">
+
+                                        <div class="form-group">
+                                            <label>--> Varyant Stok Kod</label>
+                                            <input type="text" name="v_stok_kod" class="form-control" value="vStockCode"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>--> Varyant Barkod</label>
+                                            <input type="text" name="v_barcode" class="form-control" value="vBarcode"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>--> -->Varyant Varyant Adı</label>
+                                            <input type="text" name="v_adi" class="form-control" value="variantName"/>
+                                            <input type="text" name="v_adi_def" class="form-control" value=""/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>--> -->Varyant Varyant Değeri</label>
+                                            <input type="text" name="v_deger" class="form-control" value="variantValue"/>
+                                            <input type="text" name="v_deger_def" class="form-control" value=""/>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label>--> Varyant Alış Fiyatı</label>
+                                            <input type="text" name="v_alis_fiyat" class="form-control" value="vBuyingPrice"/>
+                                            <input type="text" name="v_alis_fiyat_def" class="form-control" value="0"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>--> Varyant Satış Fiyatı</label>
+                                            <input type="text" name="v_satis_fiyat" class="form-control" value="vPrice1"/>
+                                            <input type="text" name="v_satis_fiyat_def" class="form-control" value="0"/>
+                                        </div>
+
+                                        <div class="col-md-12">
+
+                                            <div class="form-group">
+                                                <label>--> -->Varyant Ayarları Grup (Kullanmayacaksanız off yapın Kullanamak için on yazın)</label>
+                                                <input type="text" name="v_options" class="form-control" value="off"/>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label>--> -->Varyant Ayarları Ana Grup Adı</label>
+                                                <input type="text" name="v_options_ana_adi" class="form-control" value="options"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>--> -->Varyant Ayarları Alt Grup Adı</label>
+                                                <input type="text" name="v_options_alt_adi" class="form-control" value="option"/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>--> -->Varyant Varyant Adı (Option İçinden)</label>
+                                                <input type="text" name="v_adi_2" class="form-control" value="variantName"/>
+                                                <input type="text" name="v_adi_def_2" class="form-control" value=""/>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>--> -->Varyant Varyant Değeri (Option İçinden)</label>
+                                                <input type="text" name="v_deger_2" class="form-control" value="variantValue"/>
+                                                <input type="text" name="v_deger_def_2" class="form-control" value=""/>
+                                            </div>
+
+
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <div class="form-group">
+
+                                    <label>  Vergi Durum alanı:</label>
+
+                                    <input type="text" name="vergi_oran_durum" class="form-control" value="no"/>
+
+                                    <label>  Vergi Durum Standart Değer</label>
+
+                                    <select name="vergi_oran_durum_def" class="form-control">
+
+                                        <option value="2" >Fiyatlara Vergiler Dahil</option>
+                                        <option value="1" selected>Fiyatlardan Vergiler Hariç</option>
+
+
+                                    </select>
+
+
+
+                                </div>
+                                <div class="form-group">
+
+                                    <label>  Eğer Stok Mevcut İse:</label>
+
+                                    <select name="mevcut_durum" class="form-control">
+
+                                        <option value="1" selected>Hiçbirşey Yapma</option>
+                                        <option value="2">Kaydı Gelen Değerlerle Güncelle</option>
+
+
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-warning waves-effect waves-light"><i class="mdi mdi-alert-outline mr-2"></i>Yükle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+</div></div>
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#stokfileinput').bind('change', function () {
+
+
+            var file_size = this.files[0].size;
+
+
+            if (file_size > 3000000) {
+
+                notify("Dosya Boyutu lilmiti aşıyor", "danger");
+
+                //$('#stokfileinput').val('');
+
+            }
+
+        });
+        
+        
+        function xmlAnaliz() {
+
+            var url_adres = $("#analizUrl").val();
+
+
+            $.post( "{{ url}}/xml-import/xml-analiz", { url: url_adres})
+                .done(function( data ) {
+
+
+                    console.log(data);
+
+                });
+            
+        }
+    </script>
+
+{% endblock %}
+
+

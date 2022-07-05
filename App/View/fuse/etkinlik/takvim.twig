@@ -1,0 +1,452 @@
+{% extends "layout-light.twig" %}
+
+        {% block head %}
+
+
+
+            <link href="{{asset('plugins/calendar/packages/core/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/daygrid/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/timegrid/main.css')}}" rel="stylesheet" type="text/css" />
+            <link href="{{asset('plugins/calendar/packages/list/main.css')}}" rel="stylesheet" type="text/css" />
+
+
+
+        {% endblock %}
+    {% block content %}
+
+        <div id="calendar" class="page-layout simple full-width">
+
+            <!-- HEADER -->
+            <div class="page-header bg-primary text-auto p-6" style="height: 100px;max-height: 100px;min-height: 100px;">
+
+                <!-- HEADER CONTENT-->
+                <div class="header-content d-flex flex-column justify-content-between" >
+
+                    <!-- HEADER TOP -->
+                    <div class="header-top d-flex flex-column flex-sm-row align-items-center  justify-content-center justify-content-sm-between">
+
+                        <div class="logo row align-items-center no-gutters mb-4 mb-sm-0 m-t-15" >
+                            <i class="logo-icon icon-calendar-today mr-4"></i>
+                            <span class="logo-text h4">Takvim</span>
+                        </div>
+
+
+                    </div>
+                    <!-- / HEADER TOP -->
+
+
+                    <!-- / HEADER BOTTOM -->
+                </div>
+                <!-- / HEADER CONTENT -->
+
+
+
+            </div>
+            <!-- / HEADER -->
+
+            <!-- CONTENT -->
+            <div class="page-content p-6 m-t-15">
+                <div id="calendar-view">
+
+
+                </div>  <div id='script-warning'></div>
+                <div id='loading'>loading...</div>
+            </div>
+            <!-- / CONTENT -->
+        </div>
+
+
+
+
+    {% endblock %}
+
+    {% block footer %}
+
+
+
+        <script src="{{asset('plugins/calendar/packages/core/main.js')}}"></script>
+        <script src="{{asset('plugins/calendar/packages/core/locales-all.min.js')}}"></script>
+        <script src="{{asset('plugins/calendar/packages/interaction/main.js')}}"></script>
+        <script src="{{asset('plugins/calendar/packages/daygrid/main.js')}}"></script>
+        <script src="{{asset('plugins/calendar/packages/timegrid/main.js')}}"></script>
+        <script src="{{asset('plugins/calendar/packages/list/main.js')}}"></script>
+
+
+
+
+
+        <script>
+
+            var today = new Date();
+
+
+            function etkinlikIptal(calendar,id) {
+
+                $.post( "{{ url }}/etkinlik/takvim-etkinlik-iptal", {
+                    id : id
+                })
+                    .done(function( data ) {
+
+                        data = data.trim();
+
+                        var result = JSON.parse(data);
+
+                        if(result.status = 1){
+
+                            calendar.refetchEvents();
+
+                            swalert("success", "İşlem Tamamlandı", "Etkinlik İptal Edildi...");
+                        }else{
+
+                            swalert("danger", "İşlem Başarısız!", "Etkinlik İptal Edilemedi!!");
+                        }
+
+
+                    });
+
+            }
+
+            function etkinlikEkle(calendar,arg,title){
+
+
+                var start = arg.start;
+                var end = arg.end;
+                let start_date = new Date(start);
+                let end_date = new Date(end);
+                var start_date_time = start_date.toISOString()
+                var end_date_time = end_date.toISOString()
+                var all_day = "no";
+
+                if(arg.allDay == true){
+
+                    all_day = "ok";
+                }
+
+                $.post( "{{ url }}/etkinlik/takvime-ekle", {
+                    title: title,
+                    start: start_date_time,
+                    end: end_date_time,
+                    fullstart:arg.start,
+                    fullend:arg.end,
+                    allDay: all_day
+                })
+                    .done(function( data ) {
+
+                        data = data.trim();
+
+                        var result = JSON.parse(data);
+
+                        if(result.status = 1){
+
+                            calendar.refetchEvents();
+
+                            /*
+                                   calendar.addEvent({
+                                title: title,
+                                start: arg.start,
+                                end: arg.end,
+                                allDay: arg.allDay
+                            })
+
+                             */
+
+
+                            swalert("success", "Kayıt Tamamlandı", "Etkinlik Eklendi...");
+                        }else{
+
+                            swalert("danger", "İşlem Başarısız!", "Etkinlik Eklenemedi!");
+                        }
+
+
+                    });
+
+
+
+            }
+
+            function etkinlikTitleGüncelle(calendar,title,id){
+
+
+                $.post( "{{ url }}/etkinlik/takvimde-guncelle", {
+                    updatetype:'title',
+                    id : id,
+                    title: title
+                })
+                    .done(function( data ) {
+
+                        data = data.trim();
+
+                        var result = JSON.parse(data);
+
+                        if(result.status = 1){
+
+                            calendar.refetchEvents();
+
+                            swalert("success", "İşlem Tamamlandı", "Etkinlik Güncellendi...");
+                        }else{
+
+                            swalert("danger", "İşlem Başarısız!", "Etkinlik Güncellenemedi!");
+                        }
+
+
+                    });
+
+
+
+            }
+
+            function etkinlikGuncelle(calendar,arg,title,id){
+
+                var end = arg.end;
+                if(end == null){
+                    end =  arg.start;
+                }
+                var start = arg.start;
+                let start_date = new Date(start);
+                let end_date = new Date(end);
+                var start_date_time = start_date.toISOString()
+                var end_date_time = end_date.toISOString()
+                var all_day = "no";
+
+                if(arg.allDay == true){
+
+                    all_day = "ok";
+                }
+
+                var params = {
+                    updatetype:'full',
+                    id : id,
+                    title: title,
+                    start: start_date_time,
+                    end: end_date_time,
+                    fullstart:arg.start,
+                    fullend:end,
+                    allDay: all_day
+                };
+
+                console.log(params);
+
+                $.post( "{{ url }}/etkinlik/takvimde-guncelle", params)
+                    .done(function( data ) {
+
+                        data = data.trim();
+
+                        var result = JSON.parse(data);
+
+
+                        if(result.status = 1){
+
+                            swalert("success", "İşlem Tamamlandı", "Etkinlik Güncellendi...");
+                        }else{
+
+                            arg.revert();
+
+                            swalert("danger", "İşlem Başarısız!", "Etkinlik Güncellenemedi!");
+                        }
+
+                    });
+
+            }
+
+
+
+
+
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar-view');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list'  ],
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+                    },
+                    //timeZone: 'Europe/Istanbul',
+                    locale: 'tr',
+                    defaultDate: today,
+                    navLinks: true,
+                    selectable: true,
+                    selectMirror: true,
+                    select: function(arg) {
+
+
+
+                        Swal.fire({
+                            title: 'Etkinlik Ekleme',
+                            showCancelButton: false,
+                            showCloseButton: true,
+                            showConfirmButton : false,
+                            html:
+                                ' <input id="swal-etkinlik-title-input" type="text" class="form-control" placeholder="Etkinlik Adı..." aria-label="Etkinlik Adı..." />'
+                                +'<button id="swal-etkinlik-title-button" class="btn btn-danger m-t-15" >Ekle</button>',
+                            onBeforeOpen: () => {
+                                const content = Swal.getContent()
+                                const $ = content.querySelector.bind(content)
+                                const input = $('#swal-etkinlik-title-input')
+                                const buton = $('#swal-etkinlik-title-button')
+
+                                buton.addEventListener('click', () => {
+
+                                    etkinlikEkle(calendar,arg,document.getElementById('swal-etkinlik-title-input').value);
+
+                                })
+
+                            },
+                            onClose: () => {}
+                        });
+
+
+                        calendar.unselect()
+                    },
+
+                    eventDrop: function(arg) {
+
+                        var id = arg.event.id;
+                        var title = arg.event.title;
+
+
+                        Swal.fire({
+                            title: 'Güncelleme Onayı!',
+                            text: "Etkinliği Güncellemek İstiyormusunuz?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Evet'
+                        }).then((result) => {
+
+                            if (result.value) {
+
+                                etkinlikGuncelle(calendar,arg.event,title,id);
+                            }else{
+                                arg.revert();
+                            }
+                        });
+
+
+                    },
+                    eventResize: function(arg) {
+
+                        var id = arg.event.id;
+                        var title = arg.event.title;
+
+                        Swal.fire({
+                            title: 'Güncelleme Onayı!',
+                            text: "Etkinliği Güncellemek İstiyormusunuz?",
+                            type: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Evet'
+                        }).then((result) => {
+
+                            if (result.value) {
+
+                                etkinlikGuncelle(calendar,arg.event,title,id);
+                            }else{
+                                arg.revert();
+                            }
+                        });
+
+
+
+
+                    },
+                    eventClick: function(arg) {
+
+                        var id = arg.event.id;
+                        var title = arg.event.title;
+
+
+                        Swal.fire({
+                            title: 'Etkinlik Güncelleme',
+                            showCancelButton: false,
+                            showCloseButton: true,
+                            showConfirmButton : false,
+                            html:
+                                ' <input id="swal-etkinlik-title-update-input" type="text" class="form-control" value="'+title+'" placeholder="Etkinlik Adı..." aria-label="Etkinlik Adı..." />'
+                                +'<button id="swal-etkinlik-title-update-button" class="btn btn-primary " style="margin: 10px;">Güncelle</button>' +
+                                '<button id="swal-etkinlik-iptal-button" class="btn btn-danger " style="margin: 10px;">İptal Et</button>',
+                            onBeforeOpen: () => {
+                                const content = Swal.getContent()
+                                const $ = content.querySelector.bind(content)
+                                const input = $('#swal-etkinlik-title-update-input')
+                                const buton = $('#swal-etkinlik-title-update-button')
+                                const iptalbuton = $('#swal-etkinlik-iptal-button')
+
+                                buton.addEventListener('click', () => {
+
+
+                                    Swal.fire({
+                                        title: 'Güncelleme Onayı!',
+                                        text: "Etkinliği Güncellemek İstiyormusunuz?",
+                                        type: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Evet'
+                                    }).then((result) => {
+
+                                        if (result.value) {
+                                            etkinlikTitleGüncelle(calendar,document.getElementById('swal-etkinlik-title-update-input').value,id);
+                                        }
+                                    })
+
+
+                                })
+
+
+                                iptalbuton.addEventListener('click', () => {
+
+
+                                    Swal.fire({
+                                        title: 'İptal Edilmek Üzere !',
+                                        text: "Etkinliği İptal Etmek İstiyormusunuz?",
+                                        type: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: 'Evet'
+                                    }).then((result) => {
+
+                                        if (result.value) {
+
+                                            etkinlikIptal(calendar,id);
+
+                                        }
+                                    })
+
+
+                                })
+
+
+
+                            },
+                            onClose: () => {}
+                        });
+
+
+                    },
+                    editable: true,
+                    eventLimit: true,
+
+                    events: {
+                        url: '{{url}}/etkinlik/etkinlik-al',
+                        failure: function() {
+                            document.getElementById('script-warning').style.display = 'block'
+                        }
+                    },
+                    loading: function(bool) {
+                        document.getElementById('loading').style.display =
+                            bool ? 'block' : 'none';
+                    }
+                });
+
+                calendar.render();
+            });
+
+        </script>
+
+
+    {% endblock %}

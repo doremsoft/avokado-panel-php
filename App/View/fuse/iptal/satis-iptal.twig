@@ -1,0 +1,52 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+<div class="row">
+<div class="col-md-12">
+<div class="card">
+<div class="card-header">
+<h5>Satış Evrak İptali</h5>
+</div>
+<div class="card-body">
+<div class="row">
+<div class="col-md-12">
+<form id="logout-form" action="{{url}}/iptal/satis-evrak" method="post" >
+{{csrf | raw}}
+
+<div class="form-group">
+<h4>DİKKAT!</h4>
+<p>Satış evrakını kalıcı olarak iptal etmek üzeresiniz!</p>
+<p>Çıkışı yapılmış stoklar geri eklenecek!</p>
+<p>Faturanın tahsilatı var ise tahsilatı silinecek!!!</p>
+<p>Bir faturayı en geç 7 Gün içerisinde iptal edebilirsiniz!</p>
+<p>Eğer bir kalıcı rapor (Excel , pdf vs) aldıyasınız iptalden önce tamamı geçersiz sayılacaktır! </p>
+<p>Bu işelemin bütün sorumluluğu tamamen sizin yükümlülüğünüzdedir! </p>
+<p>Sildiğiniz kayıt silinen kayıtlar bölümünden görüntülenmeye devam edecektir yanlızca hirbir rapor yada veriye etkisi olmayacaktır! </p>
+<p>İptal işleminde ip adresiniz ve daha birçok bilgi sisteme güvenlik amaçlı kayıt altına alınacaktır! </p>
+<p>İptal Et Butonuna bastığınız anda işlem tamamlanacak bir onay daha alınmayacaktır.</p>
+<p>Silinen kayıtlar bölümünden geri aktarım yapazsınız!</p>
+
+
+</div>
+
+<input type="hidden" name="evrak_id" value="{{ evrak_id }}"/>
+
+<div class="form-group">
+<label>İptal Nedeni</label>
+<textarea name="iptal_not" class="form-control"></textarea>
+</div>
+
+
+
+<button type="submit" class="btn btn-primary">İptal Et</button>
+</form>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

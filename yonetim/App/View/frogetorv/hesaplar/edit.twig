@@ -1,0 +1,104 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}{% endblock %}
+{% block bread %}  
+
+
+
+    {% endblock %}
+    {% block content %}
+
+           <div class="row">
+            <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Hesap Düzenle</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/hesaplar/update" method="post">
+                            {{csrf | raw}}
+                            
+   <input type="hidden" name="id" class="form-control" value="{{ hesap.id}}" />
+                           
+                                  
+                                 <div class="form-group">
+                                <label>Hesap Adı:</label>
+                                <input type="text" name="account_nick_name" class="form-control" value="{{ hesap.account_nick_name}}" required/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Server Adı:</label>
+                                <input type="text" name="account_server_name" class="form-control" value="{{ hesap.account_server_name}}" required/>
+                            </div>
+
+                                 <div class="form-group">
+                                <label>Server İp Adresi:</label>
+                                <input type="text" name="server_ip" class="form-control" value="{{ hesap.server_ip}}" required/>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label>Server Bağlantı Protokol:</label>
+                                <input type="text" name="server_connection_protocol" class="form-control" value="{{ hesap.server_connection_protocol }}" required/>
+                            </div>
+         <div class="form-group">
+                                <label>Server Url Adresi:</label>
+                                <input type="text" name="server" class="form-control" value="{{ hesap.server}}" required/>
+                            </div>   
+                            
+                            
+                                  <div class="form-group">
+                                <label>Api Server Bağlantı Protokol</label>
+                                <input type="text" name="api_server_connection_protocol" class="form-control" value="{{ hesap.api_server_connection_protocol}}" required/>
+                            </div>                    
+                            
+                             <div class="form-group">
+                                <label>Api Server Url Adresi:</label>
+                                <input type="text" name="api_server_url" class="form-control" value="{{ hesap.api_server_url}}" required/>
+                            </div>                    
+                            
+                            <div class="form-group">
+                                <label>Veritabanı Adı:</label>
+                                <input type="text" name="db_name" class="form-control" value="{{ hesap.db_name}}" required/>
+                            </div>   
+                            
+                            
+                            
+                            
+                               
+                            <div class="form-group">
+                                <label>Hesap Türü:</label>
+                          
+                                <select name="account_type" class="form-control">
+                                    
+                                    <option value="1" {% if  hesap.account_type == 1 %} selected{% endif %}>Demo</option>
+                                    <option value="2" {% if  hesap.account_type == 2 %} selected{% endif %}>Standart</option>
+                                    
+                                    
+                                </select>
+                                
+                                
+                                
+                                
+                            </div>   
+                            
+                         
+                            
+                            
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                </div>
+
+
+        {% endblock %}
+
+        {% block footer %}
+ 
+
+
+        {% endblock %}

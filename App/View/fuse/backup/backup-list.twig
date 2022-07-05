@@ -1,0 +1,201 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block content %}
+
+    <div class="col-md-12">
+           <div class="row">
+
+
+        <div class="col-md-12" style="margin-bottom: 15px;">
+            <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+                <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{url}}/backup/db-backup" method="post">
+                                {{csrf | raw}}
+
+                                <div class="form-group">
+                                    <label>Yedek Adını Yazınız:</label>
+                                    <input type="text" name="yedek_adi" class="form-control" required/>
+                                </div>
+
+                                <h4>Dikkat!</h4>
+                                
+                                <p>Sıfırlama yedeği silmemelidir sistem sıfırlanmak istediğinde bu yedek ile mümkün olmaktadır!</p>
+                                <p>En Fazla 3 + 1 adet yedek saklama hakkı bulunmkatadır. (3 Standart yedek hakkı 1 sıfırlama yedeği)</p>
+                                <p>Eski yedeğinizi silerek yerine yeni yedek ekleyebilirsiniz</p>
+                                <p>(x) tarihinde alınan bir yedeğe (y) tarihinde yedek almadan geri yükleme yapılır ise (y) tarihine geri dönüş kesinlikle mümkün değildir! </p> 
+                                <p>Silinen bir yedeği geri getirmek mümkün değildir!</p>
+                                   <button type="submit" class="btn btn-primary">Veritabanını Yedekle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Yedekler</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Yedek Adı</th>
+                                            <th>Yedek Tarihi</th>
+                                            <th>İşlem</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for yedek in yedekler  %}
+
+
+                                            <tr>
+
+
+                                                <td>
+
+
+                                                  {{yedek.yedek_adi}}
+
+
+                                                </td>
+                                                
+                                                   <td>
+
+
+                                                  {{yedek.created_date}}
+
+
+                                                </td>
+
+                                                <td width="150px">
+
+                                                    <button type="button" class="btn btn-icon btn-secondary"  style="background-color:#0c83e2 ;border-radius: 0px !important;" onClick="yedekten_yukle({{yedek.id}})">Yükle</button>
+                                                    
+                                                   <button type="button" class="btn btn-icon btn-danger" style="border-radius: 0px !important;"  onClick="yedek_sil({{yedek.id}})">Sil</button>
+                                               
+                                                      <form id="yedek-sil-form-{{yedek.id}}" action="{{url}}/backup/remove-db-backup" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="id" value="{{yedek.id}}"/>
+                                                </form>
+                                                
+                                                 <form id="yedek-yukle-form-{{yedek.id}}" action="{{url}}/backup/sqlimport" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="id" value="{{yedek.id}}"/>
+                                                </form>
+                                                
+                                                
+                                                </td>
+                                            </tr>
+
+                                        {% endfor %}
+
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           </div>  </div>
+
+{% endblock %}
+
+{%block  footer %}
+
+<script>
+    function yedekten_yukle(id){
+        
+        
+        
+            swal({
+                title: 'Yedekten Yukleme Yapılacak!',
+                text: "Şuan bir yedek alamadıysanız sistem önceki bir haline dönecek ve işlem geri alınamaz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Yukle!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+                
+            
+
+                if(result.value){
+                      document.getElementById('yedek-yukle-form-' + id).submit();
+                }
+
+              
+
+            }, function (dismiss) {
+               
+
+                 
+                
+            });
+
+
+
+    
+    
+}
+    function yedek_sil(id){
+    
+    
+      
+            swal({
+                title: 'Yedek Kalıcı Olarak Silinecek!',
+                text: "Bu işlem geri alınamaz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+                
+            
+
+                if(result.value){
+                      document.getElementById('yedek-sil-form-' + id).submit();
+                }
+
+              
+
+            }, function (dismiss) {
+               
+
+                 
+                
+            });
+
+
+
+    
+}
+
+</script>
+    {%endblock%}

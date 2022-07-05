@@ -1,0 +1,547 @@
+<div class="navbar-top fuse-navy-900 aside-toolbar " style="background-color: #1e2129!important;">
+    <div class="logo">      <span class="logo-icon">A</span>
+        <span class="logo-text" style="color: rgba(255,255,255,.7)!important;">Avokado Panel</span></div>
+    <div class="buttons">
+
+        <button id="toggle-fold-aside-button" type="button" class="btn btn-icon d-none d-lg-block" data-fuse-aside-toggle-fold>
+            <i class="icon icon-backburger"></i>
+        </button></div>
+</div>
+
+
+<ul class="nav flex-column custom-scrollbar" id="sidenav" data-children=".nav-item">
+
+
+
+    <li><a  class="nav-link ripple " data-url="/"   href="{{url}}">
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">view_day</i>
+
+            <span>Duvar</span></a></li>
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/cari/list" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_box</i>
+
+            <span>Hesaplar</span>
+        </a>
+    </li>
+
+
+
+
+    <li class="subheader">
+        <span>Ön Muhasebe</span>
+    </li>
+
+
+
+    <li class="nav-item" role="tab" id="heading-ecommerce">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-ecommerce" href="#" aria-expanded="true" aria-controls="collapse-ecommerce" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">view_quilt</i>
+
+            <span>Ürün</span>
+        </a>
+        <ul id="collapse-ecommerce" class="collapse " role="tabpanel" aria-labelledby="heading-ecommerce" data-children=".nav-item" style="">
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list" data-url="apps-e-commerce-orders.html">
+
+                    <span>Ürünler</span>
+                </a>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/add" data-url="apps-e-commerce-orders.html">
+
+                    <span>Yeni Ürün</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/excel-import/stok-adetler-upload" data-url="apps-e-commerce-orders.html">
+
+                    <span>Excelden Stok Adetleri Guncelle</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok-haraket/giris/0/hareket" data-url="apps-e-commerce-orders.html">
+
+                    <span>Ürün Giriş Hareket</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok-haraket/cikis/0/hareket" data-url="apps-e-commerce-orders.html">
+
+                    <span>Ürün Çıkış Hareket</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/list/kritik" data-url="apps-e-commerce-orders.html">
+
+                    <span>Azalan Ürünler</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/fast-price-update" data-url="apps-e-commerce-orders.html">
+
+                    <span>Hızlı Güncelleme</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok-depolar/list" data-url="apps-e-commerce-orders.html">
+
+                    <span>Depolar</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok/weblist" data-url="apps-e-commerce-orders.html">
+
+                    <span>Web Ürünleri</span>
+                </a>
+            </li>
+
+
+
+        </ul>
+    </li>
+
+
+    <li class="nav-item" role="tab" id="heading-order-d">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-order-d" href="#" aria-expanded="true" aria-controls="collapse-order-d" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">local_grocery_store</i>
+
+            <span>Sipariş</span>
+        </a>
+        <ul id="collapse-order-d" class="collapse " role="tabpanel" aria-labelledby="heading-order-d" data-children=".nav-item" style="">
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/stok-haraket/cikis/0/siparis" data-url="apps-contacts.html">
+
+
+                    <span>Yeni Sipariş</span>
+                </a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/siparis" data-url="apps-contacts.html">
+
+
+                    <span>Aktif Siparişler</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/siparis/kargodaki" data-url="apps-contacts.html">
+
+
+                    <span>Kargodaki Siparişler</span>
+                </a>
+            </li>
+
+
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/siparis/iptaller" data-url="apps-contacts.html">
+
+
+                    <span>İptal Siparişler</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/siparis/gecmis" data-url="apps-contacts.html">
+
+
+                    <span>Sipariş Geçmişi</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/fis" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">receipt</i>
+
+            <span>Fiş</span>
+        </a>
+    </li>
+
+
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/fatura" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">description</i>
+
+            <span>Fatura</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/satislar" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">trending_up</i>
+
+            <span>Satışlar</span>
+        </a>
+    </li>
+
+
+
+    <li class="subheader">
+        <span>Finans</span>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/finansal/gelir-gider-ozet" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">bar_chart</i>
+
+            <span>Finanasal Özet</span>
+        </a>
+    </li>
+
+
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/alimlar/iki-tarih-gore-alimlar" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">save_alt</i>
+
+            <span>Alımlar</span>
+        </a>
+    </li>
+
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/kasa/index" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance_wallet</i>
+
+            <span>Nakit</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/banka" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance</i>
+
+            <span>Banka</span>
+        </a>
+    </li>
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/tahsilat/liste" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">money</i>
+
+            <span>Gelir</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/odemeler/liste" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">payment</i>
+
+            <span>Gider</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/senet" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">subtitles</i>
+
+            <span>Senet</span>
+        </a>
+    </li>
+
+
+
+
+    <li class="subheader">
+        <span>Web Modül</span>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/web" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">web</i>
+
+            <span>Web Sitesi</span>
+        </a>
+    </li>
+
+
+
+
+    <li class="subheader">
+        <span>Yardımcı Araçlar</span>
+    </li>
+
+
+    <li class="nav-item" role="tab" id="heading-ecommerce">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-islemler" href="#" aria-expanded="true" aria-controls="collapse-islemler" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">storage</i>
+
+            <span>Dosya Yöneticisi</span>
+        </a>
+        <ul id="collapse-islemler" class="collapse " role="tabpanel" aria-labelledby="heading-islemler" data-children=".nav-item" style="">
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/multimedia/public" data-url="apps-e-commerce-orders.html">
+
+                    <span>Web Dosya Deposu</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/multimedia/private" data-url="apps-e-commerce-orders.html">
+
+                    <span>Özel Dosya Deposu</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/multimedia/sistem" data-url="apps-e-commerce-orders.html">
+
+                    <span>Sistem Kayıtları Deposu</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/etkinlik/takvim" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">date_range</i>
+
+            <span>Takvim</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/bildirim/liste" data-url="apps-contacts.html">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">notifications_none</i>
+
+            <span>Bildirimler</span>
+        </a>
+    </li>
+
+
+
+
+    <li class="subheader">
+        <span>Çeşitli İşlemler</span>
+    </li>
+
+
+    <li class="nav-item" role="tab" id="heading-ecommerce">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-islemler2" href="#" aria-expanded="true" aria-controls="collapse-islemler2" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">settings</i>
+
+            <span>İşlemler</span>
+        </a>
+        <ul id="collapse-islemler2" class="collapse " role="tabpanel" aria-labelledby="heading-islemler2" data-children=".nav-item" style="">
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/parametreler" data-url="apps-e-commerce-orders.html">
+
+                    <span>Parametreler</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/yazilimlar" data-url="apps-e-commerce-orders.html">
+
+                    <span>Yazılımlar</span>
+                </a>
+            </li>
+
+        </ul>
+    </li>
+
+
+
+
+    <li class="nav-item" role="tab" id="heading-aktarim">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-aktarim" href="#" aria-expanded="true" aria-controls="collapse-aktarim" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">autorenew</i>
+
+            <span>Aktarımlar</span>
+        </a>
+        <ul id="collapse-aktarim" class="collapse " role="tabpanel" aria-labelledby="heading-aktarim" data-children=".nav-item" style="">
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/excel-export/stok-excel-hazirla" data-url="apps-e-commerce-orders.html">
+
+                    <span>Stokları Excel'e Aktar</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/excel-import/stok-list" data-url="apps-e-commerce-orders.html">
+
+                    <span>Stokları Excel'den Aktar</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/excel-import/stok-guncelleme-index" data-url="apps-e-commerce-orders.html">
+
+                    <span>Stokları Güncelle</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/xml-import" data-url="apps-e-commerce-orders.html">
+
+                    <span>Xml'den İçe Stok Aktarım</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/xml-export/index" data-url="apps-e-commerce-orders.html">
+
+                    <span>Xml Dışa Stok Aktarım</span>
+                </a>
+            </li>
+
+
+        </ul>
+    </li>
+
+
+
+
+
+    <li class="nav-item" role="tab" id="heading-kullanici">
+
+        <a class="nav-link ripple with-arrow fuse-ripple-ready" data-toggle="collapse" data-target="#collapse-kullanici" href="#" aria-expanded="true" aria-controls="collapse-kullanici" data-parent="#sidenav">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">people</i>
+
+            <span>Kullanıcı</span>
+        </a>
+        <ul id="collapse-kullanici" class="collapse " role="tabpanel" aria-labelledby="heading-kullanici" data-children=".nav-item" style="">
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/user/edit" data-url="apps-e-commerce-orders.html">
+
+                    <span>Bilgi Güncelleme</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/user/password-edit" data-url="apps-e-commerce-orders.html">
+
+                    <span>Şifre Güncelleme</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/user/list" data-url="apps-e-commerce-orders.html">
+
+                    <span>Kullanıcılar</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link ripple fuse-ripple-ready" href="{{ url }}/user/add" data-url="apps-e-commerce-orders.html">
+
+                    <span>Kullanıcı Ekle</span>
+                </a>
+            </li>
+
+
+        </ul>
+    </li>
+
+
+
+    <li>
+        <a class="nav-link ripple " href="#" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">exit_to_app</i>
+
+          <span>Oturumu Kapat</span></a>
+
+    </li>
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+

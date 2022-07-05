@@ -1,0 +1,174 @@
+{% extends "layout-light.twig" %}
+
+{% block backbtn %}
+
+    <a href="{{url}}/banka/banka-listesi" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Banka Listesine Dön</a>
+    {% endblock %}
+
+
+{% block content %}
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                  <h5>{{ banka_detay.banka_adi }}</h5>
+            
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/banka/hesap/ekle" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="banka_id" value="{{ banka_id }}"/>
+                            <div class="form-group">
+                                <label>Hesap Adı:</label>
+                                <input type="text" name="hesap_adi" class="form-control" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>Şube Kodu:</label>
+                                <input type="text" name="hesap_sube_no" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Hesap No:</label>
+                                <input type="text" name="hesap_no" class="form-control"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>İban No:</label>
+                                <input type="text" name="hesap_iban" class="form-control" required/>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Yeni Hesap Ekle</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ banka_detay.banka_adi }} Hesaplarınız</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+
+                                <tbody>
+                                    
+                                    <tr>
+                                        <th>Hesap Adı  </th>
+                                         <th>Şube No</th>
+                                          <th>Hesap No</th>
+                                           <th>İban</th>
+                                              <th>İşlem</th>
+                                        
+                                        </tr>
+                                    
+                                    
+                                    
+                                    {% for hesap in hesaplar  %}
+                                        <tr>
+
+                                            <td>
+
+                                               <label style="padding:10px;" >{{hesap.hesap_adi}}</label>
+                                                <form id="hesap-sil-form-{{hesap.id}}" action="{{url}}/banka/hesap/remove" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="id" value="{{hesap.id}}"/>
+                                                     <input type="hidden" name="banka_id" value="{{banka_id}}"/>
+                                                </form>
+                                            </td>
+                                            
+                                                <td>
+
+                                               <label  >{{hesap.hesap_sube_no}}</label>
+                                             
+                                            </td>
+
+                                            
+                                                <td>
+
+                                               <label  >{{hesap.hesap_no}}</label>
+                                             
+                                            </td>
+
+                                            
+                                            
+                                                <td>
+
+                                               <label  >{{hesap.hesap_iban}}</label>
+                                             
+                                            </td>
+
+                                            <td width="150px">
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="event.preventDefault(); hesap_sil({{hesap.id}});"><i class="fa  fa-trash"></i></button>
+                                                <a href="{{ url }}/banka/hesap/duzenle/{{ banka_id }}/{{ hesap.id }}" class="btn btn-icon btn-primary"  ><i class="fa fa-edit"></i></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function hesap_sil(id) {
+
+
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+
+
+                if(result.value){
+                      document.getElementById('hesap-sil-form-' + id).submit();
+                }
+
+              
+
+              
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+             
+                 if (dismiss === 'cancel') {
+              
+                 }
+                 
+                 
+            });
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

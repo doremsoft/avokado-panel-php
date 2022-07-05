@@ -1,0 +1,316 @@
+{% extends "layout-light.twig" %}
+
+
+    {% block content %}
+
+
+        {% if mobile == 1 %}
+            <div class="row">
+
+                <div class="col-md-12" style="margin-bottom: 15px;">
+                    <a href="{{url}}/cari/list" class="btn btn-danger waves-effect waves-light">
+                        <i class="fa fa-backward mr-2"></i>Geri Dön</a>
+                </div>
+            </div>
+        {% endif %}
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <div class="fro_profile">
+                            <div class="row">
+                                <div class="col-lg-12 mb-3 mb-lg-0">
+                                    <div class="fro_profile-main">
+
+                                        <div class="fro_profile_user-detail">
+                                            <h5 class="fro_user-name">{{cari.cari_adi}}</h5>
+                                            <p class="mb-0 fro_user-name-post">{{cari.cari_yetkili}}</p>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
+
+
+
+                            </div><!--end row-->
+                        </div><!--end f_profile-->                                                                                
+                    </div><!--end card-body-->
+
+
+                </div><!--end card-->
+            </div><!--end col-->
+        </div><!--end row-->
+
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <div class="fro_profile">
+                            <div class="row">
+
+                                <div class="col-lg-12 mb-2 mb-lg-0">
+
+
+                                    <div class="row">
+
+
+                                    
+
+                                        <div class="col-md-3">
+                                            <div class="header-title">Toplam Satış</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(hesap_ozet.genel_toplam)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="header-title">Toplam Tahsilat</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(hesap_ozet.toplam_tahsilat)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+                                                
+                                                
+                                        <div class="col-md-3">
+                                            <div class="header-title">Toplam Alım</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(hesap_ozet.alim_genel_toplam)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="header-title">Toplam Ödeme</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(hesap_ozet.toplam_odeme)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+                                                
+                                                <div class="col-md-12 p-10" style="height: 10px;"></div>
+                                                
+                                                    <div class="col-md-3">
+                                            <div class="header-title">Kredi Limit</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(cari.cari_kredi_limit)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="header-title">Vade</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{cari.cari_vade_gun}} Gün</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="header-title">Güncel Borç Bakiye</div>   
+                                            <div class="seling-report">
+                                                <h3 class="seling-data mb-1">{{Tl(hesap_ozet.bakiye)}} TL</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+
+    <div class="col-md-3">
+                                            <div class="header-title">Durum</div>   
+                                            <div class="seling-report">
+                                                {%  if hesap_ozet.durum_s == 0 %}
+                                                     <h3 class="seling-data mb-1 ">
+                                                    {%  elseif hesap_ozet.durum_s == 1 %}
+                                                      <h3 class="seling-data mb-1 text-success">   
+                                                        {% elseif hesap_ozet.durum_s == 2 %}
+                                                     <h3 class="seling-data mb-1 text-danger">
+                                                    {% endif %}
+                                                
+                                               {{hesap_ozet.durum}}</h3>
+
+
+                                            </div>                                                            
+                                        </div>
+
+
+                                    </div> 
+                                </div><!--end col-->
+                            </div><!--end row-->
+                        </div><!--end f_profile-->                                                                                
+                    </div><!--end card-body-->
+
+
+                </div><!--end card-->
+            </div><!--end col-->
+        </div><!--end row-->
+
+
+
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body profile-nav"> 
+                        <div class="nav flex-column nav-pills" id="profile-tab" aria-orientation="vertical">
+
+                            <a class="nav-link active" id="profile-activities-tab" data-toggle="pill" href="#profile-activities" aria-selected="false">Hesap Bilgileri</a>
+                            <!--  <a class="nav-link" id="profile-dash-tab" data-toggle="pill" href="#profile-dash" aria-selected="true">Hesap Özeti</a> -->
+                            <a class="nav-link d-flex justify-content-between align-items-center"   href="{{ url }}/cari/hesap-hareketleri/{{ cari.id }}" aria-selected="false">
+                                Hesap Hareketleri
+                            </a>
+
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+
+
+
+            </div><!--end col-->
+
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="profile-tabContent">
+                            <div class="tab-pane fade" id="profile-dash">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+
+                                        <div class="form-group">
+                                            <label>Güncel Bakiye</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(hesap_ozet.bakiye)}} TL</div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Toplam Satış</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(hesap_ozet.genel_toplam)}} TL</div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Toplam Tahsilat</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(hesap_ozet.toplam_tahsilat)}} TL</div>
+                                        </div>
+
+                                    <div class="form-group">
+                                            <label>Toplam Alım</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(hesap_ozet.genel_toplam)}} TL</div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label>Toplam Ödeme</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(hesap_ozet.toplam_tahsilat)}} TL</div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label>Tanımlı Kredi Limit</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{Tl(cari.cari_kredi_limit)}} TL</div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Tanımlı Vade Günü</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_vade_gun}} Gün</div>
+                                        </div>
+
+                                    </div>   
+
+                                </div><!--end row-->                                                
+                            </div><!--end tab-pane-->
+
+                            <div class="tab-pane fade  show active" id="profile-activities">
+
+
+                                <div class="meeting-title">
+                                    <div class="card-body bg-light">
+
+                                        <div class="form-group">
+                                            <label>Cari Kod</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_kod}}</div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Adı</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_adi}}</div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Telefon</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_telefon}}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Gsm</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_gsm}}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_mail}}</div>
+                                        </div>
+                                            <div class="form-group">
+                                            <label>Vergi No / Tc Kimlik No</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_vergi_no}}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Vergi Dairesi</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_vergi_daire}}</div>
+                                        </div>
+
+                                  
+                                        <div class="form-group">
+                                            <label>Adres</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_adres}}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Detay</label>
+                                            <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_detay}}</div>
+                                        </div>  
+
+                                 
+                                   
+
+
+
+
+
+                                    </div><!--end card-body-->
+                                </div>
+
+                                <a href="{{url}}/cari/edit/{{cari.id}}" class="btn btn-primary  primary text-light m-t-35"><i class="feather icon-edit"></i>Bilgileri Düzenle</a>
+
+                            </div><!--end tab-pane-->
+
+                            <div class="tab-pane fade" id="profile-pro-stock">
+
+
+
+                            </div><!--end tab-pen-->
+
+                            <div class="tab-pane fade" id="profile-settings">
+                                <div class="row">
+
+                                </div><!--end row-->
+                            </div><!--end tab-pane-->
+                        </div>  <!--end tab-content-->                                                                              
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div><!--end col-->
+        </div><!--end row--> 
+
+
+
+    {% endblock %}

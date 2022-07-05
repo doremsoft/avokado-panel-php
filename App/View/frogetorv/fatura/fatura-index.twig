@@ -1,0 +1,53 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="row">
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Yeni Fatura İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/stok-haraket/cikis" class="btn btn-primary col-md-12" style="margin-top: 15px;">Yeni Satış Faturası</a>
+                            <a href="{{url}}/stok-haraket/giris" class="btn btn-primary col-md-12"  style="margin-top: 15px;">Yeni Alım Faturası</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Fatura Raporları</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/satislar/iki-tarih-gore-satislar" class="btn btn-primary col-md-12" style="margin-top: 15px;">Satış Raporları</a>
+                            <a href="{{url}}/alimlar/iki-tarih-gore-alimlar" class="btn btn-primary col-md-12"  style="margin-top: 15px;">Alım Raporları</a>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

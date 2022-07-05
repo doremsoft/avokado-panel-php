@@ -1,0 +1,230 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Alım Raporları{% endblock %}
+{% block bread %}  
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Alımlar</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Alım Raporları</a></li>{% endblock %}
+        {% block head %}
+
+
+        <!-- DataTables -->
+        <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+        <!-- Responsive datatable examples -->
+        <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" /> 
+
+
+
+    {% endblock %}
+    {% block content %}
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">subtitles</i>
+
+                                        </span>
+                        <span class="logo-text h4">Senet İşlemleri</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+
+        </div>
+
+         <div class="col-md-12">
+
+        <div class="row">
+
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready"   href="{{ url }}/senet" >Senet Listesi</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn   fuse-ripple-ready"  href="{{ url }}/senet/ekle"  >Yeni Senet</a>
+                </li>
+
+
+            </ul>
+        </div>
+
+
+            <div class="col-md-12 m-t-15">
+
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <form id="logout-form"  class="col-md-12" action="{{url}}/senet/senet-listele" method="post">
+                                {{csrf | raw}}
+
+                                <div class="row">
+
+
+                                    <div class="col-md-4">
+                                        <label>Rapor Türü</label>
+
+
+                                        <select class="form-control" name="evrak_tip">
+
+                                      
+<option value="2"{% if s_evrak_tip == 2 %} selected {% endif %}>Verdiğim Senetler</option>
+<option value="1"{% if s_evrak_tip == 1 %} selected {% endif %}>Aldığım Senetler</option>
+<option value="3"{% if s_evrak_tip == 3 %} selected {% endif %}>Hepsi</option>
+                                         
+
+
+
+                                        </select>
+                                    </div>
+                                            
+                                            
+                                                  <div class="col-md-4">
+                                        <label>Ödeme Durumu</label>
+
+
+                                        <select class="form-control" name="odeme_durum">
+
+                                          
+<option value="0" {% if s_odeme_durum == 0 %} selected {% endif %}>Açık</option>
+<option value="1" {% if s_odeme_durum == 1 %} selected {% endif %}>Kapalı</option>
+<option value="3" {% if s_odeme_durum == 3 %} selected {% endif %}>Hepsi</option>
+
+
+
+
+                                        </select>
+                                    </div>
+                                            
+                                            
+
+
+                                    <div class="col-md-4">
+                                        <label>Vade Tarihi Başlama Tarihi</label>
+                                        <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                    </div>
+
+
+                                    <div class="col-md-4">
+                                        <label>Vade Tarihi Bitiş Tarihi</label>
+                                        <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                    </div>
+
+
+
+                                </div>
+
+                                <hr>
+                                <div class="row">               
+                                    <div class="col-md-4"> 
+
+                                        <button type="submit" class="form-control btn btn-primary">Rapor Getir</button> </div> </div>
+
+
+
+
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {%  if action == "ok" %}
+
+                <div class="col-md-12 m-t-15">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="senetlistesitable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Son Ödeme Tarih</th>
+                                                       <th>Evrak Turu</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Cari Hesap</th>
+                                                    <th>Tutar</th>
+                                                     <th>İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for senet in senetler  %}
+                                                    <tr>
+                                                        <td>{{senet.evrak_son_odeme_tarihi|date("d-m-Y")}}</td>
+                                                        <td>{% if senet.evrak_tip == 1%}Aldığımız Senetler{% else %}Yazdığımız{% endif %}</td>
+      
+                                                        <td><button type="button" class="btn btn-primary waves-effect waves-light "  data-evrak-id="{{senet.id}}" >{{senet.evrak_no}}</button></td>
+                                                        <td><a href="{{ url }}/cari/show/{{ senet.cari_id }}">{{senet.cari_adi}}</a></td>
+                                                        <td style="width:120px;">{{Tl(senet.evrak_bedeli)}} TL</td>
+                                                       <td style="width:120px;"><a href="{{ url }}/senet/islem/{{ senet.id }}">İşlem Yap</a></td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                         
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>  </div>
+                </div>
+
+          
+
+        {%   endif %}
+
+  </div>  </div>
+    {% endblock %}
+
+    {% block footer %}
+        <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+        <!-- Buttons examples -->
+        <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+        <!-- Responsive examples -->
+        <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+        <script> setDataTable("#senetlistesitable", 1, "senetler-{{bas_tarih|date("d-m-Y")}}-ile-{{bit_tarih|date("d-m-Y")}}-arasi");
+
+
+
+        </script>
+
+
+
+    {% endblock %}

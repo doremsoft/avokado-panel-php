@@ -1,0 +1,547 @@
+{% extends "layout-light.twig" %}
+
+{% block head %}
+
+    <link rel="stylesheet" href="{{asset('plugins/data-tables/css/datatables.min.css')}}">
+
+    <link href="{{asset('plugins/morris/morris.css')}}" rel="stylesheet" type="text/css" />
+    <style>
+        #section-to-print{
+            display: none;
+        }
+        @media print {
+
+
+
+            body * {
+                visibility: hidden;
+            }
+            #section-to-print, #section-to-print * , #section-to-print > #print-area{
+                visibility: visible;
+                display:block;
+            }
+            #section-to-print {
+                display:block;
+                width:100%;
+                position: absolute;
+                left: 0mm;
+                top: 0mm;
+            }
+
+            #print-area{
+
+                width:58mm;
+                text-align:center;
+                text-weight:bold;
+                margin: auto;
+
+            }
+        }.p-10{
+             padding: 10px !important;
+             min-height: 40px;
+             text-shadow: 0 0 black;
+         }
+
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            color: #fff;
+            background-color: #039BE5;
+        }
+        .form-group>label {
+            color: #3c4252;
+            font-weight: 800;
+        }
+        .apexcharts-tooltip {
+            background: #f3f3f3;
+            color: #000000;
+        }
+
+        .header{
+            background: url({{ asset("images/backgrounds/dark-material-bg.jpg") }}) no-repeat;
+
+        }
+
+
+        .user-profile-head{
+            height: 250px !important; min-height: 250px  !important;
+        }
+
+        @media only screen and (min-width: 1100px) {
+
+            .user-profile-head{
+                height: 150px !important; min-height: 150px  !important;
+            }
+
+        }
+
+
+
+    </style>
+
+{% endblock %}
+
+    {% block content %}
+
+
+        <div  class="page-layout simple tabbed">
+
+            <!-- HEADER -->
+            <div class="page-header light-fg d-flex flex-column justify-content-center justify-content-lg-end p-6 header user-profile-head" >
+
+                <div class="flex-column row flex-lg-row align-items-center align-items-lg-end no-gutters justify-content-between">
+
+                    <div class="user-info flex-column row flex-lg-row no-gutters align-items-center">
+
+                        <img  class="profile-image avatar huge mr-6"  style="border:3px solid #FFFFFF;" src="{{ media(cari.cari_image) }}">
+
+
+                        <div class="name h2 my-6">{{cari.cari_adi}}</div>
+
+                    </div>
+
+                    {% if user.bayi == 0 %}
+
+                    <div class="actions row align-items-center no-gutters">
+
+
+                        <form  action="{{ url }}/cari/hesap-hareketleri/{{ cari.id }} method="get">
+
+                        {{csrf | raw}}
+                        <button type="submit" class="btn btn-secondary " aria-label="Send Message">Hesap Hareketleri</button>
+                        </form>
+
+                            <form  action="{{url}}/cari/edit/{{cari.id}} method="get">
+
+                            {{csrf | raw}}
+
+                        <button type="submit" class="btn btn-primary ml-2" aria-label="Follow">Düzenle</button>
+                        </form>
+
+
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <!-- / HEADER -->
+
+        <div class="page-content">
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn active" id="timeline-tab" data-toggle="tab" href="#timeline-tab-pane" role="tab" aria-controls="timeline-tab-pane" aria-expanded="true">Özet</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn" id="about-tab" data-toggle="tab" href="#about-tab-pane" role="tab" aria-controls="about-tab-pane">Bilgiler</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn" id="photos-videos-tab" data-toggle="tab" href="#photos-videos-tab-pane" role="tab" onclick="wallPlay()" aria-controls="photos-tab-pane">Yorumlar</a>
+                </li>
+
+            </ul>
+
+            <div class="tab-content" style="padding: 0px;">
+
+                <div role="tabpanel" class="tab-pane fade show active" id="timeline-tab-pane" aria-labelledby="timeline-tab">
+
+
+
+                    <div class="row" style="box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);">
+
+                            <div class="col-12">
+                                <div class="card" style="border-radius: 0px;">
+                                    <div class="card-body border-bottom">
+                                        <div class="fro_profile">
+                                            <div class="row">
+
+                                                <div class="col-lg-12 mb-2 mb-lg-0">
+
+
+                                                    <div class="row">
+
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Toplam Satış</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(hesap_ozet.genel_toplam,"TL",2) | raw}}</h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Toplam Tahsilat</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(hesap_ozet.toplam_tahsilat,"TL",2) | raw}} </h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Toplam Alım</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(hesap_ozet.alim_genel_toplam,"TL",2) | raw}} </h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Toplam Ödeme</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(hesap_ozet.toplam_odeme,"TL",2) | raw}} </h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-12 p-10" style="height: 10px;"></div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Kredi Limit</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(cari.cari_kredi_limit,"TL",2) | raw}} </h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Vade</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{cari.cari_vade_gun}} Gün</h3>
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Güncel Borç Bakiye</div>
+                                                            <div class="seling-report">
+                                                                <h3 class="seling-data mb-1">{{Fiyat(hesap_ozet.bakiye,"TL",2) | raw}} </h3>
+
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-3">
+                                                            <div class="header-title">Durum</div>
+                                                            <div class="seling-report">
+
+
+                                                                {%  if hesap_ozet.durum_s == 0 %}
+
+                                                                <h3 class="seling-data mb-1 ">{{hesap_ozet.durum}}</h3>
+
+                                                                    {%  elseif hesap_ozet.durum_s == 1 %}
+
+                                                                    <h3 class="seling-data mb-1 text-success">{{hesap_ozet.durum}}</h3>
+
+                                                                        {% elseif hesap_ozet.durum_s == 2 %}
+
+                                                                        <h3 class="seling-data mb-1 text-danger">{{hesap_ozet.durum}}</h3>
+
+                                                                            {% endif %}
+
+
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                </div><!--end col-->
+                                            </div><!--end row-->
+                                        </div><!--end f_profile-->
+                                    </div><!--end card-body-->
+
+
+                                </div><!--end card-->
+                            </div><!--end col-->
+
+
+
+
+                    </div>
+
+                    <div class="row">
+                        <style>
+                            .morris-hover-point{
+                                color: #666 !important;
+                            }
+                        </style>
+                        <div class="col-md-12" style="background-color: #039be5!important;color: white;">
+                            <div id="morris-line-example" style="height: 300px"></div>
+                        </div>      </div>
+
+
+
+                </div>
+
+                <div class="tab-pane fade" id="about-tab-pane" role="tabpanel" aria-labelledby="about-tab">
+
+                    <div class="row" style="padding: 15px;">
+                        <div class="about col-12 col-md-12 col-xl-12">
+
+                            <div class="profile-box info-box general card mb-4">
+
+
+
+                                <div class="content p-4">
+
+
+
+                                    <div class="form-group">
+                                        <label>Cari Kod</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_kod}}</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Adı</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_adi}}</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Telefon</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_telefon}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gsm</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_gsm}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_mail}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vergi No / Tc Kimlik No</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_vergi_no}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Vergi Dairesi</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_vergi_daire}}</div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Adres</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_adres}}</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Detay</label>
+                                        <div class="shadow-none p-10 bg-light rounded lead m-t-0">{{cari.cari_detay}}</div>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                <div class="tab-pane fade" id="photos-videos-tab-pane" role="tabpanel" aria-labelledby="photos-videos-tab">
+
+                    <div class="row" style="padding: 15px;">
+
+                        <div class="timeline col-12 col-sm-7 col-xl-9" >
+
+                            <div class="profile-box add-post card">
+
+                                <div class="form">
+
+                                    <textarea class="w-100 p-4" id="cariyorum-textarea" placeholder="Bu Hesap Hakkında Birşeyler Yazın...."></textarea>
+
+                                    <footer class="row no-gutters align-items-center justify-content-between bg-light p-2">
+
+                                        <div class="row no-gutters">
+
+
+                                            <input id="post-image-file-upload" name="postimage" type="file"/>
+
+                                        </div>
+
+                                        <button type="post-button button" onclick="sendPost('cariyorum-textarea','hesap',{{ cari.id }},'loadwalldata()')" class="btn btn-secondary" aria-label="post">
+                                            Yorum Kaydet
+                                        </button>
+
+                                    </footer>
+                                </div>
+                            </div>
+
+                            <div class=" my-8"></div>
+
+ <div id="hesap-duvari"  class="wallresults" data-last-id = "0" data-first-id = "0"></div>
+
+                            <div class="load-more" data-load = "0" style="display: none;"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        </div>
+
+    {% endblock %}
+
+ {% block footer %}
+     <script src="{{asset('plugins/morris/morris.min.js')}}"></script>
+     <script src="{{asset('plugins/raphael/raphael.min.js')}}"></script>
+
+<script>
+
+
+
+     var wallstatus = false;
+
+
+
+    function loadwalldata(){
+
+        getIdPosts('hesap' , {{ cari.id }} ,  $("#hesap-duvari").attr("data-last-id") , "hesap-duvari" ,$("#hesap-duvari").attr("data-first-id"),0);
+
+    }
+
+    function wallPlay(){
+
+        wallstatus = true;
+
+        getIdPosts('hesap' ,{{ cari.id }} , $("#hesap-duvari").attr("data-last-id") , "hesap-duvari",$("#hesap-duvari").attr("data-first-id"),1);
+
+    }
+
+
+
+    wallPlay();
+
+    setInterval(function(){
+
+        if(wallstatus == true){
+
+            getIdPosts('hesap' , {{ cari.id }} ,  $("#hesap-duvari").attr("data-last-id"), "hesap-duvari" ,$("#hesap-duvari").attr("data-first-id") , 0);
+        }
+
+    }, 10000);
+
+
+
+
+    $("div.content").scroll(function() {
+        var $this = $(this);
+        var $results = $(".wallresults");
+
+        var scrooltop = $this.scrollTop();
+
+        var thish = $this.height();
+        var resultheight =  $results.height();
+        var thisheihgt = scrooltop + thish;
+
+
+
+        if($(".load-more").attr("data-load") == 0){
+
+            if (thisheihgt  >= resultheight) {
+
+                $(".load-more").attr("data-load",1)
+
+                $(".load-more").show();
+
+                getLoadMorePosts('hesap' , {{ cari.id }} , "hesap-duvari",$("#hesap-duvari").attr("data-first-id"));
+
+            }
+
+
+        }
+    });
+
+
+
+
+
+
+    var mount = JSON.parse('{{ satislar | raw }}');
+
+    console.log(mount);
+
+var year = "{{ yil }}";
+
+
+
+
+
+     !function($) {
+         "use strict";
+
+         var MorrisCharts = function() {};
+
+
+         MorrisCharts.prototype.createLineChart = function(element, data, xkey, ykeys, labels, lineColors) {
+             Morris.Line({
+                 element: element,
+                 data: data,
+                 xkey: xkey,
+                 ykeys: ykeys,
+                 labels: labels,
+                 hideHover: 'auto',
+                 gridLineColor: '#eef0f2',
+                 gridTextColor : '#fff',
+                 resize: true,
+                 lineColors: lineColors
+             });
+         },
+
+             MorrisCharts.prototype.init = function() {
+
+                 //create line chart
+                 var $data  = [
+                     { y: year+'-01', a: mount[1] },
+                     { y:  year+'-02', a: mount[2] },
+                     { y:  year+'-03', a: mount[3]},
+                     { y:  year+'-04', a: mount[4]},
+                     { y:  year+'-05', a: mount[5]},
+                     { y:  year+'-06', a:mount[6]},
+                     { y:  year+'-07', a:mount[7]},
+                     { y:  year+'-08', a: mount[8] },
+                     { y:  year+'-09', a: mount[9] },
+                     { y:  year+'-10', a: mount[10] },
+                     { y:  year+'-11', a: mount[11] },
+                     { y:  year+'-12', a: mount[12] }
+                 ];
+                 this.createLineChart('morris-line-example', $data, 'y', ['a'], ['Satış'], ['#fff']);
+
+
+
+
+             },
+             //init
+             $.MorrisCharts = new MorrisCharts, $.MorrisCharts.Constructor = MorrisCharts
+     }(window.jQuery),
+
+
+         function($) {
+             "use strict";
+             $.MorrisCharts.init();
+         }(window.jQuery);
+
+
+
+</script>
+
+
+
+{% endblock %}

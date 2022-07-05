@@ -1,0 +1,213 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="icon-account-box s-6"></i>
+                                        </span>
+                        <span class="logo-text h4">Alacaklı Olduğumuz Hesaplar</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+            <!-- SEARCH -->
+            <div class="col search-wrapper">
+
+                <div class="input-group">
+
+                                    <span class="input-group-btn">
+
+                                        <button type="button" class="btn btn-icon">
+                                            <i class="icon icon-magnify"></i>
+                                        </button>
+
+                                    </span>
+
+                    <input onkeyup="cariarama(this.value)" id="contacts-search-input" type="text" class="form-control" placeholder="Hesap Adı..." aria-label="Hesap Adı..." />
+                    <div id="aramasonuc" ></div>
+                </div>
+            </div>
+            <!-- / SEARCH -->
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Hesap İşlemleri</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top:16px;">
+                                <a class="nav-link ripple active  sid-nav-link " href="{{ url }}/cari/list">
+                                    <span>Bütün Hesaplar</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  " href="{{ url }}/cari/list/1">
+                                    <span>Müşteriler</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link " href="{{ url }}/cari/list/2">
+                                    <span>Tedarikçiler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link " href="{{ url }}/cari/list/3">
+                                    <span>Personeller</span>
+                                </a>
+                            </li>
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link accent" href="{{ url }}/finansal/alacaklarim">
+                                    <span>Alacaklarım</span>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/finansal/borclarim">
+                                    <span>Borçlarım</span>
+                                </a>
+                            </li>
+
+                            <div class="divider"></div>
+
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 1 %}accent{% endif %}" href="{{ url }}/cari/add/1">
+                                    <span>Yeni Müşteri</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  {% if tur == 2 %}accent{% endif %}" href="{{ url }}/cari/add/2">
+                                    <span>Yeni Tedrikçi</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  {% if tur == 3 %}accent{% endif %}" href="{{ url }}/cari/add/3">
+                                    <span>Yeni Personel</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6 ">
+
+                <div class="bg-white p-4">
+
+
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>Genel alacak listenizi gösterir Vadeli Alacaklarınız Dahildir!</p>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                <tr>
+
+                                                    <th>Cari Hesap Adı</th>
+                                                    <th>Alacak Tutarı</th>
+                                                    <th>İşlem</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% set toplami = 0 %}
+
+                                                {% for alacak in alacaklar %}
+
+                                                    {% set bakiye = alacak.toplam_alacak_bakiyesi + alacak.odeme_tutar - alacak.toplam_borc_bakiyesi - alacak.tahsilat_tutar  %}
+                                                    {%  if bakiye > 0.001  %}
+
+                                                        {% set toplami = toplami + bakiye %}
+                                                        <tr>
+
+                                                            <td><a href="{{url}}/cari/show/{{alacak.cari_id}}">{{alacak.cari_adi}}</a></td>
+                                                            <td>{{Tl(bakiye , 2)}} TL</td>
+                                                            <td><a href="{{url}}/cari/show/{{alacak.cari_id}}">Hesabı Göster</a></td>
+                                                        </tr>
+
+                                                    {% endif %}
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="card-body">
+                                Toplam : {{ Tl(toplami , 2) }} TL
+                            </div>
+
+
+                </div>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock %}

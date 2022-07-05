@@ -1,0 +1,183 @@
+{% extends "layout-light.twig" %}
+
+
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance</i>
+
+                                        </span>
+                    <span class="logo-text h4">Banka İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+    <div class="col-md-12">
+    <div class="row">
+
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" href="{{ url }}/banka" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready" href="{{ url }}/banka/sec" >Yeni Hareket Kayıt</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/banka/hareket-raporlari" >Hesap Hareketleri</a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"  href="{{ url }}/banka/hesap-ozetleri" >Hesap Özetleri</a>
+                </li>
+
+
+            </ul>
+        </div>
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ banka_detay.banka_adi }}</h5>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/banka/hesap/hareket-kaydet" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="banka_id" value="{{ banka_id }}"/>
+                            
+                            <div class="form-group">
+
+
+                                <label>Hesap:</label>
+
+                                <select name="hesap_id" class="form-control">
+                                    {% for hesap in hesaplar  %}
+                                        <option value="{{hesap.id}}">{{hesap.hesap_adi}}</option>
+                                    {% endfor %}
+
+                                </select>
+
+
+                            </div>
+                                    
+                                          <div class="form-group">
+
+
+                                <label>İşlem Türü:</label>
+
+                                <select name="tip" class="form-control">
+                                   
+                                        <option value="1">Para Girişi</option>
+                                        <option value="2">Para Çıkışı</option>
+                                
+                                </select>
+
+
+                            </div>
+                     
+                     
+                                   <div class="form-group">
+                                <label>İşlem Tarihi:</label>
+                                <input type="date" name="tarih" class="form-control" value="{{ bugun }}" required/>
+                            </div>    
+                                    
+                            <div class="form-group">
+                                <label>İşlem Başlığı:</label>
+                                <input type="text" name="baslik" class="form-control" required/>
+                            </div>
+                                    
+                     
+                            <div class="form-group">
+                                <label>İşlem Tutarı:</label>
+                                <input type="text" name="tutar" class="form-control" required/>
+                            </div>
+                                    
+                               
+
+
+                         
+
+                            <button type="submit" class="btn btn-primary">Hareket Ekle</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </div> </div>
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function hesap_sil(id) {
+
+
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+
+
+
+                if (result.value) {
+                    document.getElementById('hesap-sil-form-' + id).submit();
+                }
+
+
+
+
+
+            }, function (dismiss) {
+                // dismiss can be 'cancel', 'overlay',
+                // 'close', and 'timer'
+
+                if (dismiss === 'cancel') {
+
+                }
+
+
+            });
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

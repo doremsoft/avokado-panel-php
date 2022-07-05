@@ -1,0 +1,377 @@
+{% extends "layout-light-empty.twig" %}
+
+{% block head %}
+
+    <style>
+        .nounderline {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .alfabetik{
+
+            padding: 0px;
+            margin:0px;
+
+
+        }
+
+        .alfabetik li{
+            list-style: none;
+
+            float: left;
+            padding: 10px;
+        }
+
+
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    <div class="col-md-12">
+
+        <ul class="alfabetik">
+
+            <li>
+
+                {%  if ex.tip == "hepsi" %}
+
+                    <a href="{{ url }}/stok/weblist?tip=web">Seçim: Bütün Ürünler</a>
+
+                {% else %}
+                    <a href="{{ url }}/stok/weblist?tip=hepsi">Seçim: Webde Satılanlar</a>
+
+
+                {% endif %}
+
+
+
+
+            </li>
+
+            <li><a href="{{ url }}/stok/weblist/all?tip={{ ex.tip }}">Hepsi</a></li>
+
+            {% for charcode in alphbt %}
+
+
+                <li><a href="{{ url }}/stok/weblist/{{ charcode }}?tip={{ ex.tip }}" style="{% if charcode == harf %}font-weight:bold;{% endif %}" >{{ charcode }}</a></li>
+
+            {% endfor %}
+        </ul>
+
+        <table id="e-commerce-products-table" class="table dataTable table table-striped">
+            <thead>
+            <tr>
+
+                <th>Stok Adı</th>
+                <th>Mevcut</th>
+                <th>Stok Kod</th>
+                <th>Satış Fiyatı (KDV Dahil)</th>
+                <th>Web</th>
+                <th>İşlem</th>
+            </tr>
+            </thead>
+
+            <tbody id="stoklist-table-body">
+            {% set i = 0 %}
+            {% for stok in stoklar.result %}
+                {% set i = i + 1 %}
+                <tr>
+                    <td><a class="nounderline" href="{{ url }}/stok/show/{{ stok.id }}">{{ stok.stok_full_ad }}</a></td>
+                    <td>{{ adet(stok.stok_adet) }}</td>
+                    <td>{{ stok.stok_kod }}</td>
+                    <td>{{ Fiyat(kdv_hesapla(stok.stok_satis_fiyati,1,stok.stok_kdv_oran,'ekle',1),stok.stok_doviz,1) | raw }}</td>
+
+                    <td>
+                        {% if stok.web_status == 0 %}
+                            <a href="{{url}}/stok/webstatus/{{stok.id}}/1" class="btn btn-success text-white">Yayınla</a>
+                        {% else %}
+                            <a href="{{url}}/stok/webstatus/{{stok.id}}/0" class="btn btn-danger text-white">Kaldır</a>
+                        {% endif %}</td>
+                    <td><button class="btn btn-danger hizliDuzenle" onclick="openFrameModel('{{ url }}/stok/edit/{{ stok.id }}/ok')" >Düzenle</button> </td>
+                </tr>
+            {% endfor %}
+
+            {% if i == 0 %}
+
+                <tr>
+
+                    <td colspan="6">Kayıtlı Ürün Bulunamadı</td>
+                </tr>
+
+            {% endif %}
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card-body">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{ paginate(stoklar.paginate,page_url,ex) | raw }}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+
+    <script>
+
+
+        var table_html_data = $("#stoklist-table-body").html();
+
+
+        function urungetirisimle(str) {
+            if (str.length <= 1) {
+
+                $("#stoklist-table-body").html(table_html_data);
+
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var checkbox6 = 0;
+                if ($("#checkbox6").prop("checked") == true) {
+
+                    checkbox6 = 1;
+                }
+
+
+                var jqxhr = $.post("{{ url }}/stok/search/full", {query: str, mevcutta: checkbox6})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+
+                        if (data == "non") {
+
+
+                        } else {
+
+
+                            var stok_data = JSON.parse(data);
+
+
+                            if (stok_data.durum == "ok") {
+
+                                var lihtml = "";
+
+                                $.each(stok_data.stok, function (key, val) {
+
+
+                                    lihtml += trurunbas(val);
+
+                                });
+
+                                document.getElementById("stoklist-table-body").innerHTML = lihtml;
+
+
+                            } else {
+
+
+                                document.getElementById("stoklist-table-body").innerHTML = "<tr><td colspan=\"5\"><center>Ürün Bulunamadı!</td></tr></center>";
+
+
+                            }
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+        }
+
+
+        function urunbarcodeilegetir(e) {
+            //See notes about 'which' and 'key'
+            if (e.keyCode == 13) {
+                var tb = document.getElementById("barcodeilegetirinput");
+
+
+                var str = tb.value;
+
+
+                document.getElementById("barcodeilegetirinput").value = "";
+
+
+                if (str.length <= 1) {
+                    document.getElementById("aramasonuctable").innerHTML = "";
+                    document.getElementById("arama_sonuclari_row").style.display = "none";
+
+
+                    return;
+                } else if (str.length > 1) {
+
+                    console.log(str);
+
+                    var jqxhr = $.post("{{ url }}/stok/search/full", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                            console.log(data);
+
+
+                            if (data == "non") {
+
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += trurunbas(val);
+
+                                    });
+
+                                    document.getElementById("aramasonuctable").innerHTML = lihtml;
+
+                                    document.getElementById("arama_sonuclari_row").style.display = "block";
+
+                                } else {
+
+                                    console.log("Ürün Bulunamadı");
+                                    document.getElementById("aramasonuctable").innerHTML = "<tr><td colspan=\"7\"><center>Ürün Bulunamadı!</td></tr></center>";
+
+                                    document.getElementById("arama_sonuclari_row").style.display = "block";
+                                }
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+                }
+                return false;
+            }
+        }
+
+
+        function trurunbas(data) {
+
+            var html = "";
+
+
+            if (data.stok_kdv_oran > 0) {
+
+                if (data.stok_kdv_oran > 9) {
+
+                    var kdv_oran_duzelt = "1." + data.stok_kdv_oran;
+
+                } else {
+
+                    var kdv_oran_duzelt = "1.0" + data.stok_kdv_oran;
+                }
+
+
+                var vergili_satis_fiyat = parseFloat(data.stok_satis_fiyati) * parseFloat(kdv_oran_duzelt);
+
+                vergili_satis_fiyat = vergili_satis_fiyat.toFixed(2);
+
+            } else {
+
+                var vergili_satis_fiyat = data.stok_satis_fiyati;
+            }
+
+
+            var stok_adi = data.stok_adi;
+
+            if (data.stok_varyant_adi != null || data.stok_varyant_adi != "" || data.stok_varyant_adi != "null") {
+
+                stok_adi += " " + data.stok_varyant_adi;
+            }
+
+            if (data.stok_varyant_deger != null || data.stok_varyant_deger != "" || data.stok_varyant_deger != "null") {
+
+                stok_adi += " " + data.stok_varyant_deger;
+            }
+
+
+            html += "<tr>";
+
+            html += " <td><a class=\"nounderline\" href=\"{{ url }}/stok/show/" + data.id + "\">" + stok_adi + "</a></td>";
+            html += " <td>" + parseFloat(data.stok_adet) + "</td>";
+            html += " <td>" + data.stok_kod + "</td>";
+            html += " <td>" + vergili_satis_fiyat + " " + data.stok_doviz + " </td>";
+            html += "<td><a class=\"nounderline\" href=\"{{ url }}/stok/show/" + data.id + "\">Göster</a></td>";
+            html += "</tr>"
+
+
+            return html;
+
+        }
+
+
+        $("#paginate-select").on('change', function () {
+
+
+            var url = $(this).val();
+
+            window.location.href = url;
+        });
+
+        $("#checkbox6").on("change", function () {
+
+
+            urungetirisimle($("#stokurunarama-input").val());
+
+        });
+
+
+        $("#chboxlanel").on('click', function () {
+
+
+            if ($("#checkbox6").prop("checked") == true) {
+
+                $("#checkbox6").prop('checked', false);
+            } else {
+
+                $("#checkbox6").prop('checked', true);
+            }
+
+
+        });
+
+
+        $(".hizliDuzenle").on("click",function () {
+
+            var url = $(this).attr("data-href");
+
+        })
+    </script>
+
+
+
+
+{% endblock %}

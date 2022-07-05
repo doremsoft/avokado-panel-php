@@ -1,0 +1,70 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+
+    <!-- HEADER -->
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-6">
+
+        <div class="row no-gutters align-items-center">
+
+            <a href="{{ url }}/stok/show/{{stokid }}" class="btn btn-icon mr-4">
+                <i class="icon icon-arrow-left"></i>
+            </a>
+
+
+            <div>Geri Dön...</div>
+        </div>
+
+
+
+
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Silme Onayı</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if kontrol == 0 %}
+                            
+                            Bu Stok Üzerinde Daha Önceden İşlem Yapılmış! <br>
+                            
+                            Hareket Kayıtlarını Kaldırmadan Bu Stoğu Silemezsiniz!
+                            
+                        {%  elseif kontrol == 1  %}
+                            
+                               <form id="logout-form" action="{{url}}/stok/removeok" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="stok_id" value="{{stokid}}" />
+                        
+                       
+                            <button type="submit" class="btn btn-danger">Stokğu Kalıcı Olarak Sil</button>
+                            
+                      </form>
+                            
+                            {% endif %}
+                     
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+{% endblock %} 
+

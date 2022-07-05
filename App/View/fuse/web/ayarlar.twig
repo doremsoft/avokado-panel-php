@@ -1,0 +1,391 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+                color: #040f12;
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+                color: #040f12;
+                background-color: #e6f2ff;
+
+            }
+
+            #aramasonuc{
+
+
+
+            }
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">web</i>
+
+                                        </span>
+                        <span class="logo-text h4">Websitesi</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+
+
+
+                            {% for key , val  in menuler %}
+
+                                <li class="nav-item" style="padding-top:16px;">
+                                    <a class="nav-link ripple active  sid-nav-link {% if aktif_url == val %}accent{% endif %} " href="{{ url }}/{{ val }}">
+                                        <span>{{key}}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+
+
+                <div class="card m-t-15">
+                    <div class="card-header">Yayındaki Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.active_template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Düzenlenen Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+
+
+
+                <!-- / CONTENT -->
+                <div class="page-content col-md-12 p-4 p-sm-6">
+                    <div class="row">
+
+
+
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form  action="{{url}}/web/ayar-sifirla" method="post">
+                                                {{csrf | raw}}
+
+                                                <button type="submit" class="btn btn-danger">Ayarları Oluştur</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                <!-- CONTENT -->
+
+
+
+
+
+                        <div class="col-md-12">
+
+                            <h4>Site Ayarları</h4>
+
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-webyayin" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="webyayin">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-webyayin" {% if ayar.webyayin == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Web Yayını</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-bakimmod" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="bakimmod">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-bakimmod" {% if ayar.bakimmod == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Bakım Modu</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-onbellek" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="onbellek">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-onbellek" {% if ayar.onbellek == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Önbellek Sistemi</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 ">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-compress" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="compress">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-compress" {% if ayar.compress == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">CSS + JS + HTML Sıkıştırma</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 m-t-15">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-eticaret" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="eticaret">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-eticaret" {% if ayar.eticaret == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">E-Ticaret Modu</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-3 m-t-15">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-bootblock" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="bootblock">
+
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-bootblock" {% if ayar.bootblock == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Arama Motorlarını Engelle</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 m-t-15">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-abonelik" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="abonelik">
+
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-abonelik" {% if ayar.abonelik == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Web Abone Sistemi</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3 m-t-15">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-yeniuye" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="yeniuye">
+
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-yeniuye" {% if ayar.yeniuye == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Web Yeni Üye Kabul</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 m-t-15">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12" style="text-align: center;">
+                                            <form id="form-webmesaj" action="{{url}}/web/ayar-guncelle" method="post">
+                                                {{csrf | raw}}
+                                                <input type="hidden" name="ayar_adi" value="webmesaj">
+                                                <label class="switch" style="margin: auto;">
+                                                    <input type="checkbox" name="durum" data-form-adi="form-webmesaj" {% if ayar.webmesaj == 1 %} checked{% endif %}>
+                                                    <span class="slider round"></span>
+                                                </label> <br>
+                                                <label  style="font-weight: bold;">Web Mesaj</label>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                    </div>    </div>
+
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+
+        $('[data-form-adi]').change(function() {
+
+
+            var form_adi = $(this).attr("data-form-adi");
+
+            document.getElementById(form_adi).submit();
+
+
+        });
+
+
+
+    </script>
+
+
+{% endblock %}

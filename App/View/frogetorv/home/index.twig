@@ -1,0 +1,175 @@
+{% extends "layout-light.twig" %}
+
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Anasayfa{% endblock %}
+{% block bread %}  
+    
+            <li class="breadcrumb-item"><a href="javascript:void(0);">Hoşgeldiniz</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Pano</a></li>{% endblock %}
+
+{% block content %}
+
+
+       <div class="row justify-content-center">
+
+
+            <div class="col-md-8">
+                <div class="row">
+
+
+
+                    <div class="col-xl-12 col-md-12">
+                        <div class="card Recent-Users">
+
+                               <div class="card-body">
+                                        <h4 class="header-title mb-0">Duyurular</h4>
+                                    </div>
+
+                            <div class="card-block px-0">
+
+                                <table class="table table-hover" >
+                                    <tbody>
+
+                                        {% for duyuru in duyurular  %}
+                                            <tr class="unread">
+                                                <td style="white-space: inherit;">
+                                                    <h6 class="m-b-1">{{ duyuru.tarih | date('d-m-Y h:i') }} - {{ duyuru.baslik }}</h6>
+                                                    <p class="m-0">{{ duyuru.duyuru }}</p>
+                                                </td>
+
+                                            </tr>
+
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="row">
+
+
+                    <div class="col-md-12 col-xl-12">
+                        <div class="card">
+
+
+                            <div class="card-body ">
+                              <h4 class="header-title mb-0">Hesap Durumu</h4>
+                                <div class="row align-items-center justify-content-center p-10">
+                                    <div class="col-auto">
+                                        <h3 class="f-w-300 m-t-20"> {{ Tl(hesap_detayi.guncel_bakiye) }} TL</h3>
+                                        <span>Güncel Bakiyeniz</span>
+                                    </div>
+                                    <div class="col text-right">
+                                        <i class="fas fa-chart-line f-30 text-c-purple"></i>
+                                    </div>
+                                </div>
+                                <div class="leads-progress mt-3">         <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                    <h6 class="text-muted f-w-300 mt-4">Paket Adı <span class="float-right">{{ hesap_detayi.paket_adi }}</span></h6>
+                                    <h6 class="text-muted f-w-300 mt-4">İlk Kayıt Tarihi <span class="float-right">{{ hesap_detayi.ilk_kayit | date('d-m-Y h:i') }}</span></h6>
+                                    <h6 class="text-muted f-w-300 mt-4">Yenileme Tarihi <span class="float-right"> {{ hesap_detayi.kayit_yenileme | date('d-m-Y h:i') }} </span></h6>
+                                    <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                    <h6 class="text-muted f-w-300 mt-4">Toplam Stok <span class="float-right"> {{ hesap_detayi.stok_limiti }} / {{ satis_raporlari.toplam_stok }} </span></h6>
+                                    <h6 class="text-muted f-w-300 mt-4">Toplam Cari Hesap <span class="float-right"> {{ hesap_detayi.cari_limiti }} / {{ satis_raporlari.toplam_cari }}  </span></h6>
+                                    <h6 class="text-muted f-w-300 mt-4">Toplam Parekende Cihaz <span class="float-right"> {{ hesap_detayi.cihaz_limiti }} / 1 </span></h6>
+
+                                    <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                    <h6 class="text-muted f-w-300 mt-4">Hesap Notu:</h6>
+
+                                    {{ hesap_detayi.detay }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
+
+
+        </div>
+
+{% endblock %}
+
+{%  block footer %}
+
+    <script src="{{asset('plugins/apexcharts/apexcharts.min.js')}}"></script>
+
+          <script>
+
+
+var options = {
+
+  chart: {
+    height: 350,
+    type: 'bar',
+  },
+  plotOptions: {
+    bar: {
+      columnWidth: '50%',
+      endingShape: 'rounded'
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    width: 2
+  },
+  series: [{
+    name: 'Satış',
+     data: [{% for gun, satis in son7gun  %}{{satis}},{%endfor%}],
+  }],
+  grid: {
+    row: {
+      colors: ['#fff', '#f7f8f9']
+    }
+  },
+  xaxis: {
+    labels: {
+      rotate: -45
+    },
+    categories: [{% for gun, satis in son7gun  %}'{{gun}}',{%endfor%}],
+  },
+  yaxis: {
+    labels: {
+      formatter: function (value) {
+        return value+" TL" ;
+      }
+    },
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'light',
+      type: "horizontal",
+      shadeIntensity: 0.25,
+      gradientToColors: undefined,
+      inverseColors: true,
+      opacityFrom: 0.85,
+      opacityTo: 0.85,
+      stops: [50, 0, 100]
+    },
+  },
+
+}
+
+var chart = new ApexCharts(
+  document.querySelector("#e-dash1"),
+  options
+);
+
+
+chart.render();
+          </script>
+
+{% endblock %}

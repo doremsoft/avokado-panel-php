@@ -1,0 +1,137 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+  
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Yeni Stok</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/stok/save" method="post" enctype="multipart/form-data">
+                            {{csrf | raw}}
+
+                      
+                                <input type="hidden" class="form-control" name="stok_kod">
+                         
+                            <div class="form-group">
+                                <label>Ad</label>
+                                <input type="text" class="form-control" name="stok_adi" required />
+                            </div>
+                        
+                                <input type="hidden" class="form-control" name="stok_cinsi">
+                            
+                                 <input type="hidden" class="form-control" name="page" value="fast">
+                            
+                            
+                                     
+                            <div class="form-group">
+                                <label>Stok Barkod</label>
+                                <input type="text" class="form-control" name="stok_barkod_no">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Birimi</label>
+                                <select name="stok_birimi" class="form-control">
+                                    {% for birim in birimler %}
+                                        <option value="{{birim.id}}">{{birim.stok_birim_adi}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                               
+                                <input type="hidden" class="form-control" name="stok_standart_adet" value="1">
+                         
+                                
+                                     <input type="hidden" class="form-control" name="stok_sinif" value="0">
+                                         
+                            <div class="form-group">
+                                <label>Grubu</label>
+                                <select name="stok_grup" class="form-control">
+                                    {% for grup in gruplar %}
+                                        <option value="{{grup.id}}">{{grup.stok_grup_adi}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                       
+                                <input type="hidden" class="form-control" name="stok_min_seviyesi" value="0">
+                     
+
+                        
+                                <input type="hidden" class="form-control" name="stok_max_seviyesi" value="99999">
+                          
+
+                      
+                                <input type="hidden" class="form-control" name="stok_alis_fiyati" value="0">
+
+
+
+
+                   
+                                <input type="hidden" class="form-control" name="stok_satis_fiyati" value="0">
+
+                          
+
+                                <input type="hidden" class="form-control" name="stok_max_iskontolu_satis_fiyati" value="0">
+                               
+
+                                <input type="hidden" class="form-control" name="stok_kdv_oran" value="18">
+                         
+
+                      
+
+      <input type="hidden" name="fiyatVergiDurum" value="2">
+                                
+                           <input type="hidden" name="stok_detayi">
+                       
+                                <input type="hidden" name="stok_resim">
+                          
+
+
+                    
+                                <input type="hidden" class="form-control" name="stok_ozel_kod">
+                       
+
+
+
+                            <button type="submit" class="btn btn-primary">Ekle</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+    <script src="{{asset('plugins/inputmask/js/inputmask.min.js')}}"></script>
+
+    <script src="{{asset('plugins/inputmask/js/jquery.inputmask.min.js')}}"></script>
+
+    <script src="{{asset('plugins/inputmask/js/autoNumeric.js')}}"></script>
+
+    <script src="{{asset('js/pages/form-masking-custom.js')}}"></script>
+
+    <script>
+
+
+        $(document).ready(function () {
+
+            $(".tr_telephone").inputmask({
+                mask: "(999) 999-99-99"
+            });
+
+
+        });
+    </script>
+
+{% endblock %} 
+

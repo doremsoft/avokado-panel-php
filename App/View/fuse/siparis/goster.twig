@@ -1,0 +1,340 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+
+        <link href="{{asset('plugins/morris/morris.css')}}" rel="stylesheet" type="text/css" />
+
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+
+                background-color: #e6f2ff;
+
+            }
+
+            #aramasonuc{
+
+
+
+            }
+
+
+             .accent{
+                 background-color: red !important;
+             }
+
+
+
+
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">description</i>
+
+                                        </span>
+                        <span class="logo-text h4">Sipariş Detayı</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+
+                <a href="{{ url }}/siparis" class="btn btn-primary col-md-12">Geri Dön</a>
+
+                {% if siparis.remove == 0 %}
+                <button type="button" onclick="window.location.href='{{ url }}/stok-haraket/cikis-duzenle/{{siparis.id  }}'" class=" m-t-15 btn btn-danger waves-effect waves-light col-md-12">
+                    Düzenle
+                </button>
+                {% endif %}
+
+                <button type="button" onclick="window.location.href='{{ url }}/stok-haraket/cikis-siparisten-fatura/{{siparis.id}}'" class=" m-t-15 btn btn-success waves-effect  text-white waves-light col-md-12">
+                    Faturalandır
+                </button>
+
+
+                <div class="page-sidebar-card m-t-15">
+                    <!-- SIDENAV CONTENT -->
+
+
+                    <div class="content">
+
+
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+
+
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Sipariş Durumu</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider" style="padding-bottom: 15px;"></div>
+
+
+
+                            {% if siparis.remove == "1" %}
+
+                                <li class="nav-item"> <a href="#" class="nav-link ripple sid-nav-link  accent "><span  >İptal Edildi</span></a></li>
+
+
+                            {% else %}
+
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/9" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 9 %}accent{% endif %}"><span>Taslak Sipariş</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/0" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 0 %}accent{% endif %}"><span  >Sipariş Onayı Bekleniyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/1" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 1 %}accent{% endif %}"><span  >Ödeme Bekleniyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/2" class="nav-link ripple sid-nav-link  {% if siparis.siparis_durumu == 2 %}accent{% endif %}"><span   >Tedarik Bekleniyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/2" class="nav-link ripple sid-nav-link  {% if siparis.siparis_durumu == 10 %}accent{% endif %}"><span   >İmalat Bekleniyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/3" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 3 %}accent{% endif %}"><span  >Teslimat Bekleniyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/4" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 4 %}accent{% endif %}"><span>Evrak Bekleniyor</span></a></li>
+                                <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/8" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 8 %}accent{% endif %}"><span>İşlem Onayı Bekliyor</span></a></li>
+
+                                <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/5" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 5 %}accent{% endif %}"><span >Hazırlanıyor</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/6" class="nav-link ripple sid-nav-link  {% if siparis.siparis_durumu == 6 %}accent{% endif %}"><span   >Kargoya Verildi</span></a></li>
+                                    <li class="nav-item"> <a href="{{url}}/siparis/durum-degis/{{ siparis.id }}/7" class="nav-link ripple sid-nav-link   {% if siparis.siparis_durumu == 7 %}accent{% endif %}"><span  >Teslim Edildi</span></a></li>
+
+
+                            {% endif %}
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="contacts-list" style="padding-bottom: 20px;">
+
+
+
+                    <div class="col-md-12 " >
+
+                            <table class="table bg-white">
+                                <thead  class="thead-dark">
+                                <tr>
+                                    <th scope="col">Sipariş Tarih</th>
+                                    <th scope="col">Müşteri</th>
+                                    <th scope="col">İletişim</th>
+                                    <th scope="col">Mail Adresi</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr>
+                                    <th scope="row">{{ tarih(siparis.created_date,"d.m.Y H:i") }}</th>
+                                    <td><a target="_blank" href="{{ url }}/cari/show/{{ siparis.cari_id }}">{{ siparis.cari_adi }}</a></td>
+                                    <td> {{ siparis.ceptelefonu }}</td>
+                                    <td>{{ siparis.email_adres }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+
+
+
+
+
+                    </div>
+
+
+                    <div class="col-md-12 m-t-15" >
+                        <div class="card">
+                            <div class="card-header">Sipariş Notu</div>
+                            <div class="card-content p-10">
+                                {% if siparis.evrak_detayi == "" %}
+
+                                    <h5>Sipariş Mesajı Bulunmamaktadır....</h5>
+                                {% else %}
+                                    {{ siparis.evrak_detayi }}
+
+                                {% endif %}
+
+                                </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 m-t-15" >
+                        <div class="card">
+                            <div class="card-header">Sipariş Kalemleri</div>
+                            <div class="card-content">
+
+                                <table class="table bg-white">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Ürün</th>
+                                        <th scope="col" style="width: 120px;">Adet</th>
+                                        <th scope="col" style="width: 120px;">Tutar</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% set toplam = 0 %}
+                                    {% for kalem in kalemler %}
+
+                                    <tr>
+                                        <th scope="row">{{ kalem.stok_adi }} {{ kalem.stok_varyant_adi }} {{ kalem.stok_varyant_deger }}</th>
+                                        <td>{{ adet(kalem.stok_standart_adet) }}</td>
+                                        <td>{{ Fiyat(kalem.stok_satis_fiyati,"TL","ok") | raw }}</td>
+
+                                    </tr>
+
+                                        {% set toplam = toplam + kalem.stok_satis_fiyati %}
+
+                                    {% endfor %}
+
+
+
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td  style="padding: 0px;">Ara Toplam:</td>
+                                        <td  style="padding: 0px;">{{ Fiyat(siparis.evrak_tutar,"TL","ok") | raw }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td  style="padding: 0px;">KDV:</td>
+                                        <td  style="padding: 0px;">{{ Fiyat(siparis.kdv_toplam,"TL","ok") | raw }}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td style="padding: 0px;">Kargo:</td>
+                                        <td style="padding: 0px;">{{ Fiyat(siparis.kargo_bedeli,"TL","ok") | raw }}</td>
+                                    </tr>
+
+
+                                    {%  set top = siparis.genel_toplam + siparis.kargo_bedeli %}
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td style="padding: 0px;">Toplam:</td>
+                                        <td style="padding: 0px;">{{ Fiyat(top,"TL","ok") | raw }}</td>
+                                    </tr>
+
+
+
+                                    </tbody>
+                                </table>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-md-12 m-t-15" >
+                        <div class="card">
+                            <div class="card-header">Sipariş İletişim Bilgileri:</div>
+                            <div class="card-content p-10">
+                                Müşteri: {{ siparis.musteri_ad }} {{ siparis.musteri_soyad }}<br>
+                                Telefon: {{ siparis.telefonno }}<br>
+                                Gsm: {{ siparis.ceptelefonu }}<br>
+                                Adres: <br>
+                                {{ siparis.sevk_adres }} {{ siparis.sevk_il }} {{ siparis.sevk_ilce }}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 m-t-15" >
+                        <div class="card">
+                            <div class="card-header">Sipariş Kargo No:</div>
+                            <div class="card-content p-10">
+                                <form action="{{ url }}/siparis/kargo-no-guncelle" method="post">
+
+                                    <input type="hidden" name="siparisid" value="{{ siparis.siparis_web_id }}">
+
+                                    <input type="text" name="kargono" value="{{ siparis.kargo_no }}" placeholder="Kargo Numarasını Yazın">
+<br>
+                                    <button type="submit" class="m-t-15 btn btn-danger">Güncelle</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock %}

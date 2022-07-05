@@ -1,0 +1,150 @@
+{% extends "layout-light.twig" %}
+
+    
+    
+{% block content %}
+
+
+    <div class="col-md-12 m-t-15">
+    <div class="card">
+        <div class="card-header">
+            <h5>Yazılım Lisanslarınız</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Takma Adı</th>
+                                <th>Seri Kodu</th>
+                                <th>Türü</th>
+                                <th>Lisans Yenileme Tarihi</th>
+                                <th>İşlem</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for yazilim in yazilimlar  %}
+                                <tr>
+
+                                    <td>
+
+                                        <label style="padding:10px;" id="editable-{{yazilim.id}}" class="editable" data-url="{{url}}/banka/update" data-id="{{yazilim.id}}" title="Düzenlemek İçin Tıklayın">{{yazilim.takma_adi}}</label>
+                                        <form id="banka-sil-form-{{yazilim.id}}" action="{{url}}/banka/remove" method="post">
+                                            {{csrf | raw}}
+                                            <input type="hidden" name="id" value="{{yazilim.id}}"/>
+                                        </form>
+                                    </td>
+                                    <td>{{yazilim.serial_code}}</td>
+                                    <td>{{yazilim.device_type}}</td>
+                                    <td>{{yazilim.reload_date | date('d-m-Y')}}</td>
+                                    <td width="150px">
+
+                                        <a href="{{ url }}/yazilimlar/edit/{{ yazilim.id }}" class="btn btn-icon btn-primary" ><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="col-md-12 m-t-15">
+        <div class="card">
+            <div class="card-header">
+                <h5>Yazılım İndirme Adresleri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="senetlistesitable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th>Uygulama Adı</th>
+                                    <th>İşletim Sistemi</th>
+                                    <th>İndirme Adresi</th>
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                <tr>
+                                    <td>Avokado Barkod</td>
+                                    <td>Windows </td>
+                                    <td> <a href="#" onclick="event.preventDefault();
+                                                        document.getElementById('a-barkod-w-x86-form').submit();" class="">İndir</a>
+                                        <form id="a-barkod-w-x86-form"  target="_blank" action="{{url}}/download/barkod-win-download" method="post">
+                                            {{csrf | raw}}
+                                        </form> </td>
+
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function banka_sil(id) {
+
+     
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+                
+            
+
+                if(result.value){
+                      document.getElementById('banka-sil-form-' + id).submit();
+                }
+
+              
+
+            }, function (dismiss) {
+               
+                 if (dismiss === 'cancel') {
+                 swal(
+                 'Cancelled',
+                 'Your imaginary file is safe :)',
+                 'error'
+                 )
+                 }
+                 
+                
+            });
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

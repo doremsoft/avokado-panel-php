@@ -1,0 +1,227 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Alım Raporları{% endblock %}
+{% block bread %}
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Alımlar</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Alım Raporları</a></li>{% endblock %}
+{% block head %}
+
+
+    <!-- DataTables -->
+    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+    <style>
+        .modal-dialog {
+            max-width: 90%;
+
+        }
+    </style>
+
+
+
+
+
+
+{% endblock %}
+    {% block content %}
+
+        <div class="row justify-content-center">
+
+        <div class="col-md-12">
+
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="row">
+                        <form id="logout-form"  class="col-md-12" action="{{url}}/fatura/liste" method="post">
+                            {{csrf | raw}}
+
+                            <div class="row">
+
+
+                                <div class="col-md-3">
+                                    <label>Fatura Türü</label>
+
+
+                                    <select class="form-control" name="type">
+
+
+                                            <option value="1"    {% if type == "1" %} selected  {% endif %}>Alım Faturaları</option>
+                                             <option value="2"    {% if type == "2" %} selected  {% endif %} >Satış Faturaları</option>
+
+
+
+
+
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <label>Rapor Başlama Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <label>Rapor Bitiş Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                </div>
+
+                                     <div class="col-md-3">
+                                    <label>İşlem</label>
+
+
+                               <button type="submit" class="form-control btn btn-primary">Rapor Getir</button> </div> </div>
+      </form>
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+
+
+
+
+            <div class="col-md-12">
+                <div class="card">
+
+                {% set genel_toplam_tutari = 0 %}
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="alimlartable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        <thead>
+                                        <tr>
+                                            <th>Tarih</th>
+                                            <th>Evrak No</th>
+                                            <th>Hesap</th>
+                                            <th>Vergili Toplam</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for fatura in faturalar  %}
+                                            <tr>
+                                                <th scope="row" style="width:50px;">{{fatura.created_date|date("d-m-Y H:i:s")}}</th>
+                                                <th style="width:150px;"><button type="button" class="btn btn-primary waves-effect waves-light alimevrakmodal" data-toggle="modal" data-evrak-id="{{fatura.id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{fatura.evrak_no}}</button></th>
+                                                <th>{{fatura.cari_adi}}</th>
+                                                <td style="width:120px;">{{Tl(fatura.genel_toplam)}} TL</td>
+                                                  {% set genel_toplam_tutari = genel_toplam_tutari + fatura.genel_toplam %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                                <div class="row">
+
+
+
+
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2"> </div>
+                                    <div class="col-md-2">Toplam Tutar:<b>{{ Tl(genel_toplam_tutari , 2) }} TL</b></div>
+
+                                </div>
+                                <br>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>  </div>
+            </div>
+
+
+
+        <!-- sample modal content -->
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mt-0" id="myLargeModalLabel"> </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="invoicearea" class="col-md-12"></div>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+    {% endblock %}
+
+    {% block footer %}
+        <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+        <!-- Buttons examples -->
+        <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+        <!-- Responsive examples -->
+        <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+        <script> setDataTable("#alimlartable", 1, "alimlar-{{bas_tarih}}-ile-{{bit_tarih}}-arasi");
+
+
+
+            $(".alimevrakmodal").click(function () {
+
+                $("#invoicearea").html("Yükleniyor....");
+                var id = $(this).attr("data-evrak-id");
+
+                {% if type == "1" %}
+
+    $("#invoicearea").load("{{ url }}/fatura/show/" + id + "/alim");
+                  {% elseif type == "2" %}
+    $("#invoicearea").load("{{ url }}/fatura/show/" + id + "/satis");
+                  {% endif %}
+
+
+            });
+
+        </script>
+
+
+
+    {% endblock %}

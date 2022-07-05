@@ -1,0 +1,1566 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+        <link href="{{asset_url}}/plugins/prism/prism.css" rel="stylesheet" type="text/css" />
+      <link href="{{asset_url}}/plugins/prismlive/prism-live.css" rel="stylesheet" type="text/css" />
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+                color: #040f12;
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+                color: #040f12;
+                background-color: #e6f2ff;
+
+            }
+
+            .form-group, .form-check {
+                font-size: 14px;
+
+                letter-spacing: 0;
+
+            }
+
+
+
+            div.prism-live {
+                position: relative;
+                box-sizing: border-box;
+                display: flex;
+                flex-flow: column;
+            }
+
+            textarea.prism-live,
+            pre.prism-live {
+                padding: .2rem 2rem;
+                box-sizing: border-box;
+                margin: 0;
+                font-size: 16px;
+            }
+
+            textarea.prism-live {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                color: transparent;
+                /* color: hsla(0,0%,100%,.4); */
+                cursor: text;
+                white-space: pre;
+                border: 0;
+                outline: none;
+                background: transparent;
+                resize: none;
+                font-size: 16px;
+                --selection-background: hsl(320, 80%, 25%);
+                --selection-color: hsla(0, 0%, 100%, .8);
+            }
+
+            @supports (not (caret-color: black)) and (-webkit-text-fill-color: black) {
+                textarea.prism-live {
+                    color: inherit;
+                    -webkit-text-fill-color: transparent;
+                }
+            }
+
+            /* Setting specific colors is needed
+             * because otherwise Firefox shows blank text */
+            textarea.prism-live::-moz-selection {
+                background: var(--selection-background);
+                color: var(--selection-color);
+            }
+
+            textarea.prism-live::selection {
+                background: var(--selection-background);
+                color: var(--selection-color);
+            }
+
+            pre.prism-live {
+                flex: 1;
+                position: relative;
+                pointer-events: none;
+                overflow: hidden;
+                max-height: 100%;
+                --scrollbar-width: 17px;
+                padding-bottom: var(--scrollbar-width);
+                padding-right: var(--scrollbar-width);
+            }
+
+            pre.prism-live > code:empty::before {
+                content: " "
+            }
+
+
+
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">web</i>
+
+                                        </span>
+                        <span class="logo-text h4">Websitesi</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+
+
+
+                            {% for key , val  in menuler %}
+
+                                <li class="nav-item" style="padding-top:16px;">
+                                    <a class="nav-link ripple active  sid-nav-link {% if aktif_url == val %}accent{% endif %} " href="{{ url }}/{{ val }}">
+                                        <span>{{key}}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Yayındaki Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.active_template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Düzenlenen Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="row" >
+
+                    <div class="col-md-12">
+
+                        <h4>{{sayfa.page_name }} - TASARIM</h4>
+
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <ul class="nav nav-tabs" role="tablist">
+
+                            <li class="nav-item ">
+                                <a class="nav-link btn btn-danger"  href="{{ url }}/web/sayfalar" >KAPAT</a>
+                            </li>
+
+                            <li class="nav-item" style="padding-left: 5px;">
+                                <a class="nav-link btn btn-secondary" href="#assets-tab-pane" >Önizleme</a>
+                            </li>
+
+
+                            {% for key , val  in altmenuler %}
+
+                                <li class="nav-item" style="padding-left: 5px;">
+                                    <a class="nav-link btn btn-primary {% if aktif_alt_url == key %}active{% endif %} " href="{{ url }}/{{ key }}/{{ sayfa.id }}">
+                                        <span>{{val}}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+
+
+
+                        </ul>
+
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <form  action="{{url}}/web/sayfa-tasarim-guncelle" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="id" value="{{ sayfa.id }}" >
+
+                            <input type="hidden"   name="page_kod" value="{{sayfa.page_kod }}">
+
+
+                            <div class="row">
+
+
+
+
+                                <div class="col-md-12 m-t-15">
+
+
+
+
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link btn active" id="timeline-tab" data-toggle="tab" href="#timeline-tab-pane" role="tab" aria-controls="timeline-tab-pane" aria-expanded="true">Html + TWİG Gövde</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link btn" id="about-tab" data-toggle="tab" href="#about-tab-pane" role="tab" aria-controls="about-tab-pane">Css</a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link btn" id="photos-videos-tab" data-toggle="tab" href="#photos-videos-tab-pane" role="tab" aria-controls="photos-tab-pane">Js</a>
+                                        </li>
+
+
+                                        <li class="nav-item">
+                                            <a class="nav-link btn" id="assets-tab" data-toggle="tab" href="#assets-tab-pane" role="tab" aria-controls="assets-tab-pane">Assets</a>
+                                        </li>
+
+                                    </ul>
+
+                                    <div class="tab-content">
+
+
+                                        <div role="tabpanel" class="tab-pane fade show active" id="timeline-tab-pane" aria-labelledby="timeline-tab">
+
+                                            <div class="row">
+
+                                                <div class="col-md-12 m-t-15">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12" style="text-align: center;">
+                                                                    <div class="form-group">
+
+                                                                        <label>Sayfa Gövdesi <br> <code>< body > İçerik < /body ></code></label>
+                                                                       <textarea id="htmleditor" name="page_html_content" class="prism-live language-twig" >{{sayfa.page_html_content}}</textarea>
+
+
+                                                                        <h5></h5>
+
+                                                                        <div class="text-left">
+
+                                                                           Gövde İçeriği Dahil Etme: {{ '{{page_html_content | raw}}' }}
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="about-tab-pane" role="tabpanel" aria-labelledby="about-tab">
+
+                                            <div class="row">
+
+                                                <div class="col-md-12 m-t-15">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12" style="text-align: center;">
+                                                                    <div class="form-group">
+                                                                        <label>İlave  CSS (Head)</label>
+
+                                                                        <textarea  id="csseditor" name="page_html_head"  class="prism-live language-css">{{sayfa.page_html_head | raw }}</textarea>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="photos-videos-tab-pane" role="tabpanel" aria-labelledby="photos-videos-tab">
+                                            <div class="row">
+
+
+                                                <div class="col-md-12 m-t-15">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12" style="text-align: center;">
+                                                                    <div class="form-group">
+                                                                        <label>İlave JS (Footer)</label>
+
+                                                                    <textarea  name="page_html_footer"   class="prism-live language-js" >{{sayfa.page_html_footer | raw }}</textarea>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="tab-pane fade" id="assets-tab-pane" aria-labelledby="assets-tab">
+
+                                            <div class="row">
+                                            <div class="col-md-12 m-t-15">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>İlave Assets Ekleme</label>
+                                                                </div>   </div>
+
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+
+                                                                    <label>Asset Url Adresi</label>
+
+                                                                    <input type="text" class="form-control" id="asset_url">
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+
+                                                                    <label>Depo</label>
+
+                                                                    <select class="form-control"  style="margin-top: 7px;"  id="depo_tur">
+                                                                        <option value="dahili">Dahili </option>
+                                                                        <option value="harici">Harici (Full URL Gerektirir) </option>
+
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+
+                                                                    <label>Tür</label>
+
+                                                                    <select class="form-control"  style="margin-top: 7px;" id="asset_turu">
+                                                                        <option value="css">Css</option>
+                                                                        <option value="js">Js</option>
+                                                                        <option value="googlefont">Google Font</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+
+                                                                    <label>Yerleşim</label>
+
+                                                                    <select class="form-control" style="margin-top: 7px;" id="asset_terlesim">
+                                                                        <option value="head">Head</option>
+                                                                        <option value="footer">Footer</option>
+
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12"> Tema Dosyanızda Gelen Asset Dosyaları Haricinde Dosyaları Eklemek İçindir </div>
+
+                                                            <div class="col-md-12 m-t-15">
+                                                                <div class="form-group">
+
+                                                                    <button type="button" onclick="assetEkle();" class="btn btn-primary">İlave Asset Ekle</button>
+
+
+                                                                </div>
+                                                            </div>
+
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 m-t-15">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>İlave Asset Listesi</label>
+                                                                </div>   </div>
+
+                                                            <div class="col-md-12" style="text-align: center;">
+                                                                <div class="form-group">
+
+                                                                    <div class="table-responsive">
+                                                                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>URL</th>
+                                                                                <th>Depo</th>
+                                                                                <th>Tür</th>
+                                                                                <th>Yerleşim</th>
+                                                                                <th>İşlem</th>
+
+
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody id="ilave_asset_listesi">
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+
+                                <!-- / CONTENT -->
+
+                                </div>
+
+
+
+                                <div class="col-md-12 text-center m-t-15 " ">
+                                    <button type="submit" class="btn btn-danger">Kodları Güncelle</button>
+                                </div>
+
+
+
+                            </div>
+                        </form>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+    <input type="hidden" id="lasti" value = "0" />
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+
+    <script src="{{asset_url }}/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="{{asset_url }}/plugins/prism/blissfuljs.min.js"></script>
+    <script src="{{asset_url }}/plugins/prism/prism.js"></script>
+    <script src="{{asset_url }}/plugins/prismlive/src/prism-live.js?load=css,html,javascript"></script>
+    <script src="{{asset_url}}/plugins/prismlive/src/prism-live-markup.js"></script>
+    <script src="{{asset_url}}/plugins/prismlive/src/prism-live-css.js"></script>
+    <script src="{{asset_url}}/plugins/prismlive/src/prism-live-javascript.js"></script>
+
+
+
+
+        <script>
+
+            /**
+             Prism Live: Code editor based on Prism.js
+             Works best in Chrome. Currently only very basic support in other browsers (no snippets, no shortcuts)
+             @author Lea Verou
+             */
+            (async function() {
+
+                if (!window.Bliss) {
+                    // Load Bliss if not loaded
+                    console.log("Bliss not loaded. Loading remotely from blissfuljs.com");
+
+                    let bliss = document.createElement("script");
+                    bliss.src = "https://blissfuljs.com/bliss.shy.min.js";
+                    document.head.appendChild(bliss);
+
+                    await new Promise(resolve => bliss.onload = resolve);
+                }
+
+                var $ = Bliss, $$ = Bliss.$;
+                var ready = Promise.resolve();
+
+
+                var superKey = navigator.platform.indexOf("Mac") === 0? "metaKey" : "ctrlKey";
+
+                var _ = Prism.Live = class PrismLive {
+                    constructor(source) {
+                        this.source = source;
+                        this.sourceType = source.nodeName.toLowerCase();
+
+                        this.wrapper = $.create({
+                            className: "prism-live",
+                            around: this.source
+                        });
+
+                        if (this.sourceType === "textarea") {
+                            this.textarea = this.source;
+                            this.code = $.create("code");
+
+                            this.pre = $.create("pre", {
+                                className: this.textarea.className + " no-whitespace-normalization",
+                                contents: this.code,
+                                before: this.textarea
+                            });
+                        }
+                        else {
+                            this.pre = this.source;
+
+                            this.textarea = $.create("textarea", {
+                                className: this.pre.className,
+                                value: this.pre.textContent,
+                                after: this.pre
+                            });
+                        }
+
+                        _.all.set(this.textarea, this);
+                        _.all.set(this.pre, this);
+                        _.all.set(this.code, this);
+
+                        this.pre.classList.add("prism-live");
+                        this.textarea.classList.add("prism-live");
+
+                        if (self.Incrementable) {
+                            // TODO data-* attribute for modifier
+                            // TODO load dynamically if not present
+                            new Incrementable(this.textarea);
+                        }
+
+                        $.bind(this.textarea, {
+                            input: evt => this.update(),
+
+                            keyup: evt => {
+                                if (evt.key == "Enter") { // Enter
+                                    // Maintain indent on line breaks
+                                    this.insert(this.currentIndent);
+                                    this.syncScroll();
+                                }
+                            },
+
+                            keydown: evt => {
+                                if (evt.key == "Tab" && !evt.altKey) {
+                                    // Default is to move focus off the textarea
+                                    // this is never desirable in an editor
+                                    evt.preventDefault();
+
+                                    if (this.tabstops && this.tabstops.length > 0) {
+                                        // We have tabstops to go
+                                        this.moveCaret(this.tabstops.shift());
+                                    }
+                                    else if (this.hasSelection) {
+                                        var before = this.beforeCaret("\n");
+                                        var outdent = evt.shiftKey;
+
+                                        this.selectionStart -= before.length;
+
+                                        var selection = _.adjustIndentation(this.selection, {
+                                            relative: true,
+                                            indentation: outdent? -1 : 1
+                                        });
+
+                                        this.replace(selection);
+
+                                        if (outdent) {
+                                            var indentStart = _.regexp.gm`^${this.indent}`;
+                                            var isBeforeIndented = indentStart.test(before);
+                                            this.selectionStart += before.length + 1 - (outdent + isBeforeIndented);
+                                        }
+                                        else { // Indent
+                                            var hasLineAbove = before.length == this.selectionStart;
+                                            this.selectionStart += before.length + 1 + !hasLineAbove;
+                                        }
+                                    }
+                                    else {
+                                        // Nothing selected, expand snippet
+                                        var selector = _.match(this.beforeCaret(), /\S*$/);
+                                        var snippetExpanded = this.expandSnippet(selector);
+
+                                        if (snippetExpanded) {
+                                            requestAnimationFrame(() => $.fire(this.textarea, "input"));
+                                        }
+                                        else {
+                                            this.insert(this.indent);
+                                        }
+                                    }
+                                }
+                                else if (_.pairs[evt.key]) {
+                                    var other = _.pairs[evt.key];
+                                    this.wrapSelection({
+                                        before: evt.key,
+                                        after: other,
+                                        outside: true
+                                    });
+                                    evt.preventDefault();
+                                }
+                                else {
+                                    for (let shortcut in _.shortcuts) {
+                                        if (_.checkShortcut(shortcut, evt)) {
+                                            _.shortcuts[shortcut].call(this, evt);
+                                            evt.preventDefault();
+                                        }
+                                    }
+                                }
+                            },
+
+                            click: evt => {
+                                var l = this.getLine();
+                                var v = this.value;
+                                var ss = this.selectionStart;
+                                //console.log(ss, v[ss], l, v.slice(l.start, l.end));
+                            },
+
+                            "click keyup": evt => {
+                                if (!evt.key || evt.key.lastIndexOf("Arrow") > -1) {
+                                    // Caret moved
+                                    this.tabstops = null;
+                                }
+                            }
+                        });
+
+                        // this.syncScroll();
+                        this.textarea.addEventListener("scroll", this, {passive: true});
+
+                        $.bind(window, {
+                            "resize": evt => this.syncStyles()
+                        });
+
+                        // Copy styles with a delay
+                        requestAnimationFrame(() => {
+                            this.syncStyles();
+
+                            var sourceCS = getComputedStyle(this.source);
+
+                            this.pre.style.height = this.source.style.height || sourceCS.getPropertyValue("--height");
+                            this.pre.style.maxHeight = this.source.style.maxHeight || sourceCS.getPropertyValue("--max-height");
+                        });
+
+                        this.update();
+                        this.lang = this.code.className.match(/lang(?:uage)?-(\w+)/i)[1];
+                    }
+
+                    handleEvent(evt) {
+                        if (evt.type === "scroll") {
+                            this.syncScroll();
+                        }
+                    }
+
+                    expandSnippet(text) {
+                        if (!text) {
+                            return false;
+                        }
+
+                        var context = this.context;
+
+                        if (text in context.snippets || text in _.snippets) {
+                            // Static Snippets
+                            var expansion = context.snippets[text] || _.snippets[text];
+                        }
+                        else if (context.snippets.custom) {
+                            var expansion = context.snippets.custom.call(this, text);
+                        }
+
+                        if (expansion) {
+                            // Insert snippet
+                            var stops = [];
+                            var replacement = [];
+                            var str = expansion;
+                            var match;
+
+                            while (match = _.CARET_INDICATOR.exec(str)) {
+                                stops.push(match.index + 1);
+                                replacement.push(str.slice(0, match.index + match[1].length));
+                                str = str.slice(match.index + match[0].length);
+                                _.CARET_INDICATOR.lastIndex = 0;
+                            }
+
+                            replacement.push(str);
+                            replacement = replacement.join("");
+
+                            if (stops.length > 0) {
+                                // make first stop relative to end, all others relative to previous stop
+                                stops[0] -= replacement.length;
+                            }
+
+                            this.delete(text);
+                            this.insert(replacement, {matchIndentation: true});
+                            this.tabstops = stops;
+                            this.moveCaret(this.tabstops.shift());
+                        }
+
+                        return !!expansion;
+                    }
+
+                    get selectionStart() {
+                        return this.textarea.selectionStart;
+                    }
+                    set selectionStart(v) {
+                        this.textarea.selectionStart = v;
+                    }
+
+                    get selectionEnd() {
+                        return this.textarea.selectionEnd;
+                    }
+                    set selectionEnd(v) {
+                        this.textarea.selectionEnd = v;
+                    }
+
+                    get hasSelection() {
+                        return this.selectionStart != this.selectionEnd;
+                    }
+
+                    get selection() {
+                        return this.value.slice(this.selectionStart, this.selectionEnd);
+                    }
+
+                    get value() {
+                        return this.textarea.value;
+                    }
+                    set value(v) {
+                        this.textarea.value = v;
+                    }
+
+                    get indent() {
+                        return _.match(this.value, /^[\t ]+/m, _.DEFAULT_INDENT);
+                    }
+
+                    get currentIndent() {
+                        var before = this.value.slice(0, this.selectionStart-1);
+                        return _.match(before, /^[\t ]*/mg, "", -1);
+                    }
+
+                    // Current language at caret position
+                    get currentLanguage() {
+                        var node = this.getNode();
+                        node = node? node.parentNode : this.code;
+                        var lang = _.match(node.closest('[class*="language-"]').className, /language-(\w+)/, 1);
+                        return _.aliases[lang] || lang;
+                    }
+
+                    // Get settings based on current language
+                    get context() {
+                        var lang = this.currentLanguage;
+                        return _.languages[lang] || _.languages.DEFAULT;
+                    }
+
+                    update() {
+                        var code = this.value;
+
+                        if (/\n$/.test(this.value)) {
+                            code += "\u200b";
+                        }
+
+                        this.code.textContent = code;
+
+                        Prism.highlightElement(this.code);
+                    }
+
+                    syncStyles() {
+                        // Copy pre metrics over to textarea
+                        var cs = getComputedStyle(this.pre);
+
+                        // Copy styles from <pre> to textarea
+                        this.textarea.style.caretColor = cs.color;
+
+                        var properties = /^(font|lineHeight)|[tT]abSize/gi;
+
+                        for (var prop in cs) {
+                            if (cs[prop] && prop in this.textarea.style && properties.test(prop)) {
+                                this.wrapper.style[prop] = cs[prop];
+                                this.textarea.style[prop] = this.pre.style[prop] = "inherit";
+                            }
+                        }
+
+                        this.textarea.style.paddingLeft = cs.paddingLeft;
+                        this.textarea.style.paddingTop = cs.paddingTop;
+
+                        this.update();
+                    }
+
+                    syncScroll() {
+                        if (this.pre.clientWidth === 0 && this.pre.clientHeight === 0) {
+                            return;
+                        }
+
+                        this.pre.scrollTop = this.textarea.scrollTop;
+                        this.pre.scrollLeft = this.textarea.scrollLeft;
+                    }
+
+                    beforeCaretIndex(until = "") {
+                        return this.value.lastIndexOf(until, this.selectionStart);
+                    }
+
+                    afterCaretIndex(until = "") {
+                        return this.value.indexOf(until, this.selectionEnd);
+                    }
+
+                    beforeCaret(until = "") {
+                        var index = this.beforeCaretIndex(until);
+
+                        if (index === -1 || !until) {
+                            index = 0;
+                        }
+
+                        return this.value.slice(index, this.selectionStart);
+                    }
+
+                    getLine(offset = this.selectionStart) {
+                        var value = this.value;
+                        var lf = "\n", cr = "\r";
+                        var start, end, char;
+
+                        for (var start = this.selectionStart; char = value[start]; start--) {
+                            if (char === lf || char === cr || !start) {
+                                break;
+                            }
+                        }
+
+                        for (var end = this.selectionStart; char = value[end]; end++) {
+                            if (char === lf || char === cr) {
+                                break;
+                            }
+                        }
+
+                        return {start, end};
+                    }
+
+                    afterCaret(until = "") {
+                        var index = this.afterCaretIndex(until);
+
+                        if (index === -1 || !until) {
+                            index = undefined;
+                        }
+
+                        return this.value.slice(this.selectionEnd, index);
+                    }
+
+                    setCaret(pos) {
+                        this.selectionStart = this.selectionEnd = pos;
+                    }
+
+                    moveCaret(chars) {
+                        if (chars) {
+                            this.setCaret(this.selectionEnd + chars);
+                        }
+                    }
+
+                    insert(text, {index} = {}) {
+                        if (!text) {
+                            return;
+                        }
+
+                        this.textarea.focus();
+
+                        if (index === undefined) {
+                            // No specified index, insert in current caret position
+                            this.replace(text);
+                        }
+                        else {
+                            // Specified index, first move caret there
+                            var start = this.selectionStart;
+                            var end = this.selectionEnd;
+
+                            this.selectionStart = this.selectionEnd = index;
+                            this.replace(text);
+
+                            this.selectionStart = start + (index < start? text.length : 0);
+                            this.selectionEnd = end + (index <= end? text.length : 0);
+                        }
+                    }
+
+                    // Replace currently selected text
+                    replace(text) {
+                        if (_.supportsExecCommand) {
+                            var hadSelection = this.hasSelection;
+                            document.execCommand("insertText", false, text);
+                            if (hadSelection) {
+                                // By default inserText places the caret at the end, losing any selection
+                                // What we want instead is the replaced text to be selected
+                                this.selectionStart = this.selectionEnd - text.length;
+                            }
+                        }
+                        else {
+                            this.textarea.setRangeText(text);
+                            this.update();
+                        }
+                    }
+
+                    // Set text between indexes and restore caret position
+                    set(text, {start, end} = {}) {
+                        if (_.supportsExecCommand) {
+                            var ss = this.selectionStart;
+                            var se = this.selectionEnd;
+
+                            this.selectionStart = start;
+                            this.selectionEnd = end;
+
+                            document.execCommand("insertText", false, text);
+
+                            this.selectionStart = ss;
+                            this.selectionEnd = se;
+                        }
+                        else {
+                            this.textarea.setRangeText(text);
+                            this.update();
+                        }
+                    }
+
+                    /**
+                     * Wrap text with strings
+                     * @param before {String} The text to insert before
+                     * @param after {String} The text to insert after
+                     * @param start {Number} Character offset
+                     * @param end {Number} Character offset
+                     */
+                    wrap({before, after, start = this.selectionStart, end = this.selectionEnd} = {}) {
+                        var ss = this.selectionStart;
+                        var se = this.selectionEnd;
+                        var between = this.value.slice(start, end);
+
+                        this.set(before + between + after, {start, end});
+
+                        if (ss > start) {
+                            ss += before.length;
+                        }
+
+                        if (se > start) {
+                            se += before.length;
+                        }
+
+                        if (ss > end) {
+                            ss += after.length;
+                        }
+
+                        if (se > end) {
+                            se += after.length;
+                        }
+
+                        this.selectionStart = ss;
+                        this.selectionEnd = se;
+                    }
+
+                    wrapSelection(o = {}) {
+                        var hadSelection = this.hasSelection;
+
+                        this.replace(o.before + this.selection + o.after);
+
+                        if (hadSelection) {
+                            if (o.outside) {
+                                // Do not include new text in selection
+                                this.selectionStart += o.before.length;
+                                this.selectionEnd -= o.after.length;
+                            }
+                        }
+                        else {
+                            this.moveCaret(-o.after.length);
+                        }
+                    }
+
+                    toggleComment() {
+                        var comments = this.context.comments;
+
+                        // Are we inside a comment?
+                        var node = this.getNode();
+                        var commentNode = node.parentNode.closest(".token.comment");
+
+                        if (commentNode) {
+                            // Remove comment
+                            var start = this.getOffset(commentNode);
+                            var commentText = commentNode.textContent;
+
+                            if (comments.singleline && commentText.indexOf(comments.singleLine) === 0) {
+                                // TODO
+                            }
+                            else {
+                                comments = comments.multiline || comments;
+                                var end = start + commentText.length - comments[1].length;
+                                this.set(this.value.slice(start + comments[0].length, end), {start, end: end + comments[1].length});
+                            }
+                        }
+                        else {
+                            // Not inside comment, add
+                            if (this.hasSelection) {
+                                comments = comments.multiline || comments;
+
+                                this.wrapSelection({
+                                    before: comments[0],
+                                    after: comments[1]
+                                });
+                            }
+                            else {
+                                // No selection, wrap line
+                                // FIXME *inside indent*
+                                comments = comments.singleline? [comments.singleline, "\n"] : comments.multiline || comments;
+                                end = this.afterCaretIndex("\n");
+                                this.wrap({
+                                    before: comments[0],
+                                    after: comments[1],
+                                    start: this.beforeCaretIndex("\n") + 1,
+                                    end: end < 0? this.value.length : end
+                                });
+                            }
+                        }
+                    }
+
+                    duplicateContent() {
+                        var before = this.beforeCaret("\n");
+                        var after = this.afterCaret("\n");
+                        var text = before + this.selection + after;
+
+                        this.insert(text, {index: this.selectionStart - before.length});
+                    }
+
+                    delete(characters, {forward, pos} = {}) {
+                        var i = characters = characters > 0? characters : (characters + "").length;
+
+                        if (pos) {
+                            var selectionStart = this.selectionStart;
+                            this.selectionStart = pos;
+                            this.selectionEnd = pos + this.selectionEnd - selectionStart;
+                        }
+
+                        while (i--) {
+                            document.execCommand(forward? "forwardDelete" : "delete");
+                        }
+
+                        if (pos) {
+                            // Restore caret
+                            this.selectionStart = selectionStart - characters;
+                            this.selectionEnd = this.selectionEnd - pos + this.selectionStart;
+                        }
+                    }
+
+                    /**
+                     * Get the text node at a given chracter offset
+                     */
+                    getNode(offset = this.selectionStart, container = this.code) {
+                        var node, sum = 0;
+                        var walk = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+
+                        while (node = walk.nextNode()) {
+                            sum += node.data.length;
+
+                            if (sum >= offset) {
+                                return node;
+                            }
+                        }
+
+                        // if here, offset is larger than maximum
+                        return null;
+                    }
+
+                    /**
+                     * Get the character offset of a given node in the highlighted source
+                     */
+                    getOffset(node) {
+                        var range = document.createRange();
+                        range.selectNodeContents(this.code);
+                        range.setEnd(node, 0);
+                        return range.toString().length;
+                    }
+
+                    // Utility method to get regex matches
+                    static match(str, regex, def, index = 0) {
+                        if (typeof def === "number" && arguments.length === 3) {
+                            index = def;
+                            def = undefined;
+                        }
+
+                        var match = str.match(regex);
+
+                        if (index < 0) {
+                            index = match.length + index;
+                        }
+
+                        return match? match[index] : def;
+                    }
+
+                    static checkShortcut(shortcut, evt) {
+                        return shortcut.trim().split(/\s*\+\s*/).every(key => {
+                            switch (key) {
+                                case "Cmd":   return evt[superKey];
+                                case "Ctrl":  return evt.ctrlKey;
+                                case "Shift": return evt.shiftKey;
+                                case "Alt":   return evt.altKey;
+                                default: return evt.key === key;
+                            }
+                        });
+                    }
+
+                    static registerLanguage(name, context, parent = _.languages.DEFAULT) {
+                        Object.setPrototypeOf(context, parent);
+                        return _.languages[name] = context;
+                    }
+
+                    static matchIndentation(text, currentIndent) {
+                        // FIXME this assumes that text has no indentation of its own
+                        // to make this more generally useful beyond snippets, we should first
+                        // strip text's own indentation.
+                        text = text.replace(/\r?\n/g, "$&" + currentIndent);
+                    }
+
+                    static adjustIndentation(text, {indentation, relative = true, indent = _.DEFAULT_INDENT}) {
+                        if (!relative) {
+                            // First strip min indentation
+                            var minIndent = text.match(_.regexp.gm`^(${indent})+`).sort()[0];
+
+                            if (minIndent) {
+                                text.replace(_.regexp.gm`^${minIndent}`, "");
+                            }
+                        }
+
+                        if (indentation < 0) {
+                            return text.replace(_.regexp.gm`^${indent}`, "");
+                        }
+                        else if (indentation > 0) { // Indent
+                            return text.replace(/^/gm, indent);
+                        }
+                    }
+                };
+
+// Static properties
+                Object.assign(_, {
+                    all: new WeakMap(),
+                    ready,
+                    DEFAULT_INDENT: "\t",
+                    CARET_INDICATOR: /(^|[^\\])\$(\d+)/g,
+                    snippets: {
+                        "test": "Snippets work!",
+                    },
+                    pairs: {
+                        "(": ")",
+                        "[": "]",
+                        "{": "}",
+                        '"': '"',
+                        "'": "'",
+                        "`": "`"
+                    },
+                    shortcuts: {
+                        "Cmd + /": function() {
+                            this.toggleComment();
+                        },
+                        "Ctrl + Shift + D": function() {
+                            this.duplicateContent();
+                        }
+                    },
+                    languages: {
+                        DEFAULT: {
+                            comments: {
+                                multiline: ["/*", "*/"]
+                            },
+                            snippets: {}
+                        }
+                    },
+                    // Map of Prism language ids and their canonical name
+                    aliases: (() => {
+                        var ret = {};
+                        var canonical = new WeakMap(Object.entries(Prism.languages).map(x => x.reverse()).reverse());
+
+                        for (var id in Prism.languages) {
+                            var grammar = Prism.languages[id];
+
+                            if (typeof grammar !== "function") {
+                                ret[id] = canonical.get(grammar);
+                            }
+                        }
+
+                        return ret;
+                    })(),
+
+                    regexp: (() => {
+                        var escape = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+                        var _regexp = (flags, strings, ...values) => {
+                            var pattern = strings[0] + values.map((v, i) => escape(v) + strings[i+1]).join("");
+                            return RegExp(pattern, flags);
+                        };
+                        var cache = {};
+
+                        return new Proxy(_regexp.bind(_, ""), {
+                            get: (t, property) => {
+                                return t[property] || cache[property]
+                                    || (cache[property] = _regexp.bind(_, property));
+                            }
+                        });
+                    })()
+                });
+
+                $.ready().then(() => {
+                    var t = $.create("textarea", {inside: document.body});
+                    t.focus();
+                    document.execCommand("insertText", false, "a");
+                    _.supportsExecCommand = !!t.value;
+                    t.remove();
+
+                    $$(":not(.prism-live) > textarea.prism-live").forEach(textarea => {
+                        if (!_.all.get(textarea)) {
+                            new _(textarea);
+                        }
+                    });
+                });
+
+            })();
+
+
+
+        $('#ilave_asset_listesi').sortable({
+            start: function(event, ui) {
+
+            },
+            change: function(event, ui) {
+
+
+
+            },
+            update: function(event, ui) {
+                yenidensirala();
+            }
+        });
+
+
+        function uniqId() {
+
+            return Math.random().toString(36).substr(2, 16);
+        }
+
+        
+        
+        function setPageAssets() {
+
+            var asset_list = JSON.parse('{{ sayfa.page_assets | raw }}');
+
+
+            var liste =  $("#ilave_asset_listesi");
+
+            var i = 1;
+
+            $.each(asset_list,function(key,val){
+
+
+                $.each(val,function(key2,val2){
+
+
+                    var url = val2.u;
+                    var depo = val2.d;
+                    var tur = val2.t;
+                    var yerlesim = val2.p;
+                    setAsset(url,depo,tur,yerlesim,liste,i);
+
+
+                    i = i + 1;
+
+
+
+
+                });
+
+
+
+            });
+
+
+            
+        }
+        
+
+        function yenidensirala(){
+
+
+
+
+
+
+           $('.assetslassess').each(function() {
+
+                var eski_id =   $(this).attr("data-asset-id");
+
+                var yeni_id = parseInt($("#lasti").val())+1;
+
+
+                   $('[name = "asset['+eski_id+'][u]"]').attr("name","asset["+yeni_id+"][u]");
+                   $('[name = "asset['+eski_id+'][d]"]').attr("name","asset["+yeni_id+"][d]");
+                   $('[name = "asset['+eski_id+'][t]"]').attr("name","asset["+yeni_id+"][t]");
+                   $('[name = "asset['+eski_id+'][p]"]').attr("name","asset["+yeni_id+"][p]");
+
+
+
+               $(this).attr("data-asset-id",yeni_id);
+
+
+               $('[data-asset-id-remove = "'+eski_id+'"]').attr("data-asset-id-remove",yeni_id);
+
+
+
+               $("#lasti").val(yeni_id);
+
+            });
+
+            $(".asset-iptal-btn").on("click",function () {
+
+                var id = $(this).attr("data-asset-id-remove");
+
+                assetKaldir(id);
+            });
+
+
+        }
+        
+        function assetEkle() {
+            var url = $("#asset_url").val();
+            var depo = $("#depo_tur").val();
+            var tur = $("#asset_turu").val();
+            var yerlesim = $("#asset_terlesim").val();
+            var liste =  $("#ilave_asset_listesi");
+            var id = parseInt($("#lasti").val()) + 1;
+            setAsset(url,depo,tur,yerlesim,liste,id);
+
+            $(".asset-iptal-btn").on("click",function () {
+
+                var id = $(this).attr("data-asset-id-remove");
+
+                assetKaldir(id);
+            });
+
+        }
+
+        function setAsset(url,depo,tur,yerlesim,liste,id) {
+
+
+            var html = "";
+            html+="<tr data-asset-id='"+id+"'  class='ui-state-default assetslassess' >";
+
+            html+="<td>";
+            html+="<i class=\"secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color\"  style='cursor: pointer;' role=\"img\" aria-hidden=\"true\">open_with</i>";
+            html+="</td>";
+
+            html+="<td>";
+            html+="<input type='text' class='form-control'  name='asset["+id+"][u]' value='"+url+"'>";
+            html+="</td>";
+
+            html+="<td>";
+            html+='<select class="form-control"   style="margin-top: 7px;"    name="asset['+id+'][d]">';
+
+            if(depo == "dahili"){
+                html+='<option value="dahili" selected>Dahili </option>';
+            }else{
+                html+='<option value="dahili">Dahili </option>';
+            }
+
+            if(depo == "harici"){
+                html+='<option value="harici" selected>Harici (Full URL Gerektirir) </option>';
+            }else{
+                html+='<option value="harici">Harici (Full URL Gerektirir) </option>';
+            }
+
+            html+='</select>';
+
+
+            html+="</td>";
+
+
+
+
+
+            html+="<td>";
+
+
+            var cselect = "";
+            var jsselect = "";
+            var fontselect = "";
+
+            if(tur == "css"){
+
+                cselect = " selected ";
+            }else   if(tur == "js"){
+                jsselect = " selected ";
+
+            }else   if(tur == "googlefont"){
+
+                fontselect = " selected ";
+            }
+
+
+            html+='<select class="form-control"  style="margin-top: 7px;" name="asset['+id+'][t]">';
+
+            html+='<option value="css" '+cselect+'>Css</option>';
+
+            html+=' <option value="js" '+jsselect+'>Js</option>';
+
+            html+='<option value="googlefont" '+fontselect+'>Google Font</option>';
+
+            html+=' </select>';
+
+            html+="</td>";
+
+
+
+
+
+
+            html+="<td>";
+
+
+
+            var headselected = "";
+            var footerslected = "";
+
+            if(yerlesim == "head"){
+
+                headselected = " selected ";
+            }else   if(yerlesim == "footer"){
+                footerslected = " selected ";
+
+            }
+
+
+            html+='<select class="form-control" style="margin-top: 7px;" name="asset['+id+'][p]">';
+            html+='<option value="head" '+headselected+'>Head</option>';
+            html+='<option value="footer" '+footerslected+'>Footer</option>;'
+            html+='</select>';
+
+            html+="</td>";
+
+
+            html+="<td>";
+            html+="<button type='button' data-asset-id-remove='"+id+"'   class='btn btn-danger asset-iptal-btn'>Kaldır</button>";
+            html+="</td>";
+
+            html+="</tr>";
+
+
+            $("#lasti").val(id);
+
+
+            liste.append(html);
+
+
+        }
+
+
+
+
+        function assetKaldir(id) {
+
+            $("[data-asset-id ="+id+" ]").remove();
+
+        }
+
+
+        setPageAssets();
+
+        $(".asset-iptal-btn").on("click",function () {
+
+            var id = $(this).attr("data-asset-id-remove");
+
+            assetKaldir(id);
+        });
+
+
+
+
+        </script>
+
+
+
+{% endblock %}

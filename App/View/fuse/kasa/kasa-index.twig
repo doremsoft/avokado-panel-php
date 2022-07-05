@@ -1,0 +1,155 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">account_balance_wallet</i>
+
+                                        </span>
+                    <span class="logo-text h4">Nakit İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn active fuse-ripple-ready" id="timeline-tab" data-toggle="tab" href="{{ url }}/satislar" role="tab" aria-controls="timeline-tab-pane" aria-expanded="true">Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="about-tab"  href="{{ url }}/kasa/kasa-raporlari"  >Nakit Hareketleri</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-virman" >Kasa Virman</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/yeni-haraket" >Yeni Haraket</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/kasa/kasa-iptal-raporlari" >İptal Kayıtları</a>
+                </li>
+
+
+            </ul>
+        </div>   </div>
+
+
+    <div class="col-md-12 m-t-15">
+        <div class="row">
+
+        <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                        <thead>
+                                        <tr>
+                                            <th>Kasa</th>
+                                            <th>Hesap</th>
+                                            <th>Not</th>
+                                            <th>Tarih</th>
+                                            <th>Giriş</th>
+                                            <th>Çıkış</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for kasa in sonharaketler %}
+                                            <tr>
+                                                <th scope="row">{{kasa.kasa_adi}}</th>
+
+                                                <td>{{kasa.cari_adi}}</td>
+
+                                                <td>{{kasa.kasa_haraket_not}}</td>
+                                                <td>{{kasa.kasa_haraket_tarih | date('d-m-Y')}}</td>
+                                                {%  if kasa.kasa_haraket_tip == 1 %}
+                                                    <td style="color: green;">{{Tl(kasa.kasa_haraket_tutar , 2  )}} TL</td>
+                                                    <td></td>
+                                                {% else %}
+
+                                                    <td></td>
+                                                    <td style="color: red;">{{Tl(kasa.kasa_haraket_tutar,2)}} TL</td>
+                                                {% endif %}
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+
+
+                {% set i = 0 %}
+
+                {% for durum in kasadurumlari %}
+
+
+
+
+                    <div class="card {% if i > 0 %} m-t-15{% endif %}">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12 text-center" >
+                                   <h4>{{ durum.kasa_adi }}</h4>
+
+
+                                    <label style="font-size: 17px;">{{  Fiyat(durum.gelirler - durum.giderler , "TL",1) | raw }}</label>
+
+
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {% set i = i + 1 %}
+
+                {% endfor %}
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+{% endblock %}

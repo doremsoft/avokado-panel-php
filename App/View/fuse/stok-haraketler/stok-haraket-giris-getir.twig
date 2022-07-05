@@ -1,0 +1,335 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+
+    <!-- DataTables -->
+    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+    <style>
+
+
+
+        .modal-dialog {
+            max-width: 90%;
+
+        }
+
+        .btn-group, .btn-group-vertical {
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+    </style>
+
+
+
+
+
+
+{% endblock %}
+    {% block content %}
+
+
+
+
+        <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+            <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+                <div class="col">
+
+                    <div class="row no-gutters align-items-center flex-nowrap">
+
+                        <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                            <i class="icon icon-menu"></i>
+                        </button>
+
+                        <!-- APP TITLE -->
+                        <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">description</i>
+
+                                        </span>
+                            <span class="logo-text h4">Fatura</span>
+                        </div>
+                    </div>
+                    <!-- / APP TITLE -->
+                </div>
+
+            </div>
+            <!-- / HEADER -->
+
+            <div class="page-content-wrapper">
+
+                <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                    <div class="page-sidebar-card">
+                        <!-- SIDENAV CONTENT -->
+                        <div class="content">
+
+                            <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                                <div class="header p-4">
+
+                                    <!-- USER -->
+                                    <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                        <span class="font-weight-bold" style="text-align:center;margin: auto;">Fatura İşlemleri</span>
+                                    </div>
+                                    <!-- / USER -->
+
+                                </div>
+
+
+                                <div class="divider" style="padding-bottom: 15px;"></div>
+
+
+
+                                <li class="nav-item">
+                                    <a href="{{url}}/fatura" class="nav-link ripple sid-nav-link "><span>Fatura Özet</span></a>
+                                </li>
+
+
+                                <li class="nav-item">
+                                    <a href="{{url}}/fatura/liste" class="nav-link ripple sid-nav-link  "><span>Faturalar</span></a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href="{{url}}/stok-haraket/giris" class="nav-link ripple sid-nav-link accent"><span>Yeni Alım Faturası</span></a>
+                                </li>
+
+                                <li class="nav-item" style="padding-bottom: 15px;">
+                                    <a href="{{url}}/stok-haraket/cikis" class="nav-link ripple sid-nav-link" ><span>Yeni Satış Faturası</span></a>
+                                </li>
+
+
+
+
+
+
+
+                            </ul>
+                        </div>
+                        <!-- / SIDENAV CONTENT -->
+                    </div>
+                </aside>
+
+
+                <div class="page-content col-md-12 p-4 p-sm-6">
+                    <!-- CONTACT LIST -->
+                    <div class="contacts-list" style="padding-bottom: 20px;">
+
+
+                        <div class="card  m-b-15" style="padding: 15px;">
+
+
+                                <input type="text" class="form-control" id="cariname" placeholder="Alım Yapacağınız Tedarikçi Adı..." onkeyup="cariarama(this.value)">
+                                <div id="aramasonuc"></div>
+
+
+
+                        </div><!--end card-->
+
+
+
+
+                        <div class="contacts-list card" style="padding-bottom: 20px;">
+
+                            <!-- CONTACT LIST HEADER -->
+                            <dvi class="contacts-list-header p-4">
+
+
+
+                            </dvi>
+                            <!-- / CONTACT LIST HEADER -->
+
+
+
+                            {% for cari in cariler.result  %}
+
+                                <!-- CONTACT ITEM -->
+                                <div onclick="location.href='{{url}}/stok-haraket/giris/{{cari.id}}/fatura'" class="contact-item ripple row no-gutters align-items-center py-2 px-3 py-sm-4 px-sm-6">
+
+
+                                    <div class="col text-truncate font-weight-bold"><a style="text-decoration: none;" href="{{url}}/stok-haraket/giris/{{cari.id}}/fatura" >{{cari.cari_adi}}</a></div>
+
+                                    <div class="col email text-truncate px-1 d-none d-xl-flex">
+                                        {{cari.cari_mail}}
+                                    </div>
+
+                                    <div class="col phone text-truncate px-1 d-none d-xl-flex">
+                                        {{cari.cari_telefon}}
+                                    </div>
+
+                                    <div class="col job-title text-truncate px-1 d-none d-sm-flex">
+                                        {{cari.cari_gsm}}
+                                    </div>
+
+                                    <div class="col company text-truncate px-1 d-none d-sm-flex">
+                                        {% if cari.cari_turu == 1%}
+                                            Müşteri
+                                        {% elseif cari.cari_turu == 2 %}
+                                            Tedarikçi
+                                        {% elseif cari.cari_turu == 3 %}
+                                            Personel
+
+                                        {% endif %}
+
+
+                                    </div>
+
+                                    <div class="col-auto actions">
+
+                                        <div class="row no-gutters">
+
+
+
+                                            <a href="{{url}}/stok-haraket/giris/{{cari.id}}/fatura" class="btn btn-icon">
+
+                                                <i class="icon icon-dots-vertical"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- CONTACT ITEM -->
+
+
+
+
+                            {% endfor %}
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-end">
+                                    {{paginate(cariler.paginate,uri) | raw }}
+                                </ul>
+                            </nav>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                    <!-- / CONTACT LIST -->
+
+                </div>
+                <!-- / CONTENT -->
+
+            </div>
+        </div>
+        </div>
+
+
+
+
+
+        <!-- /.modal -->
+
+    {% endblock %}
+
+
+{% block footer %}
+    <script>
+
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+                        console.log(data);
+
+
+
+                        if (data == "non") {
+
+                            document.getElementById("aramasonuc").innerHTML = "Tedarikçi Bulunamadı!";
+
+                        } else {
+
+
+                            var cari_data = JSON.parse(data);
+
+                            var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                            if (cari_data.durum == "ok") {
+
+
+
+                                $.each(cari_data.cari, function (key, val) {
+
+
+                                    lihtml += liurunbas(val);
+
+                                });
+
+
+
+                            } else {
+
+                                lihtml +=cariyok();
+
+
+                            }
+                            document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+
+
+
+
+
+        }
+
+
+        function cariyok() {
+
+            var html = "<li>Tedarikçi Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+        function liurunbas(data) {
+
+            var html = "<li  onclick='window.location.href=\"{{url}}/stok-haraket/giris/" + data.id + "/fatura\"'>" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+
+
+    </script>
+
+
+{% endblock %}

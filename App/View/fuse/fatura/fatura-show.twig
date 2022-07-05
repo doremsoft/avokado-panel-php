@@ -1,0 +1,180 @@
+{% extends "empty-layout.twig" %}
+
+
+{% block content %}
+    <div class="col-12">
+        <div class="card">
+
+
+            <div class="col-md-12 text-center">
+ {% if type == "satis" %}
+                            <h2> Satış Evrak </h2>
+ {% elseif type == "alim" %}
+                           <h2> Alım Evrak </h2>
+ {% endif %}
+               
+
+            </div>  
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-6">                                            
+                        <div class="float-left">
+                            <address class="font-13">
+                                <strong class="font-14">Ünvan:</strong><br>{{ faturaOzet.unvan }}<br>
+                                <strong class="font-14">Vergi Dairesi:</strong><br>{{ faturaOzet.vergidaire }}<br>
+                                <strong class="font-14">Vergi No /TCKN:</strong><br>{{ faturaOzet.vergino }}<br>
+                                <strong class="font-14">Adres:</strong><br>{{ faturaOzet.vergiadres }}<br>
+
+
+                            </address>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 text-center">
+
+
+
+                    </div>  
+                    <div class="col-md-3">
+                        <div class="">
+                            <h6 class="mb-0"><b>Evrak Tarihi :</b> {{ faturaOzet.tarih | date("d/m/Y") }}</h6>
+                            <h6><b>Evrak No :</b> {{ faturaOzet.evrak_no }}</h6> </br>
+                            {% if sil_durum == 1 %}
+                            {% if type == "satis" %}
+                                <a class="btn btn-danger text-white px-4 d-inline-block" href="{{ url }}/iptal/satis-evrak-iptal/{{ faturaOzet.id }}">Evrak İptal</a>
+                                <a class="btn btn-danger text-white px-4 d-inline-block" href="{{ url }}/stok-haraket/cikis-duzenle/{{ faturaOzet.id }}">Düzenle</a>
+
+
+
+                            {% elseif type == "alim" %}
+                             <a class="btn btn-danger text-white px-4 d-inline-block" href="{{ url }}/iptal/alim-evrak-iptal/{{ faturaOzet.id }}">Evrak İptal</a>
+
+                                <a class="btn btn-danger text-white px-4 d-inline-block" href="{{ url }}/stok-haraket/giris-duzenle/{{ faturaOzet.id }}">Düzenle</a>
+                            {% endif %}
+                            
+                            {% else %}
+                                
+                                <p>Bu Evrak İptal Edilemez </p>
+                                 {% endif %}  
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <thead>
+                                    <tr>
+
+                                        <th>Açıklama</th>
+                                        <th>Birim Fiyatı</th>
+                                        <th>Miktar</th>
+                                        <th>Tutar</th>
+                                        <th>Toplam İndirim</th>
+                                        <th>Toplam</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% if type == "satis" %}
+
+                                        {%  for kalem in kalemler %}
+                                            <tr>
+
+                                                <td>{{ kalem.stok_adi }} {{ kalem.stok_varyant_adi }} {{ kalem.stok_varyant_deger }}</td>
+                                                <td style="width:150px;">{{Tl(kalem.satis_fiyati) }} TL</td>
+                                                <td style="width:150px;">{{adet(kalem.adet) }} {{ kalem.stok_birim_adi }}</td>
+                                                <td style="width:150px;">{{Tl((kalem.satis_fiyati  * kalem.adet), 4) }} TL</td>
+                                                <td style="width:150px;">{{Tl(kalem.indirim_tutari * kalem.adet, 4) }} TL</td>
+                                                <td style="width:150px;">{{Tl((kalem.satis_fiyati - kalem.indirim_tutari) * kalem.adet, 4) }} TL</td>
+                                            </tr>
+
+                                        {% endfor %}
+                                    {% elseif type == "alim" %}
+
+                                        {%  for kalem in kalemler %}
+                                            <tr>
+
+                                                <td>{{ kalem.stok_adi }} {{ kalem.stok_varyant_adi }} {{ kalem.stok_varyant_deger }}</td>
+                                                <td style="width:150px;">{{Tl(kalem.alis_fiyati, 4) }} TL</td>
+                                                <td style="width:150px;">{{adet(kalem.adet) }} {{ kalem.stok_birim_adi }}</td>
+                                                <td style="width:150px;">{{Tl((kalem.alis_fiyati  * kalem.adet), 4) }} TL</td>
+                                                <td style="width:150px;">{{Tl(kalem.indirim_tutari * kalem.adet, 4) }} TL</td>
+                                                <td style="width:150px;">{{Tl((kalem.alis_fiyati - kalem.indirim_tutari) * kalem.adet, 4) }} TL</td>
+                                            </tr>
+
+                                        {% endfor %}
+
+                                    {% endif %}
+
+
+
+                                    {% if faturaOzet.indirim_toplam > 0 %}
+                                    <tr>
+                                        <td colspan="4" class="border-0"></td>
+                                        <td class="border-0 font-14"><b>Ara Toplam</b></td>
+                                        <td class="border-0 font-14"><b>{{ Tl(faturaOzet.ara_toplam + faturaOzet.indirim_toplam , 4) }} TL</b></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th colspan="4" class="border-0"></th>
+                                        <td class="border-0 font-14"><b>İndirim Toplam</b></td>
+                                        <td class="border-0 font-14"><b>{{ Tl(faturaOzet.indirim_toplam , 4) }} TL</b></td>
+                                    </tr>
+                                        <tr>
+                                            <th colspan="4" class="border-0"></th>
+                                            <td class="border-0 font-14"><b></b></td>
+                                            <td class="border-0 font-14"><b></b></td>
+                                        </tr>
+
+                                    {% endif %}
+
+                                    <tr>                                                        
+                                        <td colspan="4" class="border-0"></td>
+                                        <td class="border-0 font-14"><b>Toplam</b></td>
+                                        <td class="border-0 font-14"><b>{{ Tl(faturaOzet.ara_toplam , 4) }} TL</b></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="border-0"></th>
+                                        <td class="border-0 font-14"><b>Vergiler Toplamı</b></td>
+                                        <td class="border-0 font-14"><b>{{ Tl(faturaOzet.vergi_toplam, 4) }} TL</b></td>
+                                    </tr>
+                                    <tr class="bg-dark text-white">
+                                        <th colspan="4" class="border-0"></th>
+                                        <td class="border-0 font-14"><b>Genel Toplam</b></td>
+                                        <td class="border-0 font-14"><b>{{ Tl(faturaOzet.genel_toplam , 4) }} TL</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>                                            
+                    </div>                                        
+                </div>
+
+                <div class="row ">
+                    <div class="col-lg-6">
+                        <!--<h5 class="mt-4">Şartlar ve koşullar :</h5>-->
+                        <ul class="pl-3">
+                            <!-- <li><small> </small></li> -->
+                        </ul>
+                    </div>                                        
+
+                </div>
+                <hr>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-12 col-xl-4 ml-auto align-self-center">
+                        <div class="text-center text-muted"><small></small></div>
+                    </div>
+                    <div class="col-lg-12 col-xl-4">
+                        <div class="float-right d-print-none">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--end card-->
+    </div><!--end col-->
+
+{% endblock %}

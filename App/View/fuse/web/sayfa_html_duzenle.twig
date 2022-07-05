@@ -1,0 +1,324 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+        <link href="{{asset_url}}/plugins/prism/prism.css" rel="stylesheet" type="text/css" />
+      <link href="{{asset_url}}/plugins/prismlive/prism-live.css" rel="stylesheet" type="text/css" />
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+                color: #040f12;
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+                color: #040f12;
+                background-color: #e6f2ff;
+
+            }
+
+            .form-group, .form-check {
+                font-size: 14px;
+
+                letter-spacing: 0;
+
+            }
+
+
+
+            div.prism-live {
+                position: relative;
+                box-sizing: border-box;
+                display: flex;
+                flex-flow: column;
+            }
+
+            textarea.prism-live,
+            pre.prism-live {
+                padding: .2rem 2rem;
+                box-sizing: border-box;
+                margin: 0;
+                font-size: 16px;
+            }
+
+            textarea.prism-live {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                color: transparent;
+                /* color: hsla(0,0%,100%,.4); */
+                cursor: text;
+                white-space: pre;
+                border: 0;
+                outline: none;
+                background: transparent;
+                resize: none;
+                font-size: 16px;
+                --selection-background: hsl(320, 80%, 25%);
+                --selection-color: hsla(0, 0%, 100%, .8);
+            }
+
+            @supports (not (caret-color: black)) and (-webkit-text-fill-color: black) {
+                textarea.prism-live {
+                    color: inherit;
+                    -webkit-text-fill-color: transparent;
+                }
+            }
+
+            /* Setting specific colors is needed
+             * because otherwise Firefox shows blank text */
+            textarea.prism-live::-moz-selection {
+                background: var(--selection-background);
+                color: var(--selection-color);
+            }
+
+            textarea.prism-live::selection {
+                background: var(--selection-background);
+                color: var(--selection-color);
+            }
+
+            pre.prism-live {
+                flex: 1;
+                position: relative;
+                pointer-events: none;
+                overflow: hidden;
+                max-height: 100%;
+                --scrollbar-width: 17px;
+                padding-bottom: var(--scrollbar-width);
+                padding-right: var(--scrollbar-width);
+            }
+
+            pre.prism-live > code:empty::before {
+                content: " "
+            }
+
+
+
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+
+            <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">web</i>
+
+                                        </span>
+                        <span class="logo-text h4">Websitesi</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+
+
+
+                            {% for key , val  in menuler %}
+
+                                <li class="nav-item" style="padding-top:16px;">
+                                    <a class="nav-link ripple active  sid-nav-link {% if aktif_url == val %}accent{% endif %} " href="{{ url }}/{{ val }}">
+                                        <span>{{key}}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Yayındaki Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.active_template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card m-t-15">
+                    <div class="card-header">Düzenlenen Tema</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: center;">
+                                {{ ayar.template_name }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6">
+                <!-- CONTACT LIST -->
+                <div class="row" >
+
+                    <div class="col-md-12">
+
+                        <h4>{{sayfa.page_name }}</h4>
+
+
+                    </div>
+
+                    <div class="col-md-12">
+
+                        <ul class="nav nav-tabs" role="tablist">
+
+                            <li class="nav-item ">
+                                <a class="nav-link btn btn-danger"  href="{{ url }}/web/sayfalar" >KAPAT</a>
+                            </li>
+
+                            <li class="nav-item" style="padding-left: 5px;">
+                                <a class="nav-link btn btn-secondary" href="#assets-tab-pane" >Önizleme</a>
+                            </li>
+
+
+                            {% for key , val  in altmenuler %}
+
+                                <li class="nav-item" style="padding-left: 5px;">
+                                    <a class="nav-link btn btn-primary {% if aktif_alt_url == key %}active{% endif %} " href="{{ url }}/{{ key }}/{{ sayfa.id }}">
+                                        <span>{{val}}</span>
+                                    </a>
+                                </li>
+
+                            {% endfor %}
+
+
+
+
+
+                        </ul>
+
+                    </div>
+
+
+                    <div class="col-md-12 m-t-15">
+                        <form  id="sayfa-ayarlari-form" action="{{url}}/web/sayfa-html-guncelle" method="post">
+                            {{csrf | raw}}
+
+                            <input type="hidden" name="id" value="{{ sayfa.id }}" >
+                            <div class="row">
+
+
+
+
+                                <div class="col-md-12 m-t-15">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12" style="text-align: center;">
+                                                    <div class="form-group">
+
+                                                        <textarea id="ckeditor"  name="page_html_content"  class="form-control">{{sayfa.page_html_content }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="col-md-12 text-center  m-t-15" >
+                                    <button type="submit" class="btn btn-danger">Güncelle</button>
+                                </div>
+
+
+
+
+
+                            </div>
+                        </form>
+                    </div>
+
+
+
+
+                </div>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+    <input type="hidden" id="lasti" value = "0" />
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script src="{{asset('plugins/ckeditor/ckeditor.js')}}"></script>
+
+
+    <script>
+
+
+    CKEDITOR.replace( 'ckeditor' , {
+        height: '600px',
+        filebrowserBrowseUrl: '{{ url }}/filemanager/dialog.php?lang=tr_TR&akey={{ ayar.connection_key }}&hesap_no={{  hesap_detay.account_id  }}&klasor=public&type=2&editor=ckeditor&fldr=',
+        filebrowserUploadUrl: '{{ url }}/filemanager/dialog.php?lang=tr_TR&akey={{ ayar.connection_key}}&hesap_no={{  hesap_detay.account_id  }}&klasor=public&type=2&editor=ckeditor&fldr=',
+        filebrowserImageBrowseUrl: '{{ url }}/filemanager/dialog.php?lang=tr_TR&akey={{ayar.connection_key}}&hesap_no={{  hesap_detay.account_id  }}&klasor=public&type=2&editor=ckeditor&fldr='
+    });
+</script>
+
+
+{% endblock %}

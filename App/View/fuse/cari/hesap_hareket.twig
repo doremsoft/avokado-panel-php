@@ -1,0 +1,587 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block head %}
+
+
+    <!-- DataTables -->
+    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+    <style>
+
+        .btn-group, .btn-group-vertical {
+            -webkit-box-shadow:none;
+            box-shadow: none;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-6">
+
+        <div class="row no-gutters align-items-center">
+
+            <a href="{{ url }}/cari/show/{{ cari_id}}" class="btn btn-icon mr-4">
+                <i class="icon icon-arrow-left"></i>
+            </a>
+
+
+            <div><a href="{{ url }}/cari/show/{{ cari_id}}" style="text-decoration: none;" class="text-white">Hesaba Dön....</a></div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-12" id="arama_sonuclari_row">
+
+
+
+
+            <div class="card"  style="border-radius: 0px;">
+
+
+                <div class="card-body">
+                    <h3>{{ cari.cari_adi }} </h3>
+                    <h5>Hesap Hareket Dökümü</h5>
+                    <hr>
+                    <div class="row">
+                        <form id="logout-form"  class="col-md-12" action="{{url}}/cari/hesap-hareketi-goster" method="post">
+                            {{csrf | raw}}
+
+                            <div class="row">
+
+                                <input type="hidden" name="cari_id" value="{{cari_id }}" />
+
+
+
+
+                                <div class="col-md-3">
+                                    <label>Tür</label>
+
+                                    <select class="form-control" name="stur">
+
+                                        {% for key,tur in hareketturleri %}
+
+                                            {% if key == stur %}
+
+                                                <option value="{{ key }}" selected>{{tur}}</option>  
+
+                                            {% else %}
+
+                                                <option value="{{ key }}">{{tur}}</option>  
+                                            {% endif %}
+
+
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+
+
+
+
+                                <div class="col-md-2">
+                                    <label>Rapor Başlama Tarihi</label>
+
+                                    <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <label>Rapor Başlama Saati</label>
+
+                                    <input type="time" class="form-control" name="bas_saat" value="{{bas_saat}}"/>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <label>Rapor Bitiş Tarihi</label>
+
+
+                                    <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                </div>
+
+
+                                <div class="col-md-2">
+                                    <label>Rapor Bitiş Saati</label>
+
+                                    <input type="time" class="form-control" name="bit_saat" value="{{bit_saat}}"/>
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+
+                            <hr>
+                            <div class="row">               
+                                <div class="col-md-4"> 
+
+                                    <button type="submit" class="form-control btn btn-primary waves-effect waves-light">Rapor Getir</button> </div> </div>
+
+
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% if raporok == "ok" %}
+
+            {% set s_alim = 0 %} 
+            {% set s_satis = 0 %} 
+            {% set s_tahsilat = 0 %} 
+            {% set s_odeme = 0 %} 
+            {% set s_toplam = 0 %} 
+
+
+            <div class="col-md-12 m-t-15">
+                <div class="card" style="border-radius: 0px;">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="table-responsive">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                        {% if stur == 1 %}
+
+
+                                            <thead>
+                                                <tr>
+
+                                                    <th>İşlem</th>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Borç</th>
+                                                    <th>Alacak</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rapor in raporlar %}
+                                                    <tr>
+                                                        <td>{{ rapor.tip }}</td>
+                                                        <td>{{ rapor.islem_tarih }}</td>
+
+                                                        <td>
+                                                            {% if rapor.tip == "satisf" %}                                      
+                                                                <button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{rapor.evrak_id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{ rapor.evrakno}}</button></td>
+                                                            {% elseif rapor.tip == "alisf" %}                                  
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light alimevrakmodal" data-toggle="modal" data-evrak-id="{{rapor.evrak_id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{ rapor.evrakno}}</button></td>
+
+                                                {% endif %}    
+
+
+
+
+
+                                                {% if rapor.tip == 'satisf' %}
+
+
+                                                    {% set s_satis = s_satis + rapor.islem_tutar %}    
+
+                                                {% elseif rapor.tip =='alisf'  %}
+                                                    
+                                                    {% set s_alim = s_alim + rapor.islem_tutar %} 
+
+                                                {% elseif rapor.tip =='odeme'  %}
+                                                    {% set s_odeme = s_odeme + rapor.islem_tutar %} 
+
+                                                {% elseif rapor.tip =='tahsil'  %}
+                                                    
+                                                    {% set s_tahsilat = s_tahsilat + rapor.islem_tutar %} 
+
+                                                {% endif %}
+                                                
+                                                
+                                                
+
+                                                {% if rapor.tip == 'odeme' or rapor.tip =='alisf'  %}
+                                                    <td></td>
+                                                    <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+
+
+
+
+                                                {% elseif rapor.tip == 'tahsil' or rapor.tip =='satisf'  %}
+
+
+
+                                                    <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+                                                    <td></td>
+                                                {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+
+
+                                        {% elseif stur == 2 %}
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Hesap</th>
+                                                    <th>Vergili Toplam</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for satis in raporlar  %}
+                                                    <tr>
+                                                        <th scope="row" style="width:50px;">{{satis.created_date|date("d-m-Y H:i:s")}}</th>
+                                                        <th><button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{satis.id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{satis.evrak_no}}</button></th>
+
+
+
+                                                        <th>{{satis.cari_adi}}</th>
+                                                        <td style="width:120px;">{{Tl(satis.genel_toplam)}} TL</td>
+
+
+                                                            {% set s_satis = s_satis + satis.genel_toplam %}    
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+
+
+                                        {% elseif stur == 3 %}
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Hesap</th>
+                                                    <th>Vergili Toplam</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for alim in raporlar  %}
+                                                    <tr>
+                                                        <th scope="row" style="width:50px;">{{alim.created_date|date("d-m-Y H:i:s")}}</th>
+                                                        <th><button type="button" class="btn btn-primary waves-effect waves-light alimevrakmodal" data-toggle="modal" data-evrak-id="{{alim.id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{alim.evrak_no}}</button></th>
+                                                        <th>{{alim.cari_adi}}</th>
+                                                        <td style="width:120px;">{{Tl(alim.genel_toplam)}} TL</td>
+
+                                                   
+                                                        {% set s_alim = s_alim + alim.genel_toplam %}   
+
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+
+                                        {% elseif stur == 4 %}
+
+                                            <thead>
+                                                <tr>
+                                                    <th>İşlem Tarih</th>
+                                                    <th>İşlem</th>
+                                                    <th>Tahsilat Tutarı</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rapor in raporlar %}
+                                                    <tr>
+                                                        <td>{{ rapor.islem_tarih }}</td>
+                                                        <td>{{ rapor.islem_tip }}</td>
+                                                        <td>{{ Tl(rapor.islem_tutar) }}
+                                                            {% set s_tahsilat = s_tahsilat + rapor.islem_tutar %}  </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+                                        {% elseif stur == 5 %}
+
+
+                                            <thead>
+                                                <tr>
+                                                    <th>İşlem Tarih</th>
+                                                    <th>İşlem</th>
+                                                    <th>Ödeme Tutarı</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rapor in raporlar %}
+                                                    <tr>
+                                                        <td>{{ rapor.odeme_tarih }}</td>
+                                                        <td>{{ rapor.odeme_tip }}</td>
+                                                        <td>{{ Tl(rapor.odeme_tutar) }}
+                                                               {% set s_odeme = s_odeme + rapor.odeme_tutar %}  </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+                                        {% elseif stur == 6 %}
+
+                                            <thead>
+                                                <tr>
+                                                    <th>İşlem Tarih</th>
+                                                    <th>İşlem</th>
+                                                    <th>Tahsilat Tutarı</th>
+                                                    <th>Ödeme Tutarı</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rapor in raporlar %}
+                                                    <tr>
+                                                        <td>{{ rapor.islem_tarih }}</td>
+                                                        <td>{{ rapor.islem_tip }}</td>
+
+                                                        {% if rapor.tip == 'odeme' %}
+                                                            <td></td>
+                                                            <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+
+                                                         {% set s_odeme = s_odeme + rapor.islem_tutar %} 
+
+
+                                                        {% elseif rapor.tip == 'tahsil' %}
+                                                            
+                                                             {% set s_tahsilat = s_tahsilat + rapor.islem_tutar %}
+                                                           
+                                                            <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+                                                            <td></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+
+                                             {% elseif stur == 7%}
+
+
+                                            <thead>
+                                                <tr>
+
+                                                    <th>İşlem</th>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Borç</th>
+                                                    <th>Alacak</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for rapor in raporlar %}
+                                                    <tr>
+                                                        <td>{{ rapor.tip }}</td>
+                                                        <td>{{ rapor.islem_tarih }}</td>
+
+                                                        <td>
+                                                            {% if rapor.tip == "satisf" %}  
+                                                                
+                                                                {{ rapor.stok }} <br>
+                                                                <button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{rapor.evrak_id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{ rapor.evrakno}}</button></td>
+                                                            {% elseif rapor.tip == "alisf" %}    
+                                                                {{ rapor.stok }} <br>
+                                                    <button type="button" class="btn btn-primary waves-effect waves-light alimevrakmodal" data-toggle="modal" data-evrak-id="{{rapor.evrak_id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{ rapor.evrakno}}</button></td>
+
+                                                {% endif %}    
+
+
+                                                {% if rapor.tip == 'satisf' %}
+                                                    
+                                                
+
+                                                    {% set s_satis = s_satis + kdv_hesapla(rapor.islem_tutar,rapor.adet,rapor.vergi,"ekle","none") %}    
+
+                                                    
+                                                    <td>{{ kdv_hesapla(rapor.islem_tutar,rapor.adet,rapor.vergi,"ekle")}} TL</td>
+                                                    <td></td>
+                                                    
+                                                {% elseif rapor.tip =='alisf'  %}
+                                                    
+                                                       <td></td>
+                                                    <td>{{  kdv_hesapla(rapor.islem_tutar,rapor.adet,rapor.vergi,"ekle") }} TL</td>
+                                                    
+                                                    {% set s_alim = s_alim + kdv_hesapla(rapor.islem_tutar,rapor.adet,rapor.vergi,"ekle","none") %} 
+
+                                                {% elseif rapor.tip =='odeme'  %}
+                                                    {% set s_odeme = s_odeme + rapor.islem_tutar %} 
+
+                                                {% elseif rapor.tip =='tahsil'  %}
+                                                    
+                                                    {% set s_tahsilat = s_tahsilat + rapor.islem_tutar %} 
+
+                                                {% endif %}
+                                                
+                                                
+                                                
+
+                                                {% if rapor.tip == 'odeme'  %}
+                                                    <td></td>
+                                                    <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+
+
+
+
+                                                {% elseif rapor.tip == 'tahsil'%}
+
+
+
+                                                    <td>{{ Tl(rapor.islem_tutar) }} TL</td>
+                                                    <td></td>
+                                                {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+
+
+                                        {% endif %}
+
+                                    </table>
+                                </div>
+
+
+
+
+                                <div class="row">
+
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2">Satış Evrak Tutarı: </div>
+                                    <div class="col-md-2"><b>{{ Tl(s_satis) }} TL</b></div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2">Alım Evrak Tutarı: </div>
+                                    <div class="col-md-2"><b>{{ Tl(s_alim) }} TL</b></div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2">Alınan Tahsilat Tutarı: </div>
+                                    <div class="col-md-2"><b>{{ Tl(s_tahsilat) }} TL</b></div>
+
+                                </div>
+                                <div class="row">
+
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2">Yapılan Ödeme Tutarı: </div>
+                                    <div class="col-md-2"><b>{{ Tl(s_odeme) }} TL</b></div>
+
+                                </div>
+                                    
+                                    {% set evrak_sonuc = s_satis - s_alim  %}
+                                    
+                                    {% set tahsil_sonuc = s_tahsilat - s_odeme  %}
+                                     
+                                    {% set genel_toplam = evrak_sonuc - tahsil_sonuc   %}
+
+                                <div class="row" style="margin-top:25px;">
+                                    <div class="col-md-8"></div>
+                                    <div class="col-md-2"><b>Genel Toplam:</b> </div>
+                                    <div class="col-md-2"><b>{{ Tl(genel_toplam) }} TL</b></div>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>  </div>
+            </div>    
+
+        {% endif %}
+
+    </div>
+
+    <!-- sample modal content -->
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mt-0" id="myLargeModalLabel"> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+
+                    <div id="invoicearea" class="col-md-12"></div>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        fullcontent();
+
+
+    </script>
+
+
+
+
+    <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+    <!-- Buttons examples -->
+    <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+    <!-- Responsive examples -->
+    <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+    <script>
+        setDataTable("#datatable-buttons", 1, "stokhareket", "");
+
+        $(".satisevrakmodal").click(function () {
+
+            $("#invoicearea").html("Yükleniyor....");
+            var id = $(this).attr("data-evrak-id");
+            $("#invoicearea").load("{{ url }}/fatura/show/" + id + "/satis");
+
+        });
+
+        $(".alimevrakmodal").click(function () {
+
+            $("#invoicearea").html("Yükleniyor....");
+            var id = $(this).attr("data-evrak-id");
+            $("#invoicearea").load("{{ url }}/fatura/show/" + id + "/alim");
+
+        });
+
+    </script>
+
+
+{% endblock %}

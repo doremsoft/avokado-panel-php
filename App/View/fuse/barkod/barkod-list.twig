@@ -1,0 +1,215 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+        .barkod-img{
+
+            padding: 45px;
+        }
+
+        @media print {
+
+        }
+    </style>
+
+{% endblock %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Barkod Ekle</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <div class="form-group">
+                                <label>Barkod Kodunu Yazınız:</label>
+                                <input type="text" id="barkod-code" class="form-control" required/>
+                            </div>
+                            <button type="button" id="barkod_ekle_btn" class="btn btn-primary">Yeni Barkod Ekle</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Barkodlar</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" id="barkodlistesisayfa">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            
+              <div class="card">
+             
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            
+            <input type="button" class="btn btn-primary" onclick="printDiv()" value="Barkodları Yazdır" />
+
+
+            <input type="button" class="btn btn-primary" onclick="setdefaultbarkod()" value="Barkod Yazılımı Barkodları" />
+  
+            
+                      <input type="button" class="btn btn-primary" onclick="resetbarkod()" value="Barkodlar Sıfırla" />
+   </div> </div> </div> </div>
+                 </div>
+        
+        
+                <div class="col-md-12">
+            <div class="card">
+             
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <h4>Barkod Programı Kısayol Barkodları:</h4>
+
+                            nok : Nakit satış kapatma <br>
+kok : Kredi Kartı Satış kapatma<br>
+sptl : Satış komple iptal<br>
+ynfs : :Yeni satış penceresi<br>
+ons : Önceki sahne<br>
+sons : Sonraki sahne<br>
+pcl : aktif sahne kapat<br>
+usl : urun silme<br>
+usc : urun düzenleme<br>
+
+                         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+{% block footer %}
+    <script src="{{asset('plugins/barcode/dist/JsBarcode.all.min.js')}}"></script>
+
+    <script>
+
+
+                function barkodlar() {
+
+
+                    var barkodlist = localStorage.getItem("barcodelist");
+
+
+                    if (barkodlist !== null) {
+
+                        var barkodlistesi = JSON.parse(barkodlist);
+
+                        var sayfa = $("#barkodlistesisayfa");
+
+                        console.log(barkodlistesi);
+
+                        sayfa.html("");
+
+                        $.each(barkodlistesi, function (key, val) {
+
+
+                            sayfa.append("<img class=\"barkod-img\" data-id=\"" + val + "\" id=\"brk-" + val + "\">");
+
+                            try {
+
+                                JsBarcode("#brk-" + val, val);
+
+                            } catch (e) {
+
+                                console.log(e);
+                            }
+
+
+
+
+                        });
+
+                    }
+
+
+
+                }
+
+                barkodlar();
+
+                $("#barkod_ekle_btn").click(function () {
+
+                    barcode_ekle($("#barkod-code").val());
+
+                    $("#barkod-code").val("");
+
+                    barkodlar();
+
+                });
+
+
+                function setdefaultbarkod() {
+
+
+                    localStorage.setItem("barcodelist", JSON.stringify([]));
+
+                    barcode_ekle("nok");
+                    barcode_ekle("kok");
+
+                    barcode_ekle("sptl");
+                    barcode_ekle("ynfs");
+                    barcode_ekle("ons");
+                    barcode_ekle("sons");
+                    barcode_ekle("pcl");
+
+                    barcode_ekle("usl");
+                    barcode_ekle("usc");
+
+
+                    barkodlar();
+
+
+                }
+                
+                          function resetbarkod() {
+
+
+                    localStorage.setItem("barcodelist", JSON.stringify([]));
+
+                    barkodlar();
+
+
+                }
+
+
+                function printDiv() {
+                    var printContents = document.getElementById("barkodlistesisayfa").innerHTML;
+                    var originalContents = document.body.innerHTML;
+
+                    document.body.innerHTML = printContents;
+
+                    window.print();
+
+                    document.body.innerHTML = originalContents;
+                }
+
+
+    </script>
+{% endblock %}

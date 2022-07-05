@@ -1,0 +1,225 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Arama</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Stok Barkod / Stok Adı / Stok Kodu:</label>
+                            <input type="text" class="form-control" name="stok_barkod_no" onkeyup="urungetirisimle(this.value)"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Seri Numarası İle Sorgulama</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Stok Seri Numarası: </label>
+                            <input type="text" class="form-control" name="stok_seri_no_ara" onkeyup="urunseriilegetir(this.value)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Stok Sorgulama Sonuçları:</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12" >
+
+                        <div class="table-responsive">
+                            <table class="table table-striped" style="margin-bottom: 0px;">
+                                <thead>
+                                    <tr>
+                                        <th>Stok Kod</th>
+
+                                        <th>Stok Adı</th>
+                                        <th>Mevcut</th>
+                                        <th>Satış Fiyatı (KDV Hariç)</th>
+                                       
+
+                                    </tr>
+                                </thead>
+                                <tbody id="aramasonuctable">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+
+
+
+        function urungetirisimle(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuctable").innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/stok/search/full", {query: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+                            console.log(data);
+
+
+
+                            if (data == "non") {
+
+
+
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+
+                                if (stok_data.durum == "ok") {
+
+                                    var lihtml = "";
+
+                                    $.each(stok_data.stok, function (key, val) {
+
+
+                                        lihtml += trurunbas(val);
+
+                                    });
+
+                                    document.getElementById("aramasonuctable").innerHTML = lihtml;
+
+                                } else {
+
+                                    console.log("Ürün Bulunamadı");
+                                   document.getElementById("aramasonuctable").innerHTML = "<tr><td colspan=\"4\"><center>Ürün Bulunamadı!</td></tr></center>";
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+            }
+
+
+        }
+
+
+
+
+
+        function urunseriilegetir(str) {
+
+            if (str.length <= 1) {
+                document.getElementById("aramasonuctable").innerHTML = "";
+
+                return;
+            } else if (str.length > 1) {
+
+                var jqxhr = $.post("{{url}}/stok/stok-seriile-getir", {serino: str})
+                        .done(function (data) {
+
+                            data = data.trim();
+
+
+                            if (data == "non") {
+                                document.getElementById("aramasonuctable").innerHTML = "";
+                            } else {
+
+
+                                var stok_data = JSON.parse(data);
+
+
+                                console.log(stok_data);
+
+
+                                if (stok_data.durum == "ok") {
+
+                                     notify("Ürün Getirildi!", "success");
+
+                                    document.getElementById("aramasonuctable").innerHTML = trurunbas(stok_data.stok);
+
+
+                                } else {
+                                    
+
+                                   document.getElementById("aramasonuctable").innerHTML = "<tr><td colspan=\"4\"><center>Ürün Bulunamadı!</td></tr></center>";
+                                }
+
+
+
+                            }
+
+                        })
+                        .fail(function () {
+                            alert("error");
+                        });
+
+            }
+
+        }
+
+
+
+        function trurunbas(data) {
+
+            var html = "";
+
+            html += "<tr>";
+            html += " <th>" + data.stok_kod + "</th>";
+
+            html += " <td><a href=\"{{url}}/stok/show/" + data.id + "\">" + data.stok_adi + "</a></td>";
+            html += " <td>" + data.stok_adet + "</td>";
+            html += " <td>" + data.stok_satis_fiyati + "</td>";
+
+            html += "</tr>"
+
+
+            return html;
+
+        }
+
+
+    </script>
+
+
+
+
+{% endblock %}

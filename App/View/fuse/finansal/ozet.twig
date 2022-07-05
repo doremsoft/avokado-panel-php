@@ -1,0 +1,124 @@
+{% extends "layout-light.twig" %}
+
+{% block pagename %}<i class="mdi mdi-monitor-dashboard mr-2"></i>Anasayfa{% endblock %}
+{% block bread %}
+
+    <li class="breadcrumb-item"><a href="javascript:void(0);">Hoşgeldiniz</a></li>
+    <li class="breadcrumb-item active"><a href="javascript:void(0);">Pano</a></li>{% endblock %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right">
+                        <i class="dripicons-user-group font-24 text-secondary"></i>
+                    </div>
+                    <span class="badge badge-danger">Müşteri</span>
+                    <h3 class="font-weight-bold">{{ satis_raporlari.toplam_cari }}  Adet</h3>
+                    <p class="mb-0 text-muted text-truncate">Toplam Kayıtlı Müşteriniz</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title mb-0">Son 7 Günün Satış Raporu</h4>
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="apexchart-wrapper chart-demo">
+                        <div id="e-dash1" class="chart-gutters"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{%  block footer %}
+
+    <script src="{{asset('plugins/apexcharts/apexcharts.min.js')}}"></script>
+
+    <script>
+
+
+        var options = {
+
+            chart: {
+                height: 350,
+                type: 'bar',
+            },
+            plotOptions: {
+                bar: {
+                    columnWidth: '50%',
+                    endingShape: 'rounded'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 2
+            },
+            series: [{
+                name: 'Satış',
+                data: [{% for gun, satis in son7gun  %}{{satis}},{%endfor%}],
+            }],
+            grid: {
+                row: {
+                    colors: ['#fff', '#f7f8f9']
+                }
+            },
+            xaxis: {
+                labels: {
+                    rotate: -45
+                },
+                categories: [{% for gun, satis in son7gun  %}'{{gun}}',{%endfor%}],
+            },
+            yaxis: {
+                labels: {
+                    formatter: function (value) {
+                        return value+" TL" ;
+                    }
+                },
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "horizontal",
+                    shadeIntensity: 0.25,
+                    gradientToColors: undefined,
+                    inverseColors: true,
+                    opacityFrom: 0.85,
+                    opacityTo: 0.85,
+                    stops: [50, 0, 100]
+                },
+            },
+
+        }
+
+        var chart = new ApexCharts(
+            document.querySelector("#e-dash1"),
+            options
+        );
+
+
+        chart.render();
+    </script>
+
+{% endblock %}

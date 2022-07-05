@@ -1,0 +1,368 @@
+{% extends "layout-light.twig" %}
+
+
+{% block head %}
+
+
+    <!-- DataTables -->
+    <link href="{{asset('plugins/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/datatables/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="{{asset('plugins/datatables/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" /> 
+
+    <style>
+        .btn-group, .btn-group-vertical {
+            -webkit-box-shadow:  none;
+            box-shadow: none;
+        }
+    </style>
+
+
+{% endblock %}
+    {% block content %}
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">trending_up</i>
+
+                                        </span>
+                        <span class="logo-text h4">Satışlar</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+
+        </div>
+        <!-- / HEADER -->
+
+
+        <div class="row">
+            <div class="col-md-12" style="background-color: white;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link btn  fuse-ripple-ready" id="timeline-tab"  href="{{ url }}/satislar" >Özet Durum</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn active fuse-ripple-ready" id="about-tab"  href="{{ url }}/satislar/iki-tarih-gore-satislar"  >Satış Dökümü</a>
+                    </li>
+
+
+                </ul>
+            </div>   </div>
+
+        <div class="row"  style="padding: 15px;">
+
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <form id="logout-form"  class="col-md-12" action="{{url}}/satislar/iki-tarih-gore-satislar" method="post">
+                                {{csrf | raw}}
+
+                                <div class="row">
+
+
+                                    <div class="col-md-4">
+                                        <label>Rapor Türü</label>
+
+
+                                        <select class="form-control" name="tur">
+
+                                            {% if tur == "hrb" %}
+                                                <option value="hbr" selected>Hesap Bazlı Satış Raporu</option>
+                                            {% else %}
+                                                <option value="hbr">Hesap Bazlı Satış Raporu</option>
+                                            {% endif %}
+
+
+
+
+                                            {% if tur == "ubr" %}
+                                                <option value="ubr" selected>Ürün Bazlı Satış Raporu</option>
+                                            {% else %}
+                                                <option value="ubr">Ürün Bazlı Satış Raporu</option>
+                                            {% endif %}
+
+
+
+                                        </select>
+                                    </div>
+
+
+                                    <div class="col-md-2">
+                                        <label>Rapor Başlama Tarihi</label>
+
+                                        <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                    </div>
+
+                                       <div class="col-md-2">
+                                        <label>Rapor Başlama Saati</label>
+
+                                        <input type="time" class="form-control" name="bas_saat" value="{{bas_saat}}"/>
+                                    </div>
+                                    
+
+                                    <div class="col-md-2">
+                                        <label>Rapor Bitiş Tarihi</label>
+
+
+                                        <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                    </div>
+
+                                <div class="col-md-2">
+                                        <label>Rapor Bitiş Saati</label>
+
+
+                                        <input type="time" class="form-control" name="bit_saat" value="{{bit_saat}}"/>
+                                    </div>
+
+
+                                </div>
+
+                                <hr>
+                                <div class="row">               
+                                    <div class="col-md-4"> 
+
+                                        <button type="submit" class="form-control btn btn-primary">Rapor Getir</button> </div> </div>
+
+
+
+
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row" style="padding: 15px;">
+
+
+
+            {%  if tur == "hbr" %}
+
+                <div class="col-md-12 ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ tarih }} Hesap Bazlı Satış Raporu</h5>
+                        
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="satislartable" stok-girisleri-data-activate="0" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Hesap</th>
+                                                    <th>Vergili Toplam</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for satis in satislar  %}
+                                                    <tr>
+                                                        <th scope="row" style="width:120px;">{{satis.created_date|date("d-m-Y H:i:s")}}</th>
+                                                        <th style="width:150px;"><button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{satis.id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{satis.evrak_no}}</button></th>
+                                                        <th><a href="{{ url }}/cari/show/{{ satis.cari_id }}">{{satis.cari_adi}}</a></th>
+                                                        <td style="width:120px;">{{Tl(satis.genel_toplam , 2)}} TL</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Ara Toplam :</div>
+                                        <div class="col-md-2"><b>{{ Tl(ozet.ara_toplam ,2) }} TL</b></div>
+
+
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Vergi Toplam: </div>
+                                        <div class="col-md-2"> <b>{{ Tl(ozet.vergi_toplam , 2) }} TL</b></div>
+
+
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Genel Toplam: </div>
+                                        <div class="col-md-2"><b>{{ Tl(ozet.genel_toplam , 2) }} TL</b></div>
+                                    </div>
+                                    <br>
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>  </div>
+                </div>
+
+            {%  elseif tur == "ubr" %}
+
+                <div class="col-md-12  ">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>{{ tarih }} Ürün Bazlı Satış Raporu</h5>
+                     
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table id="satislartable" stok-girisleri-data-activate="0"  class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tarih</th>
+                                                    <th>Evrak No</th>
+                                                    <th>Ürün</th>
+                                                    <th>Adet</th>
+                                                    <th>Satış Fiyatı</th>
+                                                    <th>Vergi Oranı</th>
+                                                    <th>Vergili Toplam</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for satis in satislar  %}
+                                                    <tr>
+                                                        <th scope="row" style="width:50px;">{{satis.created_date|date("d-m-Y H:i:s")}}</th>
+                                                      
+                                                        
+                                                       <th style="width:150px;"><button type="button" class="btn btn-primary waves-effect waves-light satisevrakmodal" data-toggle="modal" data-evrak-id="{{satis.satis_evrak_id}}" data-animation="bounce" data-target=".bd-example-modal-xl">{{satis.cikis_evrak_no}}</button></th>
+
+
+                                                        <th>{{satis.stok_adi}} {{ satis.stok_varyant_adi }} {{ satis.stok_varyant_deger }}</th>
+
+                                                        <td style="width:120px;">{{adet(satis.adet)}}</td>
+
+                                                        <td style="width:120px;">{{Tl(satis.satis_fiyati , 2)}} TL</td>
+
+                                                        <td style="width:120px;">% {{satis.kdv_oran}}</td>
+
+                                                        <td style="width:120px;">{{  Tl(((((satis.satis_fiyati - satis.indirim_tutari) * satis.adet) * satis.kdv_oran) / 100 ) + ((satis.alis_fiyati - satis.indirim_tutari) * satis.adet) ,2) }} TL</td>
+
+
+
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Ara Toplam :</div>
+                                        <div class="col-md-2"><b>{{ Tl(ozet.ara_toplam ,2) }} TL</b></div>
+
+
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Vergi Toplam: </div>
+                                        <div class="col-md-2"> <b>{{ Tl(ozet.vergi_toplam , 2) }} TL</b></div>
+
+
+                                        <div class="col-md-8"></div>
+                                        <div class="col-md-2">Genel Toplam: </div>
+                                        <div class="col-md-2"><b>{{ Tl(ozet.genel_toplam , 2) }} TL</b></div>
+
+                                    </div>
+                                    <br>
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>  </div>
+                </div>
+
+
+            {%   endif %}
+
+        </div>
+
+
+        <!-- sample modal content -->
+        <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title mt-0" id="myLargeModalLabel"> </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div id="invoicearea" class="col-md-12"></div>
+
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+    {% endblock %}
+
+    {% block footer %}
+      <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+        <!-- Buttons examples -->
+        <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+        <!-- Responsive examples -->
+        <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+        <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+        <script>
+
+  
+
+
+        setDataTable("#satislartable", 1, "satislar-{{bas_tarih}}-ile-{{bit_tarih}}-arasi");
+
+
+        // <a href="{{ url }}/fatura/show/" ></a>
+
+
+
+        $(".satisevrakmodal").click(function(){
+
+        $("#invoicearea").html("Yükleniyor....");
+        var id = $(this).attr("data-evrak-id");
+        $("#invoicearea").load("{{ url }}/fatura/show/"+id+"/satis");
+
+        });
+    </script>
+
+
+
+{% endblock %}

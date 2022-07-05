@@ -1,0 +1,216 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="row" style="padding: 15px;">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Stok Parametreleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/stok/add" class="btn btn-primary">Yeni Stok Ekle</a>
+
+                            <a href="{{url}}/stok-birimler" class="btn btn-primary">Birimler</a>
+                            <a href="{{url}}/stok-gruplar" class="btn btn-primary">Gruplar</a>
+                            <a href="{{url}}/stok-siniflar" class="btn btn-primary">Sınıflar</a>
+                            <a href="{{url}}/stok-depolar" class="btn btn-primary">Depolar</a>
+                            <a href="{{url}}/stok/cihaz-stoklari-json"  class="btn btn-primary">Stok Listesini Json Olarak İndir</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Kasa Parametreleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/kasa/kasalar" class="btn btn-primary">Kasa Ekle / Düzenle / Kaldır</a>
+
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Banka Parametreleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+                            <a href="{{url}}/banka/bankalar" class="btn btn-primary">Banka İşlemleri</a>
+
+
+
+                            <a href="{{url}}/banka/banka-listesi" class="btn btn-primary">Banka Hesap İşlemleri</a>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Adisyon Programı Masa İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <a href="{{url}}/masa/kategoriler" class="btn btn-primary">Masa Kategoriler</a>
+                            <a href="{{url}}/masa/kategorilist" class="btn btn-primary">Masalar</a>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-3  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Döviz İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <a href="{{url}}/doviz/list" class="btn btn-primary col-xs-12 col-sm-12 col-md-6">Döviz Kurları</a>
+                     
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                            
+                            
+        <div class="col-md-3  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Etiket (Tag) İşlemleri</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <a href="{{url}}/tag/list" class="btn btn-primary col-xs-12 col-sm-12 col-md-6">Etiketler</a>
+                     
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                            
+                                                        
+                            
+        <div class="col-md-3  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Marka</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <a href="{{url}}/marka/list" class="btn btn-primary col-xs-12 col-sm-12 col-md-12">Markalar</a>
+
+
+                        </div>
+
+
+                        <div class="col-md-12 m-t-15">
+
+                            <a href="{{url}}/marka/logo-list" class="btn btn-primary col-xs-12 col-sm-12 col-md-12">Markalar Logları</a>
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
+                            
+                                                                                    
+                            
+        <div class="col-md-3  m-t-15">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Yedek Yönetimi</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                         <div class="col-md-12">
+          
+
+       <a href="{{url}}/backup/list" class="btn btn-primary">Yedekleme Sistemi</a>
+                     
+
+
+    
+                    </div>
+
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

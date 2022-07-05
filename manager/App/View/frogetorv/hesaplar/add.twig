@@ -1,0 +1,138 @@
+{% extends "layout-light.twig" %}
+{% block pagename %}{% endblock %}
+{% block bread %}  
+
+
+
+    {% endblock %}
+    {% block content %}
+
+           <div class="row">
+            <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Hesap Ekle</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="logout-form" action="{{url}}/hesaplar/append" method="post">
+                            {{csrf | raw}}
+                            
+ <div class="form-group">
+                            <label>Firma Adı / Ünvanı yada İşletme Adınız:</label>
+                            <input type="text" name="unvan" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Yetkili Adı:</label>
+                            <input type="text" name="ad" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Yetkili Soyadı:</label>
+                            <input type="text" name="soyad" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mail Adresi:</label>
+                            <input type="text" name="mail" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gsm Numaranız: <br>(Başında 0 Olmasan 5xxxxxxxxx şeklinde yazınız)</label>
+                           <input type="text" name="gsm" class="form-control" required>
+                        </div>
+
+                        
+                        <div class="form-group">
+                            <label>Adres:</label>
+                            <textarea  class="form-control" name="adres" rows="5"></textarea>
+                        </div>
+
+                        
+                           
+                                  
+                                 <div class="form-group">
+                                <label>Hesap Adı:</label>
+                                <input type="text" name="account_nick_name" class="form-control"  required/>
+                            </div>
+
+
+
+
+
+                            <div class="form-group">
+                                <label>Server Adı:</label>
+                                <input type="text" name="account_server_name" class="form-control" value="avokadoyazilim.com" required/>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Server İp Adresi:</label>
+                                <input type="text" name="server_ip" class="form-control" value="avokadoyazilim.com" required/>
+                            </div> 
+                            
+                            <div class="form-group">
+                                <label>Server Bağlantı Protokol:</label>
+                                <input type="text" name="server_connection_protocol" value="https://" class="form-control" required/>
+                            </div>
+         <div class="form-group">
+                                <label>Server Url Adresi:</label>
+                                <input type="text" name="server" class="form-control" value="avokadoyazilim.com/abone" required/>
+                            </div>   
+                            
+                            
+                                  <div class="form-group">
+                                <label>Api Server Bağlantı Protokol</label>
+                                <input type="text" name="api_server_connection_protocol"  value="https://" class="form-control" />
+                            </div>                    
+                            
+                             <div class="form-group">
+                                <label>Api Server Url Adresi:</label>
+                                <input type="text" name="api_server_url" class="form-control" value="avokadoyazilim.com/api" required/>
+                            </div>                    
+                            
+                            <div class="form-group">
+                                <label>Veritabanı Adı:</label>
+                                <input type="text" name="db_name" class="form-control" value=""  required/>
+                            </div>   
+                            
+                            
+                            
+                            
+                               
+                            <div class="form-group">
+                                <label>Hesap Türü:</label>
+                          
+                                <select name="account_type" class="form-control">
+
+                                    <option value="1">Ücretsiz</option>
+                                    <option value="2">Standart</option>
+                                    
+                                    
+                                </select>
+                                
+                                
+                                
+                                
+                            </div>   
+                            
+                         
+                            
+                            
+                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                </div>
+
+
+        {% endblock %}
+
+        {% block footer %}
+ 
+
+
+        {% endblock %}

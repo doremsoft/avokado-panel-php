@@ -1,0 +1,128 @@
+{% extends "layout-light.twig" %}
+
+{% block backbtn %}
+
+    <a href="{{url}}/parametreler/" class="btn btn-danger waves-effect waves-light">
+        <i class="fa fa-backward mr-2"></i>Parametrelere Dön</a>
+    {% endblock %}
+    
+    
+{% block content %}
+
+
+    <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Masa Ekle</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="masa-grup-kaydet-form" action="{{url}}/masa/masakaydet" method="post">
+                            {{csrf | raw}}
+                            <div class="form-group">
+                                <label>Masa Adını Yazınız:</label>
+                                <input type="text" name="masa_adi" class="form-control" required/>
+                            </div>
+                            
+                            <input type="hidden" name="kat_id" value="{{ kat_id }}">
+
+
+                            <button type="submit" class="btn btn-primary">Yeni Masa Ekle</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Masalar</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+
+                                <tbody>
+                                    {% for masa in masalar  %}
+                                        <tr>
+
+                                            <th>
+
+                                                <label style="padding:10px;" id="editable-{{masa.id}}" class="editable" data-url="{{url}}/masa/update" data-id="{{masa.id}}" title="Düzenlemek İçin Tıklayın">{{masa.masa_adi}}</label>
+                                                <form id="banka-sil-form-{{masa.id}}" action="{{url}}/masa/remove" method="post">
+                                                    {{csrf | raw}}
+                                                    <input type="hidden" name="id" value="{{masa.id}}"/>
+                                                </form>
+                                            </th>
+
+                                            <td width="150px">
+                                                <button type="button" class="btn btn-icon btn-danger" onclick="event.preventDefault();
+                                                        kategori_sil({{masa.id}});"><i class="fa  fa-trash"></i></button>
+                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{masa.id}}')"><i class="fa fa-edit"></i></button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                    </div>
+
+{% endblock %}
+{% block footer %}
+    <script>
+
+        function kategori_sil(id) {
+
+     
+
+            swal({
+                title: 'Eminmisiniz?',
+                text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Anladım , Sil!',
+                cancelButtonText: 'İptal',
+                confirmButtonClass: 'btn btn-success',
+                cancelButtonClass: 'btn btn-danger ml-2',
+                buttonsStyling: false
+            }).then(function (result) {
+                
+            
+
+                if(result.value){
+                      document.getElementById('banka-sil-form-' + id).submit();
+                }
+
+              
+
+            }, function (dismiss) {
+               
+                 if (dismiss === 'cancel') {
+                 swal(
+                 'Cancelled',
+                 'Your imaginary file is safe :)',
+                 'error'
+                 )
+                 }
+                 
+                
+            });
+
+
+
+
+
+        }
+    </script>
+{% endblock %}

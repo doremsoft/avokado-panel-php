@@ -1,0 +1,256 @@
+{% extends "layout-light.twig" %}
+
+
+
+{% block head %}
+
+
+    <link href="{{asset('plugins/chartist/css/chartist.min.css')}}" rel="stylesheet" type="text/css" />
+
+
+
+
+{% endblock %}
+    {% block content %}
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">trending_up</i>
+
+                                        </span>
+                        <span class="logo-text h4">Satışlar</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+
+        </div>
+        <!-- / HEADER -->
+
+
+        <div class="row">
+            <div class="col-md-12" style="background-color: white;">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link btn  fuse-ripple-ready" id="timeline-tab"  href="{{ url }}/satislar" >Özet Durum</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn  fuse-ripple-ready" id="about-tab"  href="{{ url }}/satislar/iki-tarih-gore-satislar"  >Satış Dökümü</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link btn active fuse-ripple-ready" id="photos-videos-tab"  href="{{ url }}/satislar/iki-tarih-gore-satislar/analiz" >Satış Analizi</a>
+                    </li>
+
+                </ul>
+            </div>   </div>
+
+
+        <div class="row" style="padding: 15px;">
+
+            <div class="col-md-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <div class="row">
+                            <form id="logout-form"  class="col-md-12" action="{{url}}/satislar/iki-tarih-gore-satislar/analiz" method="post">
+                                {{csrf | raw}}
+
+                                <div class="row">
+
+                                    <div class="col-md-2">
+                                        <label>Analiz Başlama Tarihi</label>
+
+                                        <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>Analiz Başlama Saati</label>
+
+                                        <input type="time" class="form-control" name="bas_saat" value="{{bas_saat}}"/>
+                                    </div>
+
+
+                                    <div class="col-md-2">
+                                        <label>Analiz Bitiş Tarihi</label>
+
+
+                                        <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label>Analiz Bitiş Saati</label>
+
+
+                                        <input type="time" class="form-control" name="bit_saat" value="{{bit_saat}}"/>
+                                    </div>
+
+
+                                </div>
+
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4">
+
+                                        <button type="submit" class="form-control btn btn-primary">Rapor Getir</button> </div> </div>
+
+
+
+
+
+                            </form>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="padding: 15px;">
+
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="chart-demo">
+
+                            <div id="apex_area2" class="apex-charts"></div>
+                        </div>
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div><!--end col-->
+        </div><!--end row-->
+
+
+
+
+    {% endblock %}
+
+
+{%  block footer %}
+
+    <script src="{{asset('plugins/apexcharts/apexcharts.min.js')}}"></script>
+<script>
+
+    var satislar = JSON.parse('{{ satislar | raw }}');
+
+
+
+    console.log(satislar);
+
+    var tarih = [];
+    var satis = [];
+
+
+
+var i = 0;
+
+
+    var ts2 = 1484418600000;
+
+    var dates = [];
+    var spikes = [5, -5, 3, -3, 8, -8]
+
+
+    var first_date = 0;
+
+    $.each(satislar, function( index, value ) {
+
+        var d = new Date(value.tarih);
+
+        if(first_date == 0){
+
+            first_date = d.getTime();
+        }
+
+
+        var innerArr = [d.getTime(), parseFloat(value.genel_toplam).toFixed(2)];
+
+
+
+        dates.push(innerArr)
+
+         i++;
+
+    });
+
+
+    if(first_date == 0){
+        first_date = new Date('14 Nov 2012').getTime();
+    }
+
+
+
+
+
+    //Area-2
+    var options = {
+
+        chart: {
+            type: 'area',
+            height: 350,
+        },
+        dataLabels: {
+            enabled: true
+        },
+        series: [{
+            data:dates
+
+        },
+
+        ],
+        markers: {
+            size: 2,
+            style: 'hollow',
+        },
+        xaxis: {
+            type: 'datetime',
+            min: first_date,
+            tickAmount: 6,
+        },
+        colors: ['#dfa579'],
+        tooltip: {
+            x: {
+                format: 'dd MM yyyy'
+            }
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 100]
+            }
+        },
+
+    }
+
+    var chart = new ApexCharts(
+        document.querySelector("#apex_area2"),
+        options
+    );
+
+    chart.render();
+
+    </script>
+
+
+
+
+{% endblock %}

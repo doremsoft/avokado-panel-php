@@ -1,0 +1,74 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="row justify-content-center">
+
+
+
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Güncel Alacaklar</h5>
+
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Güncel alacak listenizi gösterir Vadesi Gelmemiş Alacaklarınız Dahil Değildir!</p>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th>Cari Hesap Adı</th>
+                                            <th>Alacak Tutarı</th>
+
+                                            <th>İşlem</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                           {% set toplami = 0 %}
+                                        {% for alacak in alacaklar %}
+
+
+
+
+
+                                            {% set bakiye = alacak.toplam_alacak_bakiyesi - alacak.tahsilat_tutar %}
+
+
+
+                                         
+                                            {%  if bakiye > 0.001  %}
+                                                     {% set toplami = toplami + bakiye %}
+                                                <tr>
+
+                                                    <td><a href="{{url}}/cari/show/{{alacak.cari_id}}">{{alacak.cari_adi}}</a></td>
+                                                    <td>{{Tl( bakiye)}} TL</td>
+                                                    <td><a href="{{url}}/cari/show/{{alacak.cari_id}}">Hesabı Göster</a></td>
+                                                </tr>
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div> <div class="card-body">
+                          Toplam : {{ Tl(toplami) }} TL
+                </div>   </div>
+        </div>    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+
+
+{% endblock %}

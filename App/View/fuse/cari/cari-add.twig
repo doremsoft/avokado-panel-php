@@ -1,0 +1,430 @@
+{% extends "layout-light.twig" %}
+
+    {% block head %}
+        <style>
+            .cariIsımleArama{
+                list-style: none;
+                position:absolute;
+                z-index:3;
+                right:0px;
+                left:0px;
+                background-color:white;
+                margin-right: 10px;
+                margin-left: 10px;
+                border: 1px solid black;
+                padding: 10px;
+
+            }
+
+            .cariIsımleArama li{
+
+                cursor:pointer;
+                padding: 0px;
+                margin-bottom:10px;
+                border-bottom:1px dashed black;
+
+            }
+
+            .cariIsımleArama li:hover{
+
+                background-color: #e6f2ff;
+
+            }
+
+            #aramasonuc{
+
+
+
+            }
+
+
+        </style>
+    {% endblock %}
+{% block content %}
+
+
+    {% if mobile == 1 %}
+        <div class="row">
+
+            <div class="col-md-12" style="margin-bottom: 15px;">
+                <a href="{{url}}/cari/list" class="btn btn-danger waves-effect waves-light">
+                    <i class="fa fa-backward mr-2"></i>Geri Dön</a>
+            </div>
+        </div>
+    {% endif %}
+
+
+    <div id="contacts" class="page-layout simple left-sidebar-floating">
+
+        <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+            <div class="col">
+
+                <div class="row no-gutters align-items-center flex-nowrap">
+
+                    <button type="button" class="sidebar-toggle-button btn btn-icon d-inline-block d-lg-none mr-2" data-fuse-bar-toggle="contacts-sidebar">
+                        <i class="icon icon-menu"></i>
+                    </button>
+
+                    <!-- APP TITLE -->
+                    <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                            <i class="icon-account-box s-6"></i>
+                                        </span>
+                        <span class="logo-text h4">Yeni Hesap</span>
+                    </div>
+                </div>
+                <!-- / APP TITLE -->
+            </div>
+
+            <!-- SEARCH -->
+            <div class="col search-wrapper">
+
+                <div class="input-group">
+
+                                    <span class="input-group-btn">
+
+                                        <button type="button" class="btn btn-icon">
+                                            <i class="icon icon-magnify"></i>
+                                        </button>
+
+                                    </span>
+
+                    <input onkeyup="cariarama(this.value)" id="contacts-search-input" type="text" class="form-control" placeholder="Hesap Adı..." aria-label="Hesap Adı..." />
+                    <div id="aramasonuc" ></div>
+                </div>
+            </div>
+            <!-- / SEARCH -->
+        </div>
+        <!-- / HEADER -->
+
+        <div class="page-content-wrapper">
+
+            <aside class="page-sidebar p-6" data-fuse-bar="contacts-sidebar" data-fuse-bar-media-step="md">
+                <div class="page-sidebar-card">
+                    <!-- SIDENAV CONTENT -->
+                    <div class="content">
+
+                        <ul class="nav flex-column" style="padding-bottom: 16px;">
+
+                            <div class="header p-4">
+
+                                <!-- USER -->
+                                <div class="row no-gutters align-items-center" style="text-align:center">
+
+                                    <span class="font-weight-bold" style="text-align:center;margin: auto;">Hesap İşlemleri</span>
+                                </div>
+                                <!-- / USER -->
+
+                            </div>
+
+
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top:16px;">
+                                <a class="nav-link ripple active  sid-nav-link " href="{{ url }}/cari/list">
+                                    <span>Bütün Hesaplar</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  " href="{{ url }}/cari/list/1">
+                                    <span>Müşteriler</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link " href="{{ url }}/cari/list/2">
+                                    <span>Tedarikçiler</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link " href="{{ url }}/cari/list/3">
+                                    <span>Personeller</span>
+                                </a>
+                            </li>
+                            <div class="divider"></div>
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/finansal/alacaklarim">
+                                    <span>Alacaklı Hesaplar</span>
+                                </a>
+                            </li>
+
+
+                            <li class="nav-item" style="padding-bottom: 15px;">
+                                <a class="nav-link ripple sid-nav-link" href="{{ url }}/finansal/borclarim">
+                                    <span>Borçlu Hesaplar</span>
+                                </a>
+                            </li>
+
+                            <div class="divider"></div>
+
+
+                            <li class="nav-item" style="padding-top: 15px;">
+                                <a class="nav-link ripple sid-nav-link {% if tur == 1 %}accent{% endif %}" href="{{ url }}/cari/add/1">
+                                    <span>Yeni Müşteri</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  {% if tur == 2 %}accent{% endif %}" href="{{ url }}/cari/add/2">
+                                    <span>Yeni Tedrikçi</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link ripple sid-nav-link  {% if tur == 3 %}accent{% endif %}" href="{{ url }}/cari/add/3">
+                                    <span>Yeni Personel</span>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <!-- / SIDENAV CONTENT -->
+                </div>
+            </aside>
+
+            <!-- CONTENT -->
+            <div class="page-content col-md-12 p-4 p-sm-6 ">
+
+                <div class="bg-white p-4">
+
+                <form id="logout-form" action="{{url}}/cari/save" method="post">
+                    {{csrf | raw}}
+
+                    <input type="hidden" name="tur" value="{{ tur }}"/>
+
+                    <div class="form-group">
+                        <label>Ad Soyad / Unvan</label>
+                        <input type="text" class="form-control" name="cari_adi" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>Vergi No / Tc Kimlik No</label>
+                        <input type="text" class="form-control" name="cari_vergi_no" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>Vergi Dairesi</label>
+                        <input type="text" class="form-control" name="cari_vergi_daire">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefon</label>
+                        <input type="text" class="form-control tr_telephone" data-mask="(999) 999-99-99" name="cari_telefon">
+                    </div>
+                    <div class="form-group">
+                        <label>Gsm</label>
+                        <input type="text" class="form-control tr_telephone" name="cari_gsm" data-mask="(999) 999-99-99">
+                    </div>
+                    <div class="form-group">
+                        <label>e-Posta</label>
+                        <input type="email" class="form-control" name="cari_mail">
+                    </div>
+
+
+                    <!--  <div class="form-group"> !-->
+                    <!--    <label>Cari Özel Kod</label>!-->
+                    <input type="hidden" class="form-control" name="cari_kod">
+                    <!--   </div>!-->
+
+                    <div class="form-group">
+                        <label>Adres</label>
+                        <textarea name="cari_adres" class="form-control"></textarea>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label>Not</label>
+                        <textarea name="cari_detay" class="form-control"></textarea>
+                    </div>
+
+
+
+                    {% if tur == 1 %}
+                        <div class="form-group">
+                            <label>Vade Günü</label>
+                            <br><small>Fatura tarihine ek ödeme süresi</small>
+                            <input type="text" class="form-control" name="cari_vade_gun" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cari Limit (TL)</label>
+                            <input type="text" class="form-control" name="cari_kredi_limit" value="0">
+                        </div>
+
+
+                    {% elseif tur == 2 %}
+                        <div class="form-group">
+                            <label>Vade Günü</label>
+                            <br><small>Fatura tarihine ek ödeme süresi</small>
+                            <input type="text" class="form-control" name="cari_vade_gun" value="0">
+                        </div>
+                        <input type="hidden" name="cari_kredi_limit" value="0"/>
+
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label>Hesap Resmi</label>
+
+                        <img src="noimage.jpg" style="max-width: 200px;" class="image"  id="img-fieldID-1">
+
+                        <br>
+                        <a href="javascript:open_popup('{{ url }}/filemanager/dialog.php?lang=tr_TR&{{ media_secure }}&klasor=private&callback=image_callback&type=1&popup=1&field_id=fieldID-1&relative_url=1')" class="btn" type="button">Resim Seç</a>
+
+                        <input type="text" onkeyup="imageKontrol('fieldID-1')" class="form-control" name="cari_image" id="fieldID-1" value="noimage.jpg">
+
+
+
+                    </div>
+
+
+
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                </form>
+                </div>
+
+            </div>
+            <!-- / CONTENT -->
+
+        </div>
+    </div>
+
+
+
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block footer %}
+    <script>
+
+        imageKontrol('fieldID-1');
+        let kasa_json = '{{kasalar | raw}}';
+
+        try {
+
+            kasa_json = JSON.parse(kasa_json);
+
+            console.log(kasa_json);
+        } catch (e) {
+            console.log(e);
+        }
+
+
+
+        function cariarama(str) {
+            if (str.length <= 1) {
+                document.getElementById("aramasonuc").innerHTML = "";
+                document.getElementById("aramasonuc").style.border = "0px";
+                return;
+            } else if (str.length > 1) {
+
+                console.log(str);
+
+                var jqxhr = $.post("{{url}}/cari/hepsiara", {query: str})
+                    .done(function (data) {
+
+                        data = data.trim();
+
+
+
+                        //document.getElementById("aramasonuc").style.border = "1px solid #A5ACB2";
+
+                        if (data == "non") {
+
+                            document.getElementById("aramasonuc").innerHTML = "Cari Bulunamadı!";
+
+                        } else {
+
+
+                            var cari_data = JSON.parse(data);
+
+                            var lihtml = "<ul class=\"cariIsımleArama\">";
+
+                            if (cari_data.durum == "ok") {
+
+
+
+                                $.each(cari_data.cari, function (key, val) {
+
+
+                                    lihtml += liurunbas(val);
+
+                                });
+
+
+
+                            } else {
+
+                                console.log("Cari Bulunamadı");
+
+
+
+                                lihtml += cariyok();
+
+
+                            }
+
+                            document.getElementById("aramasonuc").innerHTML = lihtml + "</ul>";
+
+
+
+                        }
+
+                    })
+                    .fail(function () {
+                        alert("error");
+                    });
+            }
+
+
+
+
+
+
+
+        }
+
+        function cariyok() {
+
+            var html = "<li>Cari Hesap Bulunmadı!</li>";
+
+
+            return html;
+
+        }
+
+
+
+
+        function liurunbas(data) {
+
+            var html = "<li data-id=\"" + data.id + "\"  data-json='" + JSON.stringify(data) + "' onclick=\"window.location.href='{{url}}/cari/show/" + data.id + "'\" >" + data.cari_adi + "</li>";
+
+
+            return html;
+
+        }
+
+
+
+        function divYaz(label,input){
+
+
+            var html = "<div class=\"form-group row\"> <label for=\"example-text-input\" class=\"col-sm-2 col-form-label text-right\">"+label+"</label><div class=\"col-sm-10\">";
+
+            html += input+"</div> </div>";
+            return html;
+        }
+
+
+
+
+
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+    <div class="page-header bg-primary text-auto row no-gutters align-items-center justify-content-between p-4 p-sm-6">
+
+        <div class="col">
+
+            <div class="row no-gutters align-items-center flex-nowrap">
+
+
+
+                <!-- APP TITLE -->
+                <div class="logo row no-gutters align-items-center flex-nowrap">
+                                        <span class="logo-icon mr-4">
+                                             <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">money</i>
+
+                                        </span>
+                    <span class="logo-text h4">Gelir İşlemleri</span>
+                </div>
+            </div>
+            <!-- / APP TITLE -->
+        </div>
+
+
+    </div>
+    <!-- / HEADER -->
+<div class="col-md-12">
+
+    <div class="row">
+        <div class="col-md-12" style="background-color: white;">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                <li class="nav-item">
+                    <a class="nav-link btn  fuse-ripple-ready"   href="{{ url }}/tahsilat" >Özet Durum</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn   fuse-ripple-ready"  href="{{ url }}/tahsilat/cari-secim"  >Yeni Gelir</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link btn  active fuse-ripple-ready"  href="{{ url }}/tahsilat/liste"  >Gelir Dökümü</a>
+                </li>
+
+
+            </ul>
+        </div>
+
+            <div class="col-md-12 m-t-15">
+                <div class="card" style="border-radius: 0px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="logout-form" action="{{url}}/tahsilat/liste" method="post">
+                                    {{csrf | raw}}
+                                    <div class="row">
+
+                                        <div class="col-md-3">
+                                            <label>Gelir Tipi</label>
+                                            <select class="form-control" name="tip">
+
+                                                {% for key, val in tipler %}
+
+
+                                                    {% if key == tip %}
+                                                        <option value="{{key}}" selected="">{{val}}</option>
+                                                    {% else %}
+                                                        <option value="{{key}}" >{{val}}</option>
+                                                    {% endif %}
+
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <label>Rapor Başlama Tarihi</label>
+
+
+                                            <input type="date" class="form-control" name="bas_tarih" value="{{bas_tarih}}"/>
+                                        </div>
+
+
+                                        <div class="col-md-3">
+                                            <label>Rapor Bitiş Tarihi</label>
+
+
+                                            <input type="date" class="form-control" name="bit_tarih" value="{{bit_tarih}}"/>
+                                        </div>
+
+
+                                        <div class="col-md-3">  <label>İşlem</label>
+
+                                            <button type="submit" class="form-control btn btn-primary">Gelir Raporunu Getir</button> </div>
+                                    </div>
+
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="col-md-12 m-t-15">
+            <div class="card" style="border-radius: 0px;">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+
+                                    <thead>
+                                    <tr>
+                                        <th>Gelir Tİpi</th>
+                                        <th>Tarih</th>
+                                        <th>Hesap</th>
+                                        <th>Tutar</th>
+                                        <th>İşlem</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for tahsilat in tahsilatlar.result  %}
+                                        <tr>
+
+
+                                            <td>{% if tahsilat.islem_tip == "kasanakit"  %} Kasa Nakit{% elseif   tahsilat.islem_tip == "banka" %} Banka{% else %}{{  tahsilat.islem_tip }}{% endif %}</td>
+                                            <td>{{tahsilat.islem_tarih | date('d-m-Y')}}</td>
+
+                                            <td>{{tahsilat.cari_adi}}</td>
+                                            <td>{{Fiyat(tahsilat.islem_tutar,"TL",2) | raw}}</td>
+                                            <td></td>
+
+
+
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-end">
+                            {{paginate(tahsilatlar.paginate,"tahsilat/liste",paginate_ex) | raw }}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+
+
+        </div>   </div>
+
+{% endblock %}
+{% block footer %}
+
+    <script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.bootstrap4.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.print.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/buttons.colVis.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+    <script src="{{asset('plugins/datatables/responsive.bootstrap4.min.js')}}"></script>
+
+    <script>
+
+    setDataTable("#datatable-buttons", 1, "kasaraporu", "");
+
+</script>
+{% endblock %}

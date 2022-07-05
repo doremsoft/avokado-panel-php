@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="01e7adf7-249b-4ce3-a1b1-dd3bef96cbb1" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/dipacorevendors/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/melbahja/http2-pusher" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/nezamy/support" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/nezamy/route" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/twig/twig" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/dogus/dipanelcore" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/ps/image-optimizer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/claviska/simpleimage" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/composer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/league/color-extractor" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/daveismyname/sql-import" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/wisembly/elephant.io" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/dipacorevendors/vendor/psr/log" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="2AIvG3ugYHg7B66tA6KBmcN1tQ4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../projects/NodejsProjects/doremgym" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="01e7adf7-249b-4ce3-a1b1-dd3bef96cbb1" name="Changes" comment="" />
+      <created>1654709816609</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1654709816609</updated>
+      <workItem from="1654709818125" duration="15000" />
+    </task>
+    <servers />
+  </component>
+</project>

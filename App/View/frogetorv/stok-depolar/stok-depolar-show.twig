@@ -1,0 +1,132 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+    
+    
+    <div class="row">
+
+
+      
+                                        
+      
+     
+    
+    
+    
+
+    <div class="col-sm-12">
+              
+             <div class="card">
+                                    <div class="card-body">
+
+        <h5>{{depo.stok_depo_adi}}</h5>
+        <hr>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Ürün Listesi</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" id="pills-serinolu-tab" data-toggle="pill" href="#pills-serinolu" role="tab" aria-controls="pills-serinolu" aria-selected="true">Seri Numaralı Ürünler</a>
+            </li>
+
+
+        
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="table-responsive">
+                    <table id="stok-depo-mevcut-table" class="display table nowrap table-striped table-hover">
+                        <thead>
+                            <tr>
+
+                                <th>Stok Kod</th>
+                                <th>Stok Adı</th>
+                                <th>Adet</th>
+                         
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stok in stoklar.klasik  %}
+
+                                {% if stok.cikisadet == null %}
+
+                                    {% set cikisadet = 0 %}
+
+                                {% else %}
+
+                                    {% set cikisadet = stok.cikisadet %}
+
+                                {% endif %}
+
+                                {% if stok.adet - cikisadet != 0 %}
+                                    <tr>
+
+                                        <td>{{stok.stok_kod}}</td>
+                                        <td><a href="{{url}}/stok/show/{{stok.stok_id}}">{{stok.stok_adi}}</a></td>
+                                        <td>{{stok.adet - stok.cikisadet}}</td>
+                                  
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="pills-serinolu" role="tabpanel" aria-labelledby="pills-serinolu-tab">
+                <div class="table-responsive">
+                    <table id="stok-depo-mevcut-serili-table" class="display table nowrap table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Seri No</th>
+                                <th>Stok Kod</th>
+                                <th>Stok Adı</th>
+                                <th>Adet</th>
+                              
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stok_o in stoklar.ozel  %}
+                                <tr>
+                                    <th scope="row">{{stok_o.seri_no}}</th>
+                                    <td>{{stok_o.stok_kod}}</td>
+                                    <td><a href="{{url}}/stok/show/{{stok_o.stok_id}}">{{stok_o.stok_adi}}</a></td>
+                                    <td>{{stok_o.adet}}</td>
+                              
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <p class="mb-0"></p>
+            </div>
+
+
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <p class="mb-0"></p>
+            </div>
+
+
+        </div>
+    </div>
+
+                            
+        </div>    </div>       </div>   
+    
+    
+{% endblock %}
+
+
+{% block footer %}
+    <script>
+        setDataTable("#stok-depo-mevcut-table",1,"Depo Ürün Listesi");
+        setDataTable("#stok-depo-mevcut-serili-table",1,"Depo Ürün Listesi");</script>
+              
+                                      
+     {% endblock %}                              

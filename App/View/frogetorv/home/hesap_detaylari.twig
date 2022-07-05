@@ -1,0 +1,53 @@
+{% extends "layout-light.twig" %}
+
+{% block content %}
+
+    <div class="row">
+
+
+
+        <div class="col-md-12">
+            <div class="row">
+
+
+                <div class="col-md-12 col-xl-12">
+                    <div class="card">
+
+
+                        <div class="card-body ">
+                            <h4 class="header-title mb-0">Hesap Durumu</h4>
+                            <div class="row align-items-center justify-content-center p-10">
+                                <div class="col-auto">
+                                    <h3 class="f-w-300 m-t-20"> {{ Tl(hesap_detayi.guncel_bakiye) }} TL</h3>
+                                    <span>Güncel Bakiyeniz</span>
+                                </div>
+                                <div class="col text-right">
+                                    <i class="fas fa-chart-line f-30 text-c-purple"></i>
+                                </div>
+                            </div>
+                            <div class="leads-progress mt-3">         <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                <h6 class="text-muted f-w-300 mt-4">Paket Adı <span class="float-right">{{ hesap_detayi.paket_adi }}</span></h6>
+                                <h6 class="text-muted f-w-300 mt-4">İlk Kayıt Tarihi <span class="float-right">{{ hesap_detayi.ilk_kayit | date('d-m-Y h:i') }}</span></h6>
+                                <h6 class="text-muted f-w-300 mt-4">Yenileme Tarihi <span class="float-right"> {{ hesap_detayi.kayit_yenileme | date('d-m-Y h:i') }} </span></h6>
+                                <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                <h6 class="text-muted f-w-300 mt-4">Toplam Stok <span class="float-right"> {{ hesap_detayi.stok_limiti }} / {{ satis_raporlari.toplam_stok }} </span></h6>
+                                <h6 class="text-muted f-w-300 mt-4">Toplam Cari Hesap <span class="float-right"> {{ hesap_detayi.cari_limiti }} / {{ satis_raporlari.toplam_cari }}  </span></h6>
+                                <h6 class="text-muted f-w-300 mt-4">Toplam Parekende Cihaz <span class="float-right"> {{ hesap_detayi.cihaz_limiti }} / 1 </span></h6>
+
+                                <p class="border-top m-b-20 p-t-10 m-t-20"></p>
+                                <h6 class="text-muted f-w-300 mt-4">Hesap Notu:</h6>
+
+                                {{ hesap_detayi.detay }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+{% endblock %}

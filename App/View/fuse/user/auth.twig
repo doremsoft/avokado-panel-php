@@ -1,0 +1,45 @@
+{% extends "layout-light.twig" %}
+{% block content %}
+
+<div class="col-md-12 m-t-15">
+<div class="card">
+<div class="card-header">
+<h5>{{user_data.name}} {{user_data.surname}} Yetki Güncelleme</h5>
+</div>
+<div class="card-body">
+<div class="row">
+<div class="col-md-12">
+<form id="logout-form" action="{{url}}/user/auth-update" method="post">
+{{csrf | raw}}
+<input type="hidden" name="user_id" value="{{ user_data.id }}"/>
+{% for key,list in auth_list %}
+    
+<div class="custom-control custom-checkbox">
+<input type="checkbox" name="auth_selected[{{list.k}}]"  value="1"  class="custom-control-input" id="chk-{{list.k}}" data-parsley-multiple="groups" data-parsley-mincheck="2" {%if list.k in au|keys %}checked{% endif %}>
+<label class="custom-control-label" for="chk-{{list.k}}"> {{list.a}}</label>
+</div>
+
+   {% for ckey,clist in list.c %}
+       
+<div class="custom-control custom-checkbox" style="padding-left:2.5rem;">
+<input type="checkbox" name="auth_selected[{{list.k}}][{{ ckey }}]"  value="1"  class="custom-control-input" id="chk-{{list.k}}-{{ ckey }}" data-parsley-multiple="groups" 
+       data-parsley-mincheck="2"  {%if ckey in au[list.k]|keys %}checked{% endif %}>
+<label class="custom-control-label" for="chk-{{list.k}}-{{ ckey }}"> {{clist}}</label>
+</div>
+
+        {% endfor %}
+    {% endfor %}
+    
+    <br><br>
+<button type="submit" class="btn btn-primary">Yetkileri Güncelle</button>
+</form>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+{% endblock %}

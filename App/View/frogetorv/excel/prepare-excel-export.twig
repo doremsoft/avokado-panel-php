@@ -1,0 +1,143 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+
+    <style>
+
+
+    </style>
+
+{% endblock %}
+{% block content %}
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Excel'e Stok Listesi Aktarımı</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form id="logout-form" action="{{ url }}/excel-export/selected-stocks" method="post">
+                                {{ csrf | raw }}
+
+
+                                <p>no yazarsanız o alanı çıktılamaz</p>
+
+                                <p>Excel Sütun Adını Yazın A , B , C</p>
+
+
+
+                                <div class="form-group">
+                                    <label>Barkod</label>
+                                    <input type="text" name="barkod" value="A" class="form-control"/>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Stok Kod</label>
+                                    <input type="text" name="stok_kod" value="B" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Stok Adı</label>
+                                    <input type="text" name="stok_adi" value="C" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Mevcut Miktar</label>
+                                    <input type="text" name="mevcut" value="D" class="form-control"/>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Birim</label>
+                                    <input type="text" name="birim" value="E" class="form-control"/>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Alım  Fiyat (Vergi Hariç)</label>
+                                    <input type="text" name="vh_alim" value="F" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Satış Fiyat (Vergi Hariç)</label>
+                                    <input type="text" name="vh_satis" value="G" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Alım  Fiyat (Vergi Dahil)</label>
+                                    <input type="text" name="vd_alim" value="H" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Satış Fiyat (Vergi Dahil)</label>
+                                    <input type="text" name="vd_satis" value="I" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Vergi Oranı</label>
+                                    <input type="text" name="vergi_oran" value="J" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Döviz</label>
+                                    <input type="text" name="doviz" value="K" class="form-control"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Döviz Günlük Kur Karşılığı</label>
+                                    <input type="text" name="kur" value="L" class="form-control"/>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label>Çıktı Seçimi</label>
+                                    <select name="yalnizca_alimlarla" class="form-control">
+                                        <option value="1" selected>Yanlızca Stokta Mevcut Olanlar</option>
+                                        <option value="2">Yanlızca Alım Yaptığım Ürünler</option>
+                                        <option value="3">Hepsi</option>
+                                    </select>
+                                </div>
+
+
+
+
+                                <button type="submit" class="btn btn-primary waves-effect waves-light">Dışa Aktar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+        $('#stokfileinput').bind('change', function () {
+
+
+            var file_size = this.files[0].size;
+
+
+            if (file_size > 3000000) {
+
+                notify("Dosya Boyutu lilmiti aşıyor", "danger");
+
+                //$('#stokfileinput').val('');
+
+            }
+
+        });
+    </script>
+
+{% endblock %}
+
+

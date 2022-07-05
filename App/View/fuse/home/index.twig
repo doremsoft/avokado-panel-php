@@ -1,0 +1,329 @@
+{% extends "layout-light.twig" %}
+{% block head %}
+<style>
+.card{
+    border-radius: 0px;
+}
+.wall-card {
+
+     padding: 0px;
+}
+</style>
+
+{% endblock %}
+    {% block content %}
+
+
+<div class="col-md-12 m-t-15">
+        <div class="row">
+
+            <div class="timeline-sidebar col-12 col-sm-12 col-xl-3" >
+
+
+                <div id="left-sticky" style="position: sticky; top: 15px;max-width: 100%;max-width: 100%;">
+
+                          <div class="card" >
+                              <div class="card-header">Hoşgeldiniz</div>
+                                   <div class="card-body text-center text-primary" ><label class="hesap-adi-label">{{hesap_detay.hesap_cari_adi}}</label></div>
+
+                          </div>
+
+
+
+
+                    {% if mobile != 1 %}
+
+                <div class="card" style="margin-top:10px;border-radius: 0px;" >
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <input type="text" class="form-control" name="mesaj" id="htmesaj" placeholder="Hatırlatma Mesajı" required>
+                                    </div>
+
+
+                                    <div class="col-md-12 m-t-15">
+                                        <input type="date" class="form-control" name="tarih" id="httarih" value="{{ bugun }}" required>
+
+
+                                    </div>
+                                    <div class="col-md-12 m-t-15">
+                                        <input type="time" class="form-control" name="saat" id="htsaat" value="{{ saat }}" required>
+
+
+                                    </div>
+                                    <div class="col-md-12 m-t-15">
+
+                                        <button type="button" onclick="yeniBildirimEkle();" class="col-md-12 btn btn-primary">Hatırlatma Ekle</button>
+                                    </div>
+
+                                </div>
+
+
+                            </div></div></div>
+
+
+                </div>
+
+                    {% endif %}
+
+
+                </div>
+            </div>
+
+            <div class="timeline col-12 col-sm-12 col-xl-6 m-m-t-15 mt-m-t-15">
+
+
+
+                <div class="profile-box add-post card " style="border-radius: 0px;">
+
+                    <div class="form">
+
+                        <textarea class="w-100 p-4"  onkeyup="postTextarea(this);" placeholder="Ekibinize Bir İçerik Paylaşın...." id="duvar-textarea"></textarea>
+
+                        <footer class="row no-gutters align-items-center justify-content-between bg-light p-2">
+
+                            <div class="row no-gutters">
+
+
+                                <input id="post-image-file-upload" name="postimage" type="file"/>
+
+                            </div>
+
+                            <button type="post-button button" onclick="sendPost('duvar-textarea','duvar',0,'loadwalldata()')" class="btn btn-secondary  m-t-15 col-md-12" aria-label="post">
+                                PAYLAŞ
+                            </button>
+
+                        </footer>
+                    </div>
+                </div>
+
+
+                <div id="paylasim-duvari"  class="wallresults m-t-15" data-last-id = "0" data-first-id = "0"></div>
+
+
+
+                <div class="load-more" data-load = "0" style="display: none;"></div>
+
+
+            </div>
+
+
+            <div class="timeline col-12 col-sm-12 col-xl-3 m-m-t-15 mt-m-t-15">
+
+
+                <div class="card"  >
+                    <div class="card-header">Son Bildirimler</div>
+
+
+      <div class="content activities "  id="butun-bildirimler-bolumu">
+          {% for bildirim in sonbildirimler %}
+              <div class="activity row no-gutters bildirimlistesi bildirim-kalem " style='width:100%;padding:5px;padding-bottom:10px;padding-top: 10px;'   data-bildirim-id="{{ bildirim.id }}"data-okunmayan-bildirim="0">
+
+                  <div style="width: 100%;">
+
+
+                      {% set bildirim_url = "#" %}
+                      {% if  bildirim.tip == 0 %}
+                      {% elseif  bildirim.tip == 1 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% elseif  bildirim.tip == 2 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% elseif  bildirim.tip == 3 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% elseif  bildirim.tip == 5 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% elseif  bildirim.tip == 6 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% elseif  bildirim.tip == 7 %}
+                          {% set bildirim_url %}{{ url }}/post/show/{{ bildirim.islem_id }}{% endset %}
+                      {% endif %}
+
+
+                      <div style="width: 100%;float: left;text-align: center">
+
+
+                          {% if bildirim.bildirim_icon == "" %}
+                              <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">keyboard_arrow_right</i>
+                          {% else %}
+                              <i class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color" role="img" aria-hidden="true">{{bildirim.bildirim_icon}}</i>
+                          {% endif %}
+                      </div>
+
+
+                      <div  style=" width: 100%; float: left;text-align: center"">
+
+                          <span class="bildirim-baslik ">{{bildirim.bildirim_baslik}} </span> <br>
+
+                          <span class="time text-muted bildirim-mesaj">{{ tarih(bildirim.created_date , 'd-m-Y H:i') }}</span>
+                          <br>
+                          <span class="message"><a class="bildirim bildirim-mesaj" href="{{ bildirim_url }}">
+                                            {{ get_html( bildirim.bildirim_mesaj) }}
+                                        </a>
+                                    </span>
+
+
+
+
+                      </div>
+
+
+
+
+                  </div>
+              </div>
+
+          {% endfor %}
+      </div>
+
+
+                    <div class="card-footer"><a style="text-decoration: none;font-weight: bold;" href="{{ url }}/bildirim/liste">Bütün Bildirimler</a></div>
+
+                </div>
+
+
+
+            </div>
+
+
+
+        </div>
+
+</div>
+
+
+
+{% endblock %}
+
+ {% block footer %}
+     <script>
+
+
+         var wallstatus = false;
+
+
+         function loadwalldata(){
+
+             getIdPosts('duvar' , 0 ,  $("#paylasim-duvari").attr("data-last-id") , "paylasim-duvari" ,$("#paylasim-duvari").attr("data-first-id"),0);
+
+         }
+
+         function wallPlay(){
+
+             wallstatus = true;
+
+             getIdPosts('duvar' ,0 , $("#paylasim-duvari").attr("data-last-id") , "paylasim-duvari",$("#paylasim-duvari").attr("data-first-id"),1);
+
+         }
+
+
+
+         wallPlay();
+
+         setInterval(function(){
+
+             if(wallstatus == true){
+
+                 getIdPosts('duvar' , 0 ,  $("#paylasim-duvari").attr("data-last-id"), "paylasim-duvari" ,$("#paylasim-duvari").attr("data-first-id") , 0);
+             }
+
+         }, 10000);
+
+
+         $("div.content").scroll(function() {
+             var $this = $(this);
+             var $results = $(".wallresults");
+
+             var scrooltop = $this.scrollTop();
+
+             var thish = $this.height();
+             var resultheight =  $results.height();
+             var thisheihgt = scrooltop + thish;
+
+
+
+             if($(".load-more").attr("data-load") == 0){
+
+                 if (thisheihgt  >= resultheight) {
+
+                     $(".load-more").attr("data-load",1)
+
+                     $(".load-more").show();
+
+                     getLoadMorePosts('duvar' ,0 , "paylasim-duvari",$("#paylasim-duvari").attr("data-first-id"));
+
+                 }
+
+
+             }
+         });
+
+
+         function loadMoreData(){
+
+             getLoadMorePosts('duvar' ,0 , "paylasim-duvari",$("#paylasim-duvari").attr("data-first-id"));
+
+         }
+
+
+
+
+         
+         function yeniBildirimEkle() {
+
+             var mesaj = $("#htmesaj").val();
+
+             var saat = $("#htsaat").val();
+
+             var tarih =  $("#httarih").val();
+
+
+
+             if(mesaj.trim() != "" && saat.trim() != "" && tarih.trim() != ""  ){
+
+
+             var params = {
+
+                 mesaj:mesaj,
+                 saat:saat,
+                 tarih:tarih,
+                 type:2
+
+             };
+
+
+             $.post( "{{url}}/bildirim/ekle", params)
+                 .done(function( data ) {
+
+                     data = data.trim();
+
+                     if(data){
+
+                         $("#htmesaj").val("");
+
+                         swalert("success","İşlem Başarılı","Hatırlatma Eklendi....");
+
+                     }else{
+
+                         swalert("error","İşlem Başarısız","Hatırlatma Eklenemedi!");
+                     }
+
+                 });
+
+             }else{
+
+                 swalert("error","İşlem Başarısız","Bütün Alanları Doldurunuz!");
+             }
+             
+         }
+
+
+
+     </script>
+
+
+
+ {% endblock %}

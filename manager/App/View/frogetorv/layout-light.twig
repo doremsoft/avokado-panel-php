@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+    <title>Avokado Yazılım</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Avokado Yazılım Profesyonel Satış Sistemleri" name="description" />
+    <meta name="robots" content="nofollow">
+    <meta name="googlebot" content="noindex">
+    <meta name="csrf-token" content="{{csrf_token}}">
+    <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon">
+        <link href="{{asset('plugins/sweet-alert2/sweetalert2.min.css')}}" rel="stylesheet" type="text/css" />
+        <!-- App css -->
+        <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('css/icons.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('css/metismenu.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('plugins/notification/css/notification.min.css')}}" rel="stylesheet" type="text/css" />  
+
+        {% if user.h_nav == 1 %}
+            <link href="{{asset('css/styleh.css')}}" rel="stylesheet" type="text/css" />
+        {% else %}
+            <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css" />
+        {% endif %}
+        {% block head %}{%endblock%}
+    </head>
+    <body>
+
+        <!-- Top Bar Start -->
+    <div class="topbar">
+        <!-- Navbar -->
+        <nav class="navbar-custom">
+
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <a href="{{url}}" class="logo">
+                    <span>
+                        <img src="{{asset('images/logo-sm.png')}}" alt="logo-small" class="logo-sm">
+                    </span>
+                    <span>
+                        <img src="{{asset('images/logo-dark.png')}}" alt="logo-large" class="logo-lg">
+                    </span>
+                </a>
+            </div>
+
+            <ul class="list-unstyled topbar-nav float-right mb-0">
+
+                <li class="dropdown">
+                    <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="false" aria-expanded="false">
+                        <i class="mdi mdi-bell-outline nav-icon"></i>
+                        <span class="badge badge-danger badge-pill noti-icon-badge">0</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+                        <!-- item-->
+                        <h6 class="dropdown-item-text">
+                            Bildirim Bulunmamaktadır!
+                        </h6>
+                        <div class="slimscroll notification-list">
+
+                        </div>
+
+                    </div>
+                </li>
+                {% if user.h_nav == 1 %}
+                    <li class="menu-item">
+                        <!-- Mobile menu toggle-->
+                        <a class="navbar-toggle nav-link" id="mobileToggle">
+                            <div class="lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </a>
+                        <!-- End mobile menu toggle-->
+                    </li>  
+                {% endif %}
+            </ul>
+
+            <ul class="list-unstyled topbar-nav mb-0">
+                {% if user.h_nav == 0 %}
+                    <li>
+                        <button class="button-menu-mobile nav-link waves-effect waves-light">
+                            <i class="mdi mdi-menu nav-icon"></i>
+                        </button>
+                    </li>
+                {% endif %}
+
+            </ul>
+                
+                    <ul class="list-unstyled topbar-nav float-right mb-0">
+                    <li class="hide-phone app-search">
+                        <form role="search" class="">
+                            <input type="text" placeholder="Cari Hesap Adı Yazınız..." onkeyup="cariaramahead(this.value,'{{url}}')" class="form-control">
+                            <a href=""><i class="fas fa-search"></i></a>
+                            
+                                 <div id="charamasonuc"></div>
+                        </form>
+                    </li>
+                    
+                </ul>
+
+        </nav>
+        <!-- end navbar-->
+    </div>
+    <!-- Top Bar End -->
+    
+  
+    <div class="page-wrapper-img">
+        <div class="page-wrapper-img-inner">
+            <div class="sidebar-user media">      
+
+                {% if user.image == "noimage.jpg" %}
+                    {% if user.gender == "male" %}
+                        <img src="{{asset('images/user/avatar-2.jpg')}}" alt="user" class="rounded-circle img-thumbnail mb-1"/>
+                    {% else %}
+                        <img src="{{asset('images/user/avatar-1.jpg')}}" alt="user" class="rounded-circle img-thumbnail mb-1"/>
+                    {% endif %}
+                {% else %}
+                    <img src="{{media('userpicture/',user.image) }}" alt="user" class="rounded-circle img-thumbnail mb-1"/> 
+                {% endif %}
+
+                <span class="online-icon"><i class="mdi mdi-record text-success"></i></span>
+                <div class="media-body">
+                    <h5 class="text-light">{{user.name}} {{user.surname}}</h5>
+                    <ul class="list-unstyled list-inline mb-0 mt-2">
+                        <li class="list-inline-item">
+                            <a href="{{url}}/user/password-edit" class=""><i class="mdi mdi-account text-light"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{{url}}/user/edit" class=""><i class="mdi mdi-settings text-light"></i></a>
+                        </li>
+
+
+
+                        <li class="list-inline-item">
+                            <a href="#" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();" class=""><i class="mdi mdi-power text-danger"></i></a>
+                            <form id="logout-form" action="{{url}}/logout" method="post">
+                                {{csrf | raw}}
+                            </form>
+
+                        </li>
+                    </ul>
+                </div>                    
+            </div>
+            <!-- Page-Title -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+
+
+
+                        <div class="float-right align-item-center mt-2">
+                            <button class="btn btn-info px-4 align-self-center report-btn">Destek</button>
+                        </div>
+
+                        <div class="float-left align-item-center mt-2">   
+                            {% block backbtn %}{%endblock%}   
+                        </div>
+
+                        <h4 class="page-title mb-2">{% block pagename %}{%endblock%}</h4>  
+                        <div class="">
+                            <ol class="breadcrumb">
+                                {% block bread %}{%endblock%}
+                            </ol>
+                        </div>                                      
+                    </div><!--end page title box-->
+                </div><!--end col-->
+            </div><!--end row-->
+            <!-- end page title end breadcrumb -->
+        </div><!--end page-wrapper-img-inner-->
+    </div><!--end page-wrapper-img-->
+
+   
+          
+            
+    <div class="page-wrapper">
+        <div class="page-wrapper-inner">
+
+
+
+            <!-- Left Sidenav -->
+
+
+            {% if user.h_nav == 1 %}
+                {% include 'navh.twig' %}
+
+            </div>
+        {% else %}
+            {% include 'nav.twig' %}
+        {% endif %}
+
+
+
+
+
+        <!-- Page Content-->
+        <div class="page-content">
+
+
+            <div class="container-fluid"> 
+                {% if session['session_message'] is defined %}
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <!-- [ aler ] start -->
+                            {% if  session['session_message']['type'] == "primary" %}
+
+                                <div class="alert alert-info border-0" role="alert">
+                                    {{session['session_message']['message']}}
+                                </div>
+
+
+                            {% elseif  session['session_message']['type'] == "success" %}  
+
+                                <div class="alert alert-success border-0" role="alert">
+                                    {{session['session_message']['message']}}
+                                </div>  
+
+
+
+                            {% elseif  session['session_message']['type'] == "danger" %}  
+
+                                <div class="alert alert-danger border-0" role="alert">
+                                    {{session['session_message']['message']}}
+                                </div>
+                            {% elseif  session['session_message']['type'] == "fail" %}  
+
+                                <div class="alert alert-danger border-0" role="alert">
+                                    {{session['session_message']['message']}}
+                                </div>   
+
+                            {% elseif  session['session_message']['type'] == "warning" %}  
+
+                                <div class="alert alert-warning border-0" role="alert">
+                                    {{session['session_message']['message']}}
+                                </div>
+
+                            {% endif %}  
+
+                            <!-- [ aler ] end -->
+                        </div>    </div>
+                    {% endif %}        
+
+
+
+
+
+                {% block content %}{%endblock%}
+            </div><!-- container -->
+
+
+            {% if user.h_nav == 0 %}</div>{% endif %}   
+        <footer class="footer text-center text-sm-left">
+            &copy; 2019 Avokado Yazılım 
+        </footer>
+    </div>
+    <!-- end page content -->
+
+    <!--end page-wrapper-inner -->
+</div>
+<!-- end page-wrapper -->
+
+<!-- jQuery  -->
+<script src="{{asset('js/jquery.min.js')}}"></script>
+<script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{asset('js/metisMenu.min.js')}}"></script>
+<script src="{{asset('js/waves.min.js')}}"></script>
+<script src="{{asset('js/jquery.slimscroll.min.js')}}"></script>
+<script src="{{asset('plugins/notification/js/bootstrap-growl.min.js')}}"></script>
+
+{% if user.h_nav == 1 %}
+    <script src="{{asset('js/apph.js')}}"></script>
+{% else %}
+    <script src="{{asset('js/app.js')}}"></script>
+{% endif %}
+
+<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('plugins/datatables/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('plugins/sweet-alert2/sweetalert2.min.js')}}"></script>
+<script src="{{asset('js/dipa.js')}}"></script>
+{% block footer %}{%endblock%}
+</body>
+</html>
