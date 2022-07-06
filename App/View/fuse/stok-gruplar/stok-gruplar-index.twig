@@ -1,74 +1,86 @@
 {% extends "layout-light.twig" %}
 {% block content %}
-      <div class="col-md-12 m-b-10">
-    <a href="{{url}}/parametreler/" class="btn btn-danger"><i class="feather icon-corner-up-left"></i>Parametrelere Dön</a>
-     </div>
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Stok Grup Ekle</h5>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-12 m-b-10">
+                <a href="{{ url }}/parametreler/" class="btn btn-danger"><i class="feather icon-corner-up-left"></i>Parametrelere Dön</a>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form id="logout-form" action="{{url}}/stok-gruplar/save" method="post">
-                            {{csrf | raw}}
-                            <div class="form-group">
-                                <label>Stok Grup Adını Yazınız:</label>
-                                <input type="text" name="stok-grup-adi" class="form-control" required/>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Stok Grup Ekle</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <form id="logout-form" action="{{ url }}/stok-gruplar/save" method="post">
+                                    {{ csrf | raw }}
+                                    <div class="form-group">
+                                        <label>Stok Grup Adını Yazınız:</label>
+                                        <input type="text" name="stok-grup-adi" class="form-control" required/>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Yeni Grup Ekle</button>
+                                </form>
                             </div>
-                            <button type="submit" class="btn btn-primary">Yeni Grup Ekle</button>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Stok Gruplar</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
 
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5>Stok Gruplar</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
+                                        <tbody>
+                                        {% for grup in gruplar %}
+                                            <tr>
 
-                                <tbody>
-                                    {% for grup in gruplar  %}
-                                        <tr>
+                                                <td width="50px">
+                                                    {{ grup.id }}
+                                                </td>
 
-                                               <td width="50px">
-                                            {{grup.id}}
-                                               </td>
-                                            
-                                            <th>
+                                                <th>
 
-                                                <label style="padding:10px;" id="editable-{{grup.id}}" class="editable" data-url="{{url}}/stok-gruplar/update" data-id="{{grup.id}}" title="Düzenlemek İçin Tıklayın">{{grup.stok_grup_adi}}</label>
-                                                <form id="grup-sil-form-{{grup.id}}" action="{{url}}/stok-gruplar/remove" method="post">
-                                                    {{csrf | raw}}
-                                                    <input type="hidden" name="id" value="{{grup.id}}"/>
-                                                </form>
-                                            </th>
+                                                    <label style="padding:10px;" id="editable-{{ grup.id }}"
+                                                           class="editable" data-url="{{ url }}/stok-gruplar/update"
+                                                           data-id="{{ grup.id }}"
+                                                           title="Düzenlemek İçin Tıklayın">{{ grup.stok_grup_adi }}</label>
+                                                    <form id="grup-sil-form-{{ grup.id }}"
+                                                          action="{{ url }}/stok-gruplar/remove" method="post">
+                                                        {{ csrf | raw }}
+                                                        <input type="hidden" name="id" value="{{ grup.id }}"/>
+                                                    </form>
+                                                </th>
 
-                                            <td width="150px">
-                                                <button type="button" class="btn btn-icon btn-danger" onclick="event.preventDefault();
-                                                         grup_sil({{grup.id}});"><i class="fa  fa-trash"></i></button>
-                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{grup.id}}')"><i class="fa fa-edit"></i></button>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                                <td width="150px">
+
+                                                    <button type="button" class="btn btn-icon btn-danger "
+                                                            onclick="event.preventDefault();
+                                                                    grup_sil({{ grup.id }});"><i
+                                                                class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color  ">clear</i></button>
+
+                                                    <button type="button" class="btn btn-icon btn-attach"
+                                                            onClick="ajax_label_duzenle('editable-{{ grup.id }}')"><i
+                                                                class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color  ">edit</i></button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
 {% block footer %}
     <script>
@@ -79,16 +91,15 @@
                 title: "Eminmisiniz?",
                 text: "Kaydı Kalıcı Olarak Silmek Üzeresiniz!",
                 icon: "warning",
-                buttons: true,
                 dangerMode: true,
                 buttons: ["İptal Et", "Tamam Anladım Sil!"],
             })
-                    .then((willDelete) => {
-                        if (willDelete) {
+                .then((willDelete) => {
+                    if (willDelete) {
 
-                            document.getElementById('grup-sil-form-' + id).submit();
-                        }
-                    });
+                        document.getElementById('grup-sil-form-' + id).submit();
+                    }
+                });
 
 
         }

@@ -22,12 +22,11 @@
                
                        
                                     {% for masa in masa_kategoriler  %}
-                               <div class="col-md-12" > 
-                                   <center>
-                                   <p>  
-                                       <a href="{{ url }}/masa/islem/{{ masa.id }}" class="btn btn-icon btn-primary col-md-6" >{{masa.masa_kategori_adi}}</a>
-                                    </p>
-                                      </center>
+                               <div class="col-md-3" >
+
+
+                                       <a href="{{ url }}/masa/islem/{{ masa.id }}" class="btn  btn-primary" >{{masa.masa_kategori_adi}}</a>
+
                                </div>       
                                    
                                     {% endfor %}

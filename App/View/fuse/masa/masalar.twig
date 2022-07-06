@@ -63,8 +63,10 @@
 
                                             <td width="150px">
                                                 <button type="button" class="btn btn-icon btn-danger" onclick="event.preventDefault();
-                                                        kategori_sil({{masa.id}});"><i class="fa  fa-trash"></i></button>
-                                                <button type="button" class="btn btn-icon btn-primary"  onClick="ajax_label_duzenle('editable-{{masa.id}}')"><i class="fa fa-edit"></i></button>
+                                                        kategori_sil({{masa.id}});"><i
+                                                            class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color  ">clear</i></button>
+                                                <button type="button" class="btn btn-icon btn-attach"  onClick="ajax_label_duzenle('editable-{{masa.id}}')"><i
+                                                            class="secondary-text s-48 mat-icon notranslate material-icons mat-icon-no-color  ">edit</i></button>
                                             </td>
                                         </tr>
                                     {% endfor %}

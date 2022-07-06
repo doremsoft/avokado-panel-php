@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="01e7adf7-249b-4ce3-a1b1-dd3bef96cbb1" name="Changes" comment="" />
+    <list default="true" id="01e7adf7-249b-4ce3-a1b1-dd3bef96cbb1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/View/frogetorv/stok-gruplar/stok-gruplar-index.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/View/frogetorv/stok-gruplar/stok-gruplar-index.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/View/fuse/masa/masa-grup-liste.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/View/fuse/masa/masa-grup-liste.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/View/fuse/masa/masa-kategoriler.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/View/fuse/masa/masa-kategoriler.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/View/fuse/masa/masalar.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/View/fuse/masa/masalar.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/App/View/fuse/stok-gruplar/stok-gruplar-index.twig" beforeDir="false" afterPath="$PROJECT_DIR$/App/View/fuse/stok-gruplar/stok-gruplar-index.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Avokado Barkod.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/adisyon.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/adisyon.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/avokado_adisyon.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/derby.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perakende.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/1fef65063f1ea753df74215493d47449.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/27e8ce5df8f94d7552fa5b03ca5e1db7.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/73959ef98dc5f55d4932f14689e87c4e.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/7c7ebef7241d5cb0f8593b0ebadf409a.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/7d2fb169de41223e2078c935eeed46e4.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/925a0b601806ea69f12b266f43d8811a.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/9ee2c70d9a6b7123049821d754e7a411.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/db64ab37ee0e4d05004c1d9405397ae1.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/e2ca2c8f40467a80f6e3841bedf97fae.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/e4a4f5193580ccd274604a41d186fff9.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/temp/ece9ef8614cd54ff162462f544ca76e4.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/raspberry run fx.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/source/barkod_desktop/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/1/media/sistem/log/2022/07/2022-07-05.log" beforeDir="false" afterPath="$PROJECT_DIR$/storage/1/media/sistem/log/2022/07/2022-07-05.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/updater.jar" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/dipacorevendors/composer.json</pharConfigPath>
     <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -48,7 +82,11 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../projects/NodejsProjects/doremgym" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -61,7 +99,11 @@
       <option name="presentableId" value="Default" />
       <updated>1654709816609</updated>
       <workItem from="1654709818125" duration="15000" />
+      <workItem from="1657101568085" duration="1318000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
